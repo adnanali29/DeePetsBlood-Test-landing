@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeePet Services | Better Care Starts With Better Tests</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --purple: #6C3FC5;
+    --purple-dark: #5729A8;
+    --purple-darker: #4A1F94;
+    --pink: #EC4C79;
+    --pink-dark: #D93764;
+    --bg-lav: #F6F3FD;
+    --bg-lav-2: #EFE9FB;
+    --text-dark: #221B33;
+    --text-muted: #6b6478;
+    --white: #ffffff;
+    --border: #E7E1F7;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:'Inter', sans-serif;
+    color:var(--text-dark);
+    background:var(--white);
+    line-height:1.5;
+  }
+  h1,h2,h3,h4,.logo,.brand-font{font-family:'Poppins', sans-serif;}
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  .container{max-width:1200px;margin:0 auto;padding:0 24px;}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    border:none;border-radius:999px;cursor:pointer;font-weight:600;
+    font-family:'Inter',sans-serif; transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-purple{background:linear-gradient(135deg,var(--purple),var(--purple-darker));color:#fff;padding:13px 26px;box-shadow:0 8px 20px rgba(108,63,197,.28);}
+  .btn-purple:hover{box-shadow:0 10px 26px rgba(108,63,197,.38);}
+  .btn-pink{background:var(--pink);color:#fff;padding:11px 22px;font-size:14px;}
+  .btn-pink:hover{background:var(--pink-dark);}
+  .btn-outline{background:#fff;color:var(--purple);border:1.5px solid var(--purple);padding:9px 20px;font-size:14px;}
+
+  /* ---------- HEADER ---------- */
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 40px;border-bottom:1px solid var(--border);
+    position:sticky;top:0;background:#fff;z-index:100;
+  }
+  .logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:22px;color:var(--text-dark);}
+  .logo .paw{color:var(--purple);font-size:24px;}
+  .logo small{display:block;font-size:9px;letter-spacing:2px;font-weight:600;color:var(--text-muted);margin-top:-2px;}
+  nav ul{display:flex;gap:34px;font-weight:500;font-size:15px;}
+  nav a{color:var(--text-dark);position:relative;padding-bottom:4px;}
+  nav a.active{color:var(--purple);font-weight:600;}
+  nav a.active::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--purple);border-radius:2px;}
+  .header-right{display:flex;align-items:center;gap:22px;}
+  .phone{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px;color:var(--text-dark);}
+  .phone .ic{width:34px;height:34px;border-radius:50%;background:var(--bg-lav-2);display:flex;align-items:center;justify-content:center;color:var(--purple);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:linear-gradient(180deg,var(--bg-lav) 0%, #fff 100%);
+    padding:60px 0 70px;
+  }
+  .hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:50px;align-items:center;}
+  .hero-image{position:relative;}
+  .hero-image .blob{position:absolute;inset:0;background:radial-gradient(circle at 35% 40%, #E4D9FB 0%, transparent 65%);z-index:0;}
+  .hero-image img{position:relative;z-index:1;width:100%;border-radius:24px;}
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);
+    padding:8px 16px;border-radius:999px;font-size:13px;font-weight:600;color:var(--text-dark);
+    box-shadow:0 4px 14px rgba(108,63,197,.08); margin-bottom:22px;
+  }
+  .badge .dot{width:16px;height:16px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;}
+  .hero h1{font-size:46px;line-height:1.15;font-weight:700;color:var(--text-dark);margin-bottom:18px;}
+  .hero h1 span{color:var(--purple);}
+  .hero p.lead{font-size:17px;color:var(--text-muted);max-width:460px;margin-bottom:28px;}
+  .feature-row{display:flex;gap:28px;flex-wrap:wrap;}
+  .feature-item{display:flex;flex-direction:column;align-items:flex-start;gap:8px;max-width:110px;}
+  .feature-item .ic{width:42px;height:42px;border-radius:50%;background:var(--bg-lav-2);display:flex;align-items:center;justify-content:center;color:var(--purple);font-size:18px;}
+  .feature-item span{font-size:12.5px;font-weight:600;color:var(--text-dark);}
+
+  /* booking form card */
+  .book-card{
+    background:#fff;border-radius:20px;padding:30px;
+    box-shadow:0 20px 50px rgba(76,41,150,.14); border:1px solid var(--border);
+  }
+  .book-card h3{font-size:21px;font-weight:700;margin-bottom:4px;}
+  .book-card h3 span{color:var(--purple);}
+  .book-card .sub{font-size:13px;color:var(--text-muted);margin-bottom:18px;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+  .field{
+    border:1.5px solid var(--border);border-radius:12px;padding:11px 14px;background:#FBFAFF;
+  }
+  .field label{display:block;font-size:10.5px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px;}
+  .field input, .field select, .field textarea{
+    border:none;background:transparent;width:100%;font-size:14px;font-family:'Inter',sans-serif;color:var(--text-dark);outline:none;
+  }
+  .field textarea{resize:none;height:44px;padding-top:2px;}
+  .field.full{grid-column:1/-1;}
+  .book-card .btn-purple{width:100%;margin-top:6px;font-size:15px;padding:14px;}
+  .safe-note{display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:var(--text-muted);margin-top:14px;}
+
+  /* ---------- SECTION TITLE ---------- */
+  .section{padding:80px 0;}
+  .section-title{text-align:center;margin-bottom:44px;}
+  .section-title h2{font-size:32px;font-weight:700;}
+  .section-title h2 span{color:var(--purple);}
+  .section-title p{color:var(--text-muted);margin-top:8px;font-size:15.5px;}
+
+  /* ---------- CAT/DOG CARDS ---------- */
+  .paw-cards{display:grid;grid-template-columns:1fr 1fr;gap:26px;}
+  .paw-card{
+    display:flex;align-items:stretch;border-radius:22px;overflow:hidden;min-height:230px;
+  }
+  .paw-card.cat{background:linear-gradient(120deg,#FDE3EC,#FBD3E2);}
+  .paw-card.dog{background:linear-gradient(120deg,#E9E1FB,#DED2F8);}
+  .paw-card .info{padding:34px;display:flex;flex-direction:column;justify-content:center;gap:12px;flex:1;}
+  .paw-card .info .tag{display:flex;align-items:center;gap:8px;font-weight:700;font-size:20px;}
+  .paw-card.cat .tag{color:var(--pink-dark);}
+  .paw-card.dog .tag{color:var(--purple-darker);}
+  .paw-card .info p{font-size:14px;color:var(--text-muted);max-width:260px;}
+  .paw-card .photo{flex:1;overflow:hidden;}
+  .paw-card .photo img{width:100%;height:100%;object-fit:cover;}
+
+  /* ---------- BRANDS ---------- */
+  .brands-bar{
+    background:#fff;border:1px solid var(--border);border-radius:18px;padding:30px 40px;
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;
+    box-shadow:0 10px 30px rgba(76,41,150,.06);
+  }
+  .brands-bar span{font-weight:700;font-size:18px;color:#444;letter-spacing:.5px;opacity:.75;font-family:Georgia,serif;}
+  .brands-title{text-align:center;font-size:14px;font-weight:600;color:var(--text-muted);margin-bottom:22px;letter-spacing:.3px;}
+
+  /* ---------- PROCESS ---------- */
+  .process{position:relative;}
+  .process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;position:relative;}
+  .process-steps::before{
+    content:"";position:absolute;top:32px;left:12%;right:12%;height:2px;
+    background:repeating-linear-gradient(90deg, var(--border) 0 8px, transparent 8px 16px); z-index:0;
+  }
+  .step{text-align:center;position:relative;z-index:1;padding:0 10px;}
+  .step .circle{
+    width:64px;height:64px;border-radius:50%;background:var(--bg-lav-2);margin:0 auto 14px;
+    display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--purple);position:relative;
+  }
+  .step .num{
+    position:absolute;top:-4px;left:-4px;width:22px;height:22px;border-radius:50%;background:var(--purple);
+    color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  }
+  .step h4{font-size:16px;font-weight:700;margin-bottom:6px;}
+  .step p{font-size:13px;color:var(--text-muted);max-width:190px;margin:0 auto;}
+
+  /* ---------- TESTS ---------- */
+  .tests-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:34px;flex-wrap:wrap;gap:14px;}
+  .tests-header h2{font-size:28px;font-weight:700;}
+  .tests-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;}
+  .test-card{
+    background:#fff;border:1px solid var(--border);border-radius:18px;padding:22px 18px;text-align:center;
+    transition:transform .2s ease, box-shadow .2s ease; cursor:pointer;
+  }
+  .test-card:hover{transform:translateY(-6px);box-shadow:0 16px 34px rgba(76,41,150,.14);border-color:transparent;}
+  .test-card .ic{
+    width:52px;height:52px;border-radius:50%;background:var(--bg-lav-2);margin:0 auto 14px;
+    display:flex;align-items:center;justify-content:center;font-size:22px;
+  }
+  .test-card h4{font-size:14.5px;font-weight:700;margin-bottom:10px;min-height:38px;}
+  .test-card .price{color:var(--purple);font-weight:700;font-size:16px;}
+  .test-card .cats-dogs{font-size:12px;color:var(--text-muted);margin-top:4px;}
+
+  /* ---------- WHY TRUST ---------- */
+  .why-trust{
+    background:linear-gradient(120deg,var(--bg-lav-2),var(--bg-lav));
+    border-radius:26px;padding:50px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:40px;align-items:center;
+  }
+  .why-trust h2{font-size:30px;font-weight:700;margin-bottom:26px;}
+  .why-trust h2 span{color:var(--purple);}
+  .why-list{display:grid;grid-template-columns:1fr 1fr;gap:16px 30px;}
+  .why-list li{display:flex;align-items:center;gap:10px;font-weight:600;font-size:14.5px;}
+  .why-list li .chk{width:22px;height:22px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;flex:none;}
+  .why-photo img{border-radius:20px;width:100%;object-fit:cover;height:340px;}
+
+  /* ---------- CONTACT ---------- */
+  .contact{
+    background:var(--bg-lav);border-radius:26px;padding:50px;
+    display:grid;grid-template-columns:0.85fr 1fr;gap:40px;align-items:center;
+  }
+  .contact h2{font-size:28px;font-weight:700;margin-bottom:6px;}
+  .contact h2 span{color:var(--purple);}
+  .contact > div > p{color:var(--text-muted);font-size:14.5px;margin-bottom:26px;max-width:340px;}
+  .contact-info{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:26px;}
+  .contact-info .item{display:flex;gap:10px;align-items:flex-start;}
+  .contact-info .ic{width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--purple);flex:none;box-shadow:0 4px 10px rgba(76,41,150,.1);}
+  .contact-info b{display:block;font-size:14px;color:var(--purple-darker);}
+  .contact-info span{font-size:13px;color:var(--text-muted);}
+  .contact-photo img{border-radius:18px;width:100%;height:180px;object-fit:cover;object-position:top;}
+  .contact-form{background:#fff;border-radius:20px;padding:26px;box-shadow:0 16px 40px rgba(76,41,150,.1);}
+  .contact-form .form-row{grid-template-columns:1fr 1fr;}
+  .contact-form .btn-purple{width:100%;margin-top:4px;}
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:26px 0;text-align:center;color:var(--text-muted);font-size:13.5px;border-top:1px solid var(--border);margin-top:20px;display:flex;align-items:center;justify-content:center;gap:10px;}
+
+  @media (max-width: 980px){
+    header{padding:14px 20px;}
+    nav{display:none;}
+    .hero-grid{grid-template-columns:1fr;}
+    .paw-cards{grid-template-columns:1fr;}
+    .process-steps{grid-template-columns:1fr 1fr;row-gap:34px;}
+    .process-steps::before{display:none;}
+    .tests-grid{grid-template-columns:repeat(2,1fr);}
+    .why-trust, .contact{grid-template-columns:1fr;padding:30px;}
+    .contact-info{grid-template-columns:1fr;}
+    .hero h1{font-size:34px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="#" class="logo"><span class="paw">🐾</span>eePet<small>SERVICES</small></a>
+  <nav>
+    <ul>
+      <li><a href="#" class="active">Home</a></li>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">Pet Tests</a></li>
+      <li><a href="#">For Vets</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="header-right">
+    <div class="phone"><span class="ic">📞</span> +91 98765 43210</div>
+    <button class="btn btn-purple" style="padding:11px 22px;font-size:14px;">Book a Test</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="badge"><span class="dot">✓</span> Trusted by Pet Parents & Veterinary Experts</span>
+      <h1>Better Care<br>Starts With<br><span>Better Tests</span></h1>
+      <p class="lead">Accurate blood tests for cats and dogs, because their health matters every day.</p>
+      <div class="feature-row">
+        <div class="feature-item"><span class="ic">🧪</span><span>NABL-Certified Labs</span></div>
+        <div class="feature-item"><span class="ic">💧</span><span>Accurate & Reliable Results</span></div>
+        <div class="feature-item"><span class="ic">🏠</span><span>Home Sample Collection</span></div>
+        <div class="feature-item"><span class="ic">📋</span><span>Quick Reports 24–48 Hours</span></div>
+      </div>
+    </div>
+    <div class="book-card">
+      <h3>Book a Blood Test for <span>Your Pet</span></h3>
+      <p class="sub">Quick, easy & hassle-free at-home pet blood testing.</p>
+      <div class="form-row">
+        <div class="field"><label>Pet Parent Name</label><input type="text" placeholder="Enter your name"></div>
+        <div class="field"><label>Phone Number</label><input type="tel" placeholder="Enter phone number"></div>
+      </div>
+      <div class="form-row">
+        <div class="field full"><label>Pet Type</label>
+          <select><option>Select Pet Type</option><option>Dog</option><option>Cat</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Pet Name</label><input type="text" placeholder="Enter pet name"></div>
+        <div class="field"><label>City</label><input type="text" placeholder="Enter city"></div>
+      </div>
+      <div class="form-row">
+        <div class="field full"><label>How can we help?</label>
+          <select><option>Select Test / Purpose</option><option>Blood Test</option><option>Full Body Checkup</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field full"><label>Additional Message (Optional)</label><textarea placeholder="Write a message"></textarea></div>
+      </div>
+      <button class="btn btn-purple">Book a Test Now →</button>
+      <div class="safe-note">🔒 Your information is safe with us.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <h2>Advanced Blood Tests for <span>Every Paw</span></h2>
+      <p>Early detection. Better treatment. Happier pets.</p>
+    </div>
+    <div class="paw-cards">
+      <div class="paw-card cat">
+        <div class="info">
+          <div class="tag">🐾 Blood Tests<br>for Cats</div>
+          <p>Detect early signs of illness and ensure a healthy, happy life for your feline friend.</p>
+          <button class="btn btn-pink">Explore Cat Tests 🐾</button>
+        </div>
+        <div class="photo"><img src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=600&q=80" alt="Cat"></div>
+      </div>
+      <div class="paw-card dog">
+        <div class="info">
+          <div class="tag">🐾 Blood Tests<br>for Dogs</div>
+          <p>Monitor your dog's health with accurate and reliable blood test panels.</p>
+          <button class="btn btn-purple" style="padding:11px 22px;font-size:14px;">Explore Dog Tests 🐾</button>
+        </div>
+        <div class="photo"><img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=600&q=80" alt="Dog"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    <p class="brands-title">Trusted by Pet Parents & Veterinary Experts</p>
+    <div class="brands-bar">
+      <span>ROYAL CANIN</span>
+      <span>Pedigree</span>
+      <span>PRO PLAN</span>
+      <span>Hill's</span>
+      <span>drools</span>
+      <span>whiskas</span>
+      <span>◆</span>
+    </div>
+  </div>
+</section>
+
+<section class="section process">
+  <div class="container">
+    <div class="section-title">
+      <h2>Simple Process, Stress-Free for You & Your Pet</h2>
+    </div>
+    <div class="process-steps">
+      <div class="step">
+        <div class="circle">📅<span class="num">1</span></div>
+        <h4>Book a Test</h4>
+        <p>Choose the test and schedule at your convenience.</p>
+      </div>
+      <div class="step">
+        <div class="circle">🚗<span class="num">2</span></div>
+        <h4>Home Collection</h4>
+        <p>Our expert collects the sample from your home hassle-free.</p>
+      </div>
+      <div class="step">
+        <div class="circle">🧪<span class="num">3</span></div>
+        <h4>Advanced Testing</h4>
+        <p>Samples are analyzed in NABL-certified labs using advanced technology.</p>
+      </div>
+      <div class="step">
+        <div class="circle">📄<span class="num">4</span></div>
+        <h4>Get Reports</h4>
+        <p>Receive accurate reports within 24–48 hours on email/WhatsApp.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:20px;">
+  <div class="container">
+    <div class="tests-header">
+      <h2>Most Popular Blood Tests</h2>
+      <button class="btn btn-outline">View All Tests</button>
+    </div>
+    <div class="tests-grid">
+      <div class="test-card">
+        <div class="ic">🩸</div>
+        <h4>Complete Blood Count (CBC)</h4>
+        <div class="price">₹899</div>
+        <div class="cats-dogs">Cats & Dogs</div>
+      </div>
+      <div class="test-card">
+        <div class="ic">🫘</div>
+        <h4>Kidney Function Test (KFT)</h4>
+        <div class="price">₹1299</div>
+        <div class="cats-dogs">Cats & Dogs</div>
+      </div>
+      <div class="test-card">
+        <div class="ic">🫀</div>
+        <h4>Liver Function Test (LFT)</h4>
+        <div class="price">₹1299</div>
+        <div class="cats-dogs">Cats & Dogs</div>
+      </div>
+      <div class="test-card">
+        <div class="ic">🦋</div>
+        <h4>Thyroid Profile (T4)</h4>
+        <div class="price">₹1199</div>
+        <div class="cats-dogs">Cats & Dogs</div>
+      </div>
+      <div class="test-card">
+        <div class="ic">🧫</div>
+        <h4>Full Body Profile (Advanced)</h4>
+        <div class="price">₹2499</div>
+        <div class="cats-dogs">Cats & Dogs</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="why-trust">
+      <div>
+        <h2>Why Pet Parents<br>Trust <span>DeePet Services</span></h2>
+        <ul class="why-list">
+          <li><span class="chk">✓</span> NABL-Certified Labs</li>
+          <li><span class="chk">✓</span> Quick Turnaround Time</li>
+          <li><span class="chk">✓</span> Accurate & Reliable Reports</li>
+          <li><span class="chk">✓</span> Expert Veterinary Support</li>
+          <li><span class="chk">✓</span> Home Sample Collection</li>
+          <li><span class="chk">✓</span> Affordable & Transparent Pricing</li>
+        </ul>
+      </div>
+      <div class="why-photo">
+        <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?auto=format&fit=crop&w=700&q=80" alt="Dog and cat">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    <div class="contact">
+      <div>
+        <h2>We're Here for <span>You & Your Pet</span></h2>
+        <p>Have a question about a test, home collection, or your pet's health? Our team is happy to help.</p>
+        <div class="contact-info">
+          <div class="item"><span class="ic">📞</span><div><b>Call Us</b><span>+91 98765 43210</span></div></div>
+          <div class="item"><span class="ic">✉️</span><div><b>Email Us</b><span>hello@deepetservices.com</span></div></div>
+          <div class="item"><span class="ic">💬</span><div><b>WhatsApp</b><span>Chat with our support team</span></div></div>
+          <div class="item"><span class="ic">🕒</span><div><b>Working Hours</b><span>Mon – Sat • 9:00 AM – 7:00 PM</span></div></div>
+        </div>
+        <div class="contact-photo">
+          <img src="https://images.unsplash.com/photo-1517849845537-4d257902861a?auto=format&fit=crop&w=700&q=80" alt="Dog and cat">
+        </div>
+      </div>
+      <div class="contact-form">
+        <div class="form-row">
+          <div class="field"><label>Your Name</label><input type="text" placeholder="Enter your name"></div>
+          <div class="field"><label>Email Address</label><input type="email" placeholder="Enter email"></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Phone Number</label><input type="tel" placeholder="Enter phone number"></div>
+          <div class="field"><label>Select Your Pet</label><select><option>Cat</option><option>Dog</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="field full"><label>How can we help?</label><textarea placeholder="Write your message"></textarea></div>
+        </div>
+        <button class="btn btn-purple">Send Message ➤</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2025 DeePet Services. All rights reserved. <span style="color:var(--purple);">🐾</span>
+</footer>
+
+</body>
+</html>
