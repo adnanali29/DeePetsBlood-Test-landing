@@ -1,23 +1,11 @@
-'use client';
-
-import React, { useState } from 'react';
-import { CheckCircle2, Mail } from 'lucide-react';
+import React from 'react';
+import { CheckCircle2 } from 'lucide-react';
 
 interface WhyTrustSectionProps {
   onSuccess?: (title: string, msg: string) => void;
 }
 
 export const WhyTrustSection: React.FC<WhyTrustSectionProps> = ({ onSuccess }) => {
-  const [email, setEmail] = useState('');
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    if (onSuccess) {
-      onSuccess('Subscribed Successfully! 🎉', 'Thank you for joining the DeePet family. We sent a welcome guide to your inbox.');
-    }
-    setEmail('');
-  };
 
   const trustFeatures = [
     'NABL-Certified Labs',
@@ -62,20 +50,15 @@ export const WhyTrustSection: React.FC<WhyTrustSectionProps> = ({ onSuccess }) =
               </ul>
             </div>
 
-            {/* Right Column: Big Dog & Cat Cutout Images */}
-            <div className="lg:col-span-6 flex items-end justify-center lg:justify-end relative min-h-[340px] sm:min-h-[400px] pt-6 lg:pt-0">
+            {/* Right Column: Aligned Pet Group Image */}
+            <div className="lg:col-span-6 relative min-h-[320px] sm:min-h-[400px] lg:min-h-[440px] mt-6 lg:mt-0">
               
-              {/* Prominent Big Pet Cutout Images Sitting Side by Side */}
-              <div className="relative flex items-end justify-center gap-2 z-10">
+              {/* Single Group Image sitting at bottom of card */}
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 lg:left-auto lg:right-0 lg:translate-x-0 z-10 w-[95%] sm:w-[100%] max-w-[380px] sm:max-w-[500px] lg:max-w-[560px]">
                 <img
-                  src="/dog-image.png"
-                  alt="Happy Dog"
-                  className="w-60 sm:w-76 lg:w-92 h-auto object-contain drop-shadow-2xl translate-y-3"
-                />
-                <img
-                  src="/cat-image.png"
-                  alt="Happy Cat"
-                  className="w-52 sm:w-68 lg:w-80 h-auto object-contain drop-shadow-2xl translate-y-5 -ml-8"
+                  src="/full-image.png"
+                  alt="Happy Pets"
+                  className="w-full h-auto object-contain drop-shadow-2xl"
                 />
               </div>
 
@@ -125,43 +108,7 @@ export const WhyTrustSection: React.FC<WhyTrustSectionProps> = ({ onSuccess }) =
 
         </div>
 
-        {/* BOTTOM BANNER: Newsletter Subscription */}
-        <div className="bg-[#fceef3] rounded-[2rem] p-6 sm:p-8 lg:p-10 border border-pink-100/80 flex flex-col lg:flex-row items-center justify-between gap-6 shadow-sm">
-          
-          {/* Envelope Icon & Title */}
-          <div className="flex items-center gap-4 text-center lg:text-left">
-            <div className="w-14 h-14 rounded-2xl bg-white border border-pink-200 text-[#eb366d] flex items-center justify-center shrink-0 shadow-md">
-              <Mail className="w-7 h-7 text-[#eb366d]" />
-            </div>
-            <div>
-              <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 font-heading">
-                Stay Updated on Pet Health Tips
-              </h3>
-              <p className="text-slate-600 text-xs sm:text-sm font-medium mt-1">
-                Subscribe to get tips, offers, and important updates for your furry friends.
-              </p>
-            </div>
-          </div>
-
-          {/* Subscription Input Form */}
-          <form onSubmit={handleSubscribe} className="w-full lg:w-auto flex flex-col sm:flex-row gap-3 shrink-0">
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              className="px-6 py-3.5 rounded-full bg-white text-slate-800 text-sm font-medium border border-pink-200 focus:outline-none focus:ring-2 focus:ring-[#eb366d] min-w-[260px] sm:min-w-[300px] shadow-inner"
-            />
-            <button
-              type="submit"
-              className="px-8 py-3.5 rounded-full bg-[#653bf7] hover:bg-[#5024f5] text-white font-extrabold text-sm shadow-md hover:shadow-purple-500/25 transition-all hover:scale-105 cursor-pointer shrink-0"
-            >
-              Subscribe
-            </button>
-          </form>
-
-        </div>
+        {/* Newsletter Subscription Section Removed */}
 
       </div>
     </section>

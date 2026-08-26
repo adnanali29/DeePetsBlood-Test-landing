@@ -227,3 +227,533 @@ export const FAQS = [
     a: "Keep your pet in a quiet room, avoid heavy exercise right before collection, and keep their favorite treats ready! Our phlebotomist brings gentle restraint aids and treats to ensure a zero-stress experience."
   }
 ];
+
+export interface WholeBodyTestItem {
+  name: string;
+  price?: string;
+  subTests?: string[];
+}
+
+export interface WholeBodyTestCategory {
+  categoryName: string;
+  price?: string;
+  items: WholeBodyTestItem[];
+}
+
+export interface PetPackage {
+  name: string;
+  title: string;
+  price: number;
+  idealFor: string;
+  testsCount: number;
+  includedTests: string[];
+  isPopular?: boolean;
+}
+
+export const CAT_WHOLE_BODY_TESTS: WholeBodyTestCategory[] = [
+  {
+    categoryName: "Hematology (Blood)",
+    price: "799 starting",
+    items: [
+      {
+        name: "Complete Blood Count (CBC)",
+        price: "Rs 799 starting",
+        subTests: ["RBC Count", "WBC Count", "Hemoglobin", "Hematocrit (PCV)", "Platelet Count", "Differential Count", "Blood Smear", "Reticulocyte Count"]
+      }
+    ]
+  },
+  {
+    categoryName: "Liver Function",
+    price: "1099 starting",
+    items: [
+      {
+        name: "Liver Function Profile",
+        price: "Rs 1099 starting",
+        subTests: ["ALT (SGPT)", "AST (SGOT)", "ALP", "GGT", "Total Bilirubin", "Direct Bilirubin", "Total Protein", "Albumin", "Globulin", "A/G Ratio", "Bile Acids"]
+      }
+    ]
+  },
+  {
+    categoryName: "Kidney Function",
+    price: "1099 starting",
+    items: [
+      {
+        name: "Kidney Function Profile",
+        price: "Rs 1099 starting",
+        subTests: ["BUN", "Creatinine", "Phosphorus", "Calcium", "Sodium", "Potassium", "Chloride"]
+      },
+      {
+        name: "SDMA (Important early kidney marker)",
+        price: "Rs 2599 starting",
+        subTests: ["Symmetric Dimethylarginine (SDMA) Early Renal Biomarker"]
+      }
+    ]
+  },
+  {
+    categoryName: "Diabetes & Metabolism",
+    price: "599 starting",
+    items: [
+      {
+        name: "Blood Glucose",
+        price: "Rs 599",
+        subTests: ["Blood Sugar Level (Random/Fasting)"]
+      }
+    ]
+  },
+  {
+    categoryName: "Pancreas",
+    price: "799 starting",
+    items: [
+      {
+        name: "Spec fPL (Feline Pancreatic Lipase)",
+        price: "Rs 2599 starting",
+        subTests: ["Feline Pancreatic Lipase Lipemia Assessment"]
+      },
+      {
+        name: "Amylase",
+        price: "Rs 799 starting",
+        subTests: ["Amylase Enzyme Level"]
+      },
+      {
+        name: "Lipase",
+        price: "Rs 799 starting",
+        subTests: ["Lipase Enzyme Level"]
+      }
+    ]
+  },
+  {
+    categoryName: "Thyroid & Hormones",
+    price: "799 starting",
+    items: [
+      {
+        name: "Total T4",
+        price: "Rs 799 starting",
+        subTests: ["Total Thyroxine Hormone Level"]
+      },
+      {
+        name: "Free T4",
+        price: "Rs 799 starting",
+        subTests: ["Free Thyroxine Hormone Level"]
+      },
+      {
+        name: "TSH",
+        price: "Rs 799 starting",
+        subTests: ["Thyroid Stimulating Hormone"]
+      },
+      {
+        name: "Cortisol",
+        price: "Rs 1099 starting",
+        subTests: ["Adrenal Stress Cortisol Hormone"]
+      }
+    ]
+  },
+  {
+    categoryName: "Urinalysis",
+    price: "899 starting",
+    items: [
+      {
+        name: "Routine Urine Test",
+        price: "Rs 899 starting",
+        subTests: ["Specific Gravity", "Protein", "Glucose", "Ketones", "Bilirubin", "pH", "Sediment Microscopy", "UPC Ratio"]
+      },
+      {
+        name: "Urine Culture",
+        price: "Rs 899 starting",
+        subTests: ["Bacterial Pathogen Culture & Sensitivity Screening"]
+      }
+    ]
+  },
+  {
+    categoryName: "Infectious Diseases (Cat Specific)",
+    price: "1099 starting",
+    items: [
+      { name: "FIV (Feline Immunodeficiency Virus)", price: "Rs 1099 starting", subTests: ["FIV Antibody Screening"] },
+      { name: "FeLV (Feline Leukemia Virus)", price: "Rs 1099 starting", subTests: ["FeLV Antigen Screening"] },
+      { name: "Feline Parvovirus (FPV)", price: "Rs 1099 starting", subTests: ["FPV Antigen Screening"] },
+      { name: "Feline Coronavirus", price: "Rs 1099 starting", subTests: ["FCoV Antibody/Antigen Screening"] },
+      { name: "Toxoplasma IgG/IgM", price: "Rs 1099 starting", subTests: ["Toxoplasmosis Antibody Screen"] },
+      { name: "Hemoplasma", price: "Rs 1099 starting", subTests: ["Mycoplasma haemofelis Screening"] },
+      { name: "Tick Fever Panel", price: "Rs 1099 starting", subTests: ["Tick-borne Pathogen Screening"] }
+    ]
+  },
+  {
+    categoryName: "Vitamins & Minerals",
+    price: "1099 starting",
+    items: [
+      {
+        name: "Vitamin & Mineral Profile",
+        price: "Rs 1099 starting",
+        subTests: ["Vitamin B12", "Folate", "Iron Profile", "Ferritin", "Magnesium"]
+      }
+    ]
+  },
+  {
+    categoryName: "Cardiac",
+    price: "999 starting",
+    items: [
+      { name: "NT-proBNP", price: "Rs 999 starting", subTests: ["Cardiac Stretch Biomarker"] },
+      { name: "Troponin-I", price: "Rs 999 starting", subTests: ["Myocardial Injury Marker"] }
+    ]
+  },
+  {
+    categoryName: "Gastrointestinal",
+    price: "799 starting",
+    items: [
+      {
+        name: "Gastrointestinal Panel",
+        price: "Rs 799 starting",
+        subTests: ["Stool Routine", "Ova & Cyst", "Giardia", "Occult Blood", "Fecal Culture"]
+      }
+    ]
+  },
+  {
+    categoryName: "Coagulation",
+    price: "1199 starting",
+    items: [
+      {
+        name: "Coagulation Panel",
+        price: "Rs 1199 starting",
+        subTests: ["PT (Prothrombin Time)", "aPTT (Activated Partial Thromboplastin Time)", "Fibrinogen"]
+      }
+    ]
+  },
+  {
+    categoryName: "Imaging",
+    price: "1599 starting",
+    items: [
+      { name: "Chest X-ray", price: "Rs 1599 starting", subTests: ["Thoracic Radiographic Scan"] },
+      { name: "Abdominal X-ray", price: "Rs 1599 starting", subTests: ["Abdominal Radiographic Scan"] },
+      { name: "Abdominal Ultrasound", price: "Rs 1599 starting", subTests: ["Ultrasonography Imaging"] }
+    ]
+  }
+];
+
+export const DOG_WHOLE_BODY_TESTS: WholeBodyTestCategory[] = [
+  {
+    categoryName: "Hematology (Blood)",
+    price: "799 starting",
+    items: [
+      {
+        name: "Complete Blood Count (CBC)",
+        price: "Rs 799 starting",
+        subTests: ["RBC Count", "WBC Count", "Hemoglobin", "Hematocrit (PCV)", "Platelet Count", "Differential Count", "Blood Smear", "Reticulocyte Count"]
+      }
+    ]
+  },
+  {
+    categoryName: "Liver Function",
+    price: "1099 starting",
+    items: [
+      {
+        name: "Liver Function Profile",
+        price: "Rs 1099 starting",
+        subTests: ["ALT (SGPT)", "AST (SGOT)", "ALP", "GGT", "Total Bilirubin", "Direct Bilirubin", "Total Protein", "Albumin", "Globulin", "A/G Ratio", "Bile Acids"]
+      }
+    ]
+  },
+  {
+    categoryName: "Kidney Function",
+    price: "1099 starting",
+    items: [
+      {
+        name: "Kidney Function Profile",
+        price: "Rs 1099 starting",
+        subTests: ["BUN", "Creatinine", "Phosphorus", "Calcium", "Sodium", "Potassium", "Chloride"]
+      },
+      {
+        name: "SDMA",
+        price: "Rs 2599 starting",
+        subTests: ["Symmetric Dimethylarginine Early Renal Marker"]
+      }
+    ]
+  },
+  {
+    categoryName: "Diabetes & Metabolism",
+    price: "599 starting",
+    items: [
+      { name: "Blood Glucose", price: "Rs 599", subTests: ["Blood Glucose (Random/Fasting)"] },
+      { name: "Fructosamine", price: "Rs 799 starting", subTests: ["Glycated Protein Assessment"] },
+      { name: "Blood Ketones", price: "Rs 799 starting", subTests: ["Ketosis Metabolic Screen"] }
+    ]
+  },
+  {
+    categoryName: "Pancreas",
+    price: "799 starting",
+    items: [
+      { name: "Spec cPL (Canine Pancreatic Lipase)", price: "Rs 2599 starting", subTests: ["Canine Pancreatic Lipase Lipemia Assessment"] },
+      { name: "Amylase", price: "Rs 799 starting", subTests: ["Amylase Enzyme Level"] },
+      { name: "Lipase", price: "Rs 799 starting", subTests: ["Lipase Enzyme Level"] }
+    ]
+  },
+  {
+    categoryName: "Endocrine (Dog Specific)",
+    price: "799 starting",
+    items: [
+      { name: "Total T4", price: "Rs 799 starting", subTests: ["Thyroxine Hormone Level"] },
+      { name: "Free T4", price: "Rs 799 starting", subTests: ["Free Thyroxine Hormone Level"] },
+      { name: "TSH", price: "Rs 799 starting", subTests: ["Thyroid Stimulating Hormone"] },
+      { name: "ACTH Stimulation Test", price: "Rs 1599 starting", subTests: ["Adrenocorticotropic Hormone Stimulation"] },
+      { name: "Low Dose Dexamethasone Test", price: "Rs 1599 starting", subTests: ["LDDS Suppression Screening"] },
+      { name: "Cortisol", price: "Rs 1099 starting", subTests: ["Adrenal Cortisol Hormone Level"] }
+    ]
+  },
+  {
+    categoryName: "Urinalysis",
+    price: "899 starting",
+    items: [
+      {
+        name: "Routine Urine Test",
+        price: "Rs 899 starting",
+        subTests: ["Specific Gravity", "Protein", "Glucose", "Ketones", "Bilirubin", "pH", "Sediment Microscopy", "UPC Ratio"]
+      },
+      {
+        name: "Urine Culture",
+        price: "Rs 899 starting",
+        subTests: ["Bacterial Pathogen Culture & Sensitivity Screening"]
+      }
+    ]
+  },
+  {
+    categoryName: "Infectious Diseases (Dog Specific)",
+    price: "1599 starting",
+    items: [
+      { name: "4Dx Test (Ehrlichia, Anaplasma, Lyme, Heartworm)", price: "Rs 1599 starting", subTests: ["4-Way Vector Vector-Borne Diagnostics"] },
+      { name: "Babesia", price: "Rs 1599 starting", subTests: ["Babesiosis Parasite Screening"] },
+      { name: "Ehrlichia", price: "Rs 1599 starting", subTests: ["Ehrlichiosis Antibody Screening"] },
+      { name: "Anaplasma", price: "Rs 1599 starting", subTests: ["Anaplasmosis Antibody Screening"] },
+      { name: "Heartworm Antigen", price: "Rs 1599 starting", subTests: ["Dirofilaria immitis Screen"] },
+      { name: "Leptospira", price: "Rs 1599 starting", subTests: ["Leptospirosis Antibody Screen"] },
+      { name: "Canine Parvovirus", price: "Rs 1599 starting", subTests: ["Canine Parvovirus Antigen Screen"] },
+      { name: "Distemper", price: "Rs 1599 starting", subTests: ["Canine Distemper Antigen Screen"] },
+      { name: "Tick Fever Panel", price: "Rs 1599 starting", subTests: ["Comprehensive Tick Fever Screen"] }
+    ]
+  },
+  {
+    categoryName: "Vitamins & Minerals",
+    price: "1099 starting",
+    items: [
+      {
+        name: "Vitamin & Mineral Profile",
+        price: "Rs 1099 starting",
+        subTests: ["Vitamin B12", "Folate", "Iron Profile", "Ferritin", "Magnesium"]
+      }
+    ]
+  },
+  {
+    categoryName: "Cardiac",
+    price: "999 starting",
+    items: [
+      { name: "NT-proBNP", price: "Rs 999 starting", subTests: ["Cardiac Stretch Biomarker"] },
+      { name: "Troponin-I", price: "Rs 999 starting", subTests: ["Myocardial Injury Marker"] },
+      { name: "ECG", price: "Rs 999 starting", subTests: ["Electrocardiogram Rhythm Scan"] },
+      { name: "Echocardiography", price: "Rs 999 starting", subTests: ["Echocardiogram Heart Scan"] }
+    ]
+  },
+  {
+    categoryName: "Gastrointestinal",
+    price: "799 starting",
+    items: [
+      {
+        name: "Gastrointestinal Panel",
+        price: "Rs 799 starting",
+        subTests: ["Stool Routine", "Ova & Cyst", "Giardia", "Occult Blood", "Fecal Culture"]
+      }
+    ]
+  },
+  {
+    categoryName: "Coagulation",
+    price: "1199 starting",
+    items: [
+      {
+        name: "Coagulation Panel",
+        price: "Rs 1199 starting",
+        subTests: ["PT (Prothrombin Time)", "aPTT (Activated Partial Thromboplastin Time)", "Fibrinogen"]
+      }
+    ]
+  },
+  {
+    categoryName: "Imaging",
+    price: "1599 starting",
+    items: [
+      { name: "Chest X-ray", price: "Rs 1599 starting", subTests: ["Thoracic Radiographic Scan"] },
+      { name: "Abdominal X-ray", price: "Rs 1599 starting", subTests: ["Abdominal Radiographic Scan"] },
+      { name: "Abdominal Ultrasound", price: "Rs 1599 starting", subTests: ["Ultrasonography Imaging"] }
+    ]
+  }
+];
+
+export const CAT_PACKAGES: PetPackage[] = [
+  {
+    name: "Cat Basic Care",
+    title: "Basic Wellness Package (Essential)",
+    price: 2700,
+    idealFor: "Ideal for: Healthy cats, annual check-up",
+    testsCount: 15,
+    includedTests: [
+      "Complete Blood Count (CBC)",
+      "Blood Smear",
+      "Blood Glucose",
+      "BUN",
+      "Creatinine",
+      "ALT (SGPT)",
+      "ALP",
+      "Total Protein",
+      "Albumin",
+      "Total Bilirubin",
+      "Calcium",
+      "Sodium",
+      "Potassium",
+      "Routine Urine Analysis",
+      "Stool Routine Examination"
+    ]
+  },
+  {
+    name: "Cat Complete Care",
+    title: "Comprehensive Health Package (Most Popular)",
+    price: 3500,
+    idealFor: "Ideal for: Adult & senior cats (1–8 years)",
+    testsCount: 28,
+    isPopular: true,
+    includedTests: [
+      "Complete Blood Count (CBC) + Blood Smear",
+      "ALT (SGPT)",
+      "AST (SGOT)",
+      "ALP",
+      "GGT",
+      "Total & Direct Bilirubin",
+      "Total Protein",
+      "Albumin",
+      "Globulin",
+      "BUN (Blood Urea Nitrogen)",
+      "Creatinine",
+      "SDMA (Early Kidney Marker)",
+      "Calcium",
+      "Phosphorus",
+      "Sodium",
+      "Potassium",
+      "Chloride",
+      "Blood Glucose",
+      "Fructosamine",
+      "Cholesterol",
+      "Routine Urinalysis",
+      "UPC Ratio (Urine Protein Creatinine)",
+      "Stool Routine Examination",
+      "FIV (Feline Immunodeficiency Virus)",
+      "FeLV (Feline Leukemia Virus)"
+    ]
+  },
+  {
+    name: "Cat Platinum 360",
+    title: "Premium Whole Body Package",
+    price: 5000,
+    idealFor: "Ideal for: Senior cats, illness screening, full preventive care",
+    testsCount: 40,
+    includedTests: [
+      "All Complete Care Diagnostic Biomarkers",
+      "Spec fPL (Feline Pancreatic Lipase)",
+      "Total T4 (Thyroid Profile)",
+      "Free T4 (Thyroid Profile)",
+      "TSH (Thyroid Profile)",
+      "Vitamin B12",
+      "Folate",
+      "Iron Profile",
+      "Ferritin",
+      "NT-proBNP (Heart Biomarker)",
+      "Troponin-I (Heart Injury Marker)",
+      "PT (Coagulation Panel)",
+      "aPTT (Coagulation Panel)",
+      "Urine Culture",
+      "Chest X-ray",
+      "Abdominal Ultrasound"
+    ]
+  }
+];
+
+export const DOG_PACKAGES: PetPackage[] = [
+  {
+    name: "Dog Basic Care",
+    title: "Basic Wellness Package (Essential)",
+    price: 2500,
+    idealFor: "Ideal for: Annual preventive check-up",
+    testsCount: 15,
+    includedTests: [
+      "Complete Blood Count (CBC)",
+      "Blood Smear",
+      "Blood Glucose",
+      "BUN",
+      "Creatinine",
+      "ALT (SGPT)",
+      "ALP",
+      "Total Protein",
+      "Albumin",
+      "Total Bilirubin",
+      "Calcium",
+      "Sodium",
+      "Potassium",
+      "Routine Urine Analysis",
+      "Stool Routine Examination"
+    ]
+  },
+  {
+    name: "Dog Complete Care",
+    title: "Comprehensive Health Package (Most Popular)",
+    price: 3600,
+    idealFor: "Ideal for: Adult dogs & breed health screening",
+    testsCount: 30,
+    isPopular: true,
+    includedTests: [
+      "Complete Blood Count (CBC) + Blood Smear",
+      "ALT (SGPT)",
+      "AST (SGOT)",
+      "ALP",
+      "GGT",
+      "Bilirubin (Total & Direct)",
+      "Total Protein",
+      "Albumin",
+      "Globulin",
+      "BUN (Blood Urea Nitrogen)",
+      "Creatinine",
+      "SDMA (Early Kidney Marker)",
+      "Calcium",
+      "Phosphorus",
+      "Sodium",
+      "Potassium",
+      "Chloride",
+      "Blood Glucose",
+      "Fructosamine",
+      "Cholesterol",
+      "Routine Urinalysis",
+      "UPC Ratio (Urine Protein Creatinine)",
+      "Stool Routine Examination",
+      "4Dx Tick Fever Panel (Ehrlichia, Anaplasma, Lyme, Heartworm)"
+    ]
+  },
+  {
+    name: "Dog Platinum 360",
+    title: "Premium Whole Body Package",
+    price: 4000,
+    idealFor: "Ideal for: Senior dogs & complete disease screening",
+    testsCount: 45,
+    includedTests: [
+      "All Complete Care Diagnostic Biomarkers",
+      "Spec cPL (Canine Pancreatic Lipase)",
+      "Total T4 (Thyroid Profile)",
+      "Free T4 (Thyroid Profile)",
+      "TSH (Thyroid Profile)",
+      "ACTH Stimulation Test (Cushing's/Addison's Screening)",
+      "Vitamin B12",
+      "Folate",
+      "Iron Profile",
+      "Ferritin",
+      "NT-proBNP (Heart Biomarker)",
+      "Troponin-I (Heart Injury Marker)",
+      "PT (Coagulation Panel)",
+      "aPTT (Coagulation Panel)",
+      "Urine Culture",
+      "Chest X-ray",
+      "Abdominal Ultrasound",
+      "ECG (Electrocardiography)"
+    ]
+  }
+];
+

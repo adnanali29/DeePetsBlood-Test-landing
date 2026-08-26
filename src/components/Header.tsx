@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Phone, Menu, X, ArrowRight, MessageSquare } from 'lucide-react';
+import { Phone, Menu, X, ArrowRight } from 'lucide-react';
 
 interface HeaderProps {
   onBookClick: () => void;
@@ -14,7 +14,6 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
     { name: 'Home', href: '#home' },
     { name: 'About Us', href: '#about' },
     { name: 'Pet Tests', href: '#categories' },
-    { name: 'At-Home Vets', href: '#services' },
     { name: 'How It Works', href: '#process' },
     { name: 'Packages', href: '#packages' },
     { name: 'Contact', href: '#contact' },
@@ -56,15 +55,6 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
 
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center space-x-3">
-              <a
-                href="https://wa.me/917500367400"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 hover:bg-emerald-500 hover:text-white flex items-center justify-center text-lg transition-colors border border-emerald-200"
-                title="Chat on WhatsApp"
-              >
-                <MessageSquare className="w-5 h-5" />
-              </a>
               <button
                 onClick={onBookClick}
                 className="btn-electric text-white px-6 py-3 rounded-full text-sm font-extrabold flex items-center gap-2"

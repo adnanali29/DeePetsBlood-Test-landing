@@ -5,13 +5,14 @@ import { Header } from '@/components/Header';
 import { HeroSection } from '@/components/HeroSection';
 import { PetCategoryCards } from '@/components/PetCategoryCards';
 import { ProcessSection } from '@/components/ProcessSection';
-import { DoorstepServices } from '@/components/DoorstepServices';
 import { WhyTrustSection } from '@/components/WhyTrustSection';
 import { GallerySection } from '@/components/GallerySection';
 import { ContactSection } from '@/components/ContactSection';
 import { Footer } from '@/components/Footer';
 import { BookingModal } from '@/components/BookingModal';
 import { Toast } from '@/components/Toast';
+import { TestCatalog } from '@/components/TestCatalog';
+import { ExploreTestsModal } from '@/components/ExploreTestsModal';
 
 export default function Home() {
   const [toast, setToast] = useState<{ title: string; message: string } | null>(null);
@@ -19,6 +20,10 @@ export default function Home() {
     isOpen: false,
     testTitle: '',
     testPrice: 0,
+  });
+  const [exploreModalState, setExploreModalState] = useState<{ isOpen: boolean; petType: 'cat' | 'dog' }>({
+    isOpen: false,
+    petType: 'cat',
   });
 
   const handleOpenBookingModal = (testTitle: string, price: number) => {
@@ -35,6 +40,25 @@ export default function Home() {
       testTitle: '',
       testPrice: 0,
     });
+  };
+
+  const handleOpenExploreModal = (petType: 'cat' | 'dog') => {
+    setExploreModalState({
+      isOpen: true,
+      petType,
+    });
+  };
+
+  const handleCloseExploreModal = () => {
+    setExploreModalState((prev) => ({
+      ...prev,
+      isOpen: false,
+    }));
+  };
+
+  const handleBookFromExplore = (testTitle: string, price: number) => {
+    handleCloseExploreModal();
+    handleOpenBookingModal(testTitle, price);
   };
 
   const handleScrollToBooking = () => {
@@ -56,13 +80,13 @@ export default function Home() {
       />
 
       {/* Pet Blood Testing Categories */}
-      <PetCategoryCards />
+      <PetCategoryCards onExploreClick={handleOpenExploreModal} />
 
       {/* 4-Step Home Diagnostic Process */}
       <ProcessSection />
 
-      {/* Full Range of Doorstep Care Services */}
-      <DoorstepServices onOpenBookingModal={handleOpenBookingModal} />
+      {/* Complete Package Tiers Section (Cat/Dog packages selector) */}
+      <TestCatalog onOpenBookingModal={handleOpenBookingModal} onExploreClick={handleOpenExploreModal} />
 
       {/* Why Pet Parents Trust DeePet + Promise Banner + Newsletter */}
       <WhyTrustSection onSuccess={(title, msg) => setToast({ title, message: msg })} />
@@ -92,6 +116,14 @@ export default function Home() {
           onClose={() => setToast(null)}
         />
       )}
+
+      {/* Explore Tests Modal */}
+      <ExploreTestsModal
+        isOpen={exploreModalState.isOpen}
+        petType={exploreModalState.petType}
+        onClose={handleCloseExploreModal}
+        onBookTest={handleBookFromExplore}
+      />
     </main>
   );
 }

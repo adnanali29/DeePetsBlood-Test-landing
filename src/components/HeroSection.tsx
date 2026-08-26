@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Phone, MessageSquare, Check, MapPin } from 'lucide-react';
+import { Phone, MessageSquare, Check } from 'lucide-react';
 import { BookingForm } from './BookingForm';
 
 interface HeroSectionProps {
@@ -83,12 +83,44 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
           {/* LEFT SIDE CONTENT OVERLAY — CENTER-ALIGNED ON PHONE / MOBILE, LEFT-ALIGNED ON DESKTOP */}
           <div className="lg:col-span-7 space-y-5 text-center lg:text-left flex flex-col items-center lg:items-start justify-center">
             
-            {/* Location Badge */}
+            {/* Happy Parents Badge */}
             <div className="flex justify-center lg:justify-start w-full">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/70 border border-amber-400/60 text-amber-300 text-xs font-extrabold uppercase tracking-wider backdrop-blur-md shadow-lg">
-                <MapPin className="w-4 h-4 text-amber-400" />
-                SERVICES AVAILABLE ONLY IN DELHI NCR
-              </span>
+              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-black/70 border border-white/20 text-white backdrop-blur-md shadow-lg">
+                
+                {/* 3 Overlapping Avatars */}
+                <div className="flex -space-x-2.5">
+                  <img
+                    className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-800 object-cover"
+                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100"
+                    alt="Happy pet parent avatar 1"
+                  />
+                  <img
+                    className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-800 object-cover"
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100"
+                    alt="Happy pet parent avatar 2"
+                  />
+                  <img
+                    className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-800 object-cover"
+                    src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=100"
+                    alt="Happy pet parent avatar 3"
+                  />
+                </div>
+
+                {/* 5 Stars */}
+                <div className="flex items-center gap-0.5">
+                  <span className="text-yellow-400 text-xs sm:text-sm">★</span>
+                  <span className="text-yellow-400 text-xs sm:text-sm">★</span>
+                  <span className="text-yellow-400 text-xs sm:text-sm">★</span>
+                  <span className="text-yellow-400 text-xs sm:text-sm">★</span>
+                  <span className="text-yellow-400 text-xs sm:text-sm">★</span>
+                </div>
+
+                {/* Text Description */}
+                <span className="text-[10px] sm:text-xs font-extrabold uppercase tracking-wide text-white/95">
+                  5000+ Happy Pet Parents
+                </span>
+
+              </div>
             </div>
 
             {/* Main Headline */}

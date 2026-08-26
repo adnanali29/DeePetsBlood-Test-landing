@@ -60,7 +60,7 @@ export const ProcessSection: React.FC = () => {
           {/* Dashed Horizontal Connector Line for Desktop */}
           <div className="hidden lg:block absolute top-10 left-[12%] right-[12%] h-0.5 border-t-2 border-dashed border-slate-300 z-0" />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-8 relative z-10">
             {steps.map((step, idx) => (
               <div key={idx} className="flex flex-col items-center text-center group">
                 
