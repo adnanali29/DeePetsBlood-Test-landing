@@ -27,11 +27,26 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !phone || !date) return;
+
+    // WhatsApp message formatting for modal bookings
+    const messageText = `Hi Dee Pets, I want to book an appointment:
+- Test: ${testTitle}
+- Price: ₹${testPrice.toLocaleString('en-IN')}
+- Name: ${name}
+- Phone Number: ${phone}
+- Preferred Collection Date: ${date}`.trim();
+
+    const whatsappUrl = `https://wa.me/919591875232?text=${encodeURIComponent(messageText)}`;
+    
+    // Open immediately to guarantee user gesture stack is preserved
+    window.open(whatsappUrl, '_blank');
+
     onClose();
     onConfirm(
       'Booking Confirmed! 🐾',
       `Our phlebotomist will call ${phone} to confirm your doorstep visit slot for ${testTitle}.`
     );
+
     setName('');
     setPhone('');
     setDate('');

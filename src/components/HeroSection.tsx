@@ -164,9 +164,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
             </div>
 
             {/* Action Buttons: Call Now & WhatsApp */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-1 w-full">
+            <div className="hidden lg:flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-1 w-full">
               <a
-                href="tel:+917500367400"
+                href="tel:+919591875232"
                 className="bg-[#b2d650] hover:bg-[#a1c83d] text-slate-900 px-8 py-3.5 rounded-full text-base font-extrabold transition-all shadow-lg hover:scale-105 flex items-center gap-2.5"
               >
                 <Phone className="w-5 h-5" />
@@ -174,7 +174,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
               </a>
 
               <a
-                href="https://wa.me/917500367400"
+                href="https://wa.me/919591875232?text=Hi%20Deepet%20Services%0AI%20want%20to%20know%20more%20about%20your%20services."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-[#b2d650] hover:bg-[#a1c83d] text-slate-900 px-8 py-3.5 rounded-full text-base font-extrabold transition-all shadow-lg hover:scale-105 flex items-center gap-2.5"

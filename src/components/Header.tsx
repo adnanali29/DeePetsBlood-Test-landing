@@ -100,10 +100,10 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
                 Book Home Visit Now
               </button>
               <a
-                href="tel:+917500367400"
+                href="tel:+919591875232"
                 className="text-center py-2.5 rounded-2xl bg-deepblue-50 text-deepblue-700 font-bold text-xs flex items-center justify-center gap-2"
               >
-                <Phone className="w-4 h-4" /> Call +91 75003 67400
+                <Phone className="w-4 h-4" /> Call +91 95918 75232
               </a>
             </div>
           </div>

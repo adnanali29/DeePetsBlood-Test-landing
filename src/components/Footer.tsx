@@ -22,7 +22,7 @@ export const Footer: React.FC = () => {
             </p>
             <div className="flex items-center space-x-3 text-slate-400">
               <a
-                href="https://wa.me/917500367400"
+                href="https://wa.me/919591875232?text=Hi%20Deepet%20Services%0AI%20want%20to%20know%20more%20about%20your%20services."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 rounded-full bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors text-xs"
@@ -31,7 +31,7 @@ export const Footer: React.FC = () => {
                 <MessageSquare className="w-4 h-4" />
               </a>
               <a
-                href="tel:+917500367400"
+                href="tel:+919591875232"
                 className="w-8 h-8 rounded-full bg-slate-800 hover:bg-deepblue-600 hover:text-white flex items-center justify-center transition-colors text-xs"
                 title="Phone"
               >
@@ -66,7 +66,7 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="text-white text-sm font-bold font-heading mb-4">Contact Info</h4>
             <ul className="space-y-2.5 text-xs">
-              <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-deepblue-400" /> +91 75003 67400</li>
+              <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-deepblue-400" /> +91 95918 75232</li>
               <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-deepblue-400" /> +91 80765 63747</li>
               <li className="flex items-center gap-2"><Mail className="w-4 h-4 text-deepblue-400" /> contact@deepetservices.com</li>
               <li className="flex items-center gap-2"><Clock className="w-4 h-4 text-deepblue-400" /> Mon–Sat: 9:00 AM – 7:00 PM</li>

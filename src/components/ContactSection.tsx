@@ -25,6 +25,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onSuccess }) => 
       return;
     }
 
+    // Format WhatsApp message for contact form
+    const messageText = `Hi Dee Pets, I want to contact you:
+- Name: ${formData.userName}
+- Pet Name: ${formData.petName} (${selectedPetType})
+- Phone Number: ${formData.phoneNumber}
+${formData.emailAddress ? `- Email: ${formData.emailAddress}` : ''}
+- Message: ${formData.messageText}`.trim();
+
+    const whatsappUrl = `https://wa.me/919591875232?text=${encodeURIComponent(messageText)}`;
+    
+    // Open WhatsApp synchronously to bypass popup blocker
+    window.open(whatsappUrl, '_blank');
+
     onSuccess(
       'Thank You! 🐾',
       `Message received for ${formData.petName}. Our DeePet team will call you within 15 minutes.`
@@ -87,13 +100,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onSuccess }) => 
                 <div className="space-y-3">
                   
                   {/* Call Us */}
-                  <a href="tel:+917500367400" className="flex items-center gap-3 p-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 transition-all group backdrop-blur-sm">
+                  <a href="tel:+919591875232" className="flex items-center gap-3 p-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 transition-all group backdrop-blur-sm">
                     <div className="w-9 h-9 rounded-lg bg-white/20 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                       <Phone className="w-4 h-4" />
                     </div>
                     <div>
                       <span className="text-[10px] font-bold text-blue-100/70 block uppercase tracking-wider">Call Us</span>
-                      <span className="text-xs font-extrabold text-white group-hover:text-blue-50 transition-colors">+91 75003 67400</span>
+                      <span className="text-xs font-extrabold text-white group-hover:text-blue-50 transition-colors">+91 95918 75232</span>
                     </div>
                   </a>
 
@@ -109,7 +122,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onSuccess }) => 
                   </a>
 
                   {/* WhatsApp */}
-                  <a href="https://wa.me/917500367400" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-xl bg-emerald-400/15 hover:bg-emerald-400/25 border border-emerald-300/30 transition-all group backdrop-blur-sm">
+                  <a href="https://wa.me/919591875232?text=Hi%20Deepet%20Services%0AI%20want%20to%20know%20more%20about%20your%20services." target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-xl bg-emerald-400/15 hover:bg-emerald-400/25 border border-emerald-300/30 transition-all group backdrop-blur-sm">
                     <div className="w-9 h-9 rounded-lg bg-emerald-500 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                       <MessageSquare className="w-4 h-4" />
                     </div>
