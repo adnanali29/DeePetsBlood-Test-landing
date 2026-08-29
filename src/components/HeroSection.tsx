@@ -39,9 +39,7 @@ import { useApp } from '@/context/AppContext';
 export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
   const { heroConfig, contactConfig } = useApp();
   const [activeVideoIdx, setActiveVideoIdx] = useState(0);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  const currentVideo = LOCAL_PET_VIDEOS[activeVideoIdx];
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   // Auto-advance video carousel smoothly every 7 seconds
   useEffect(() => {
@@ -51,33 +49,39 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
     return () => clearInterval(timer);
   }, []);
 
-  // When activeVideoIdx changes, play the next video cleanly
+  // Ensure active video is playing smoothly
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => {});
+    const activeVideo = videoRefs.current[activeVideoIdx];
+    if (activeVideo) {
+      activeVideo.currentTime = 0;
+      activeVideo.play().catch(() => {});
     }
   }, [activeVideoIdx]);
 
   return (
     <section id="home" className="relative min-h-[90vh] lg:min-h-screen flex items-center overflow-hidden py-10 lg:py-14 text-white">
       
-      {/* PURE AUTOMATIC FULL-COVER BACKGROUND VIDEO CAROUSEL (Dog 2 -> cat -> Dog 5) */}
+      {/* INSTANT PRELOADED FULL-COVER BACKGROUND VIDEO CAROUSEL WITH ZERO FLICKER CROSSFADE */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-950">
-        <video
-          ref={videoRef}
-          key={currentVideo.id}
-          src={currentVideo.videoUrl}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover scale-[1.32] object-center transition-opacity duration-1000"
-        />
+        {LOCAL_PET_VIDEOS.map((vid, idx) => (
+          <video
+            key={vid.id}
+            ref={(el) => { videoRefs.current[idx] = el; }}
+            src={vid.videoUrl}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            className={`absolute inset-0 w-full h-full object-cover scale-[1.32] object-center transition-opacity duration-1000 ease-in-out ${
+              idx === activeVideoIdx ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+            }`}
+          />
+        ))}
         
         {/* Soft Ambient Overlay so background video is clearly visible while keeping text readable */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/35 z-10" />
-        <div className="absolute inset-0 bg-black/15 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/35 z-20" />
+        <div className="absolute inset-0 bg-black/15 z-20" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full">

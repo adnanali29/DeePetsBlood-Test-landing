@@ -41,6 +41,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${outfit.variable} ${jakarta.variable} scroll-smooth`} suppressHydrationWarning>
       <head>
+        {/* Preload Hero Background Video for Instant Playback */}
+        <link rel="preload" href="/dog2.mp4" as="video" type="video/mp4" />
+
         {/* Google Tag Manager — placed as high as possible in <head> */}
         <Script
           id="gtm-head"
