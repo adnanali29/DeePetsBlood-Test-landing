@@ -2,7 +2,8 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { ChevronDown, Lock, CheckCircle2, Phone } from 'lucide-react';
-import { CAT_WHOLE_BODY_TESTS, DOG_WHOLE_BODY_TESTS, CAT_PACKAGES, DOG_PACKAGES } from '@/data/testsData';
+import { useApp } from '@/context/AppContext';
+import { useRouter } from 'next/navigation';
 
 interface BookingFormProps {
   initialTestName?: string;
@@ -10,6 +11,15 @@ interface BookingFormProps {
 }
 
 export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuccess }) => {
+  const router = useRouter();
+  const { 
+    catTests, 
+    dogTests, 
+    catPackages, 
+    dogPackages, 
+    contactConfig, 
+    addLead 
+  } = useApp();
   const [petType, setPetType] = useState<'Dog' | 'Cat'>('Dog');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [selectedSubTest, setSelectedSubTest] = useState<string>('');
@@ -22,8 +32,8 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
 
   // Generate categories list dynamically
   const categoriesList = useMemo(() => {
-    const wholeBodycats = petType === 'Cat' ? CAT_WHOLE_BODY_TESTS : DOG_WHOLE_BODY_TESTS;
-    const packages = petType === 'Cat' ? CAT_PACKAGES : DOG_PACKAGES;
+    const wholeBodycats = petType === 'Cat' ? catTests : dogTests;
+    const packages = petType === 'Cat' ? catPackages : dogPackages;
     const names = wholeBodycats.map(c => c.categoryName);
     const packageNames = packages.map(p => p.title);
     return [...names, ...packageNames];
@@ -33,8 +43,8 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
 
   // Generate sub-tests list dynamically based on selected category
   const subTestsList = useMemo(() => {
-    const wholeBodycats = petType === 'Cat' ? CAT_WHOLE_BODY_TESTS : DOG_WHOLE_BODY_TESTS;
-    const packages = petType === 'Cat' ? CAT_PACKAGES : DOG_PACKAGES;
+    const wholeBodycats = petType === 'Cat' ? catTests : dogTests;
+    const packages = petType === 'Cat' ? catPackages : dogPackages;
     
     // Check if the selected category is one of the packages
     const activePackage = packages.find(pkg => pkg.title === activeCategory || pkg.name === activeCategory);
@@ -78,15 +88,15 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
   // Pre-select category and sub-test when initialTestName is provided
   useEffect(() => {
     if (initialTestName) {
-      const catPackages = petType === 'Cat' ? CAT_PACKAGES : DOG_PACKAGES;
-      const matchingPkg = catPackages.find(p => p.title === initialTestName || p.name === initialTestName);
+      const packages = petType === 'Cat' ? catPackages : dogPackages;
+      const matchingPkg = packages.find(p => p.title === initialTestName || p.name === initialTestName);
       if (matchingPkg) {
         setSelectedCategory(matchingPkg.title);
         setSelectedSubTest(matchingPkg.title);
         return;
       }
       
-      const wholeBodycats = petType === 'Cat' ? CAT_WHOLE_BODY_TESTS : DOG_WHOLE_BODY_TESTS;
+      const wholeBodycats = petType === 'Cat' ? catTests : dogTests;
       for (const cat of wholeBodycats) {
         const matchingItem = cat.items.find(item => item.name === initialTestName);
         if (matchingItem) {
@@ -105,28 +115,44 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
       return;
     }
 
-    // WhatsApp message formatting
+    // WhatsApp message — build line by line, skip empty optional fields
     const activeSubTestObj = subTestsList.find(s => s.name === activeSubTest);
-    const priceStr = activeSubTestObj ? ` (₹${activeSubTestObj.price})` : '';
+    const priceStr = activeSubTestObj ? ` (\u20B9${activeSubTestObj.price})` : '';
 
-    const messageText = `Hi Dee Pets, I want to book an appointment:
-- Pet Type: ${petType}
-- Main Category: ${activeCategory}
-- Test/Package: ${activeSubTest}${priceStr}
-- Name: ${name}
-- Phone Number: ${phone}
-${city ? `- City: ${city}` : ''}
-${pincode ? `- Pincode: ${pincode}` : ''}
-${message ? `- Message: ${message}` : ''}`.trim();
+    const lines = [
+      'Hi Dee Pets, I want to book an appointment:',
+      `\u2022 Pet Type: ${petType}`,
+      `\u2022 Main Category: ${activeCategory}`,
+      `\u2022 Test/Package: ${activeSubTest}${priceStr}`,
+      `\u2022 Name: ${name}`,
+      `\u2022 Phone Number: ${phone}`,
+    ];
+    if (city)    lines.push(`\u2022 City: ${city}`);
+    if (pincode) lines.push(`\u2022 Pincode: ${pincode}`);
+    if (message) lines.push(`\u2022 Message: ${message}`);
 
-    const whatsappUrl = `https://wa.me/919591875232?text=${encodeURIComponent(messageText)}`;
-    
-    // Open synchronously first so the browser doesn't block the popup
-    window.open(whatsappUrl, '_blank');
+    const messageText = lines.join('\n');
+    const whatsappUrl = `https://wa.me/${contactConfig.whatsappNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(messageText)}`;
+
+    const code = addLead({
+      name,
+      phone,
+      petType,
+      category: activeCategory,
+      subTest: activeSubTest,
+      price: activeSubTestObj?.price,
+      city,
+      pincode,
+      message,
+    });
+
+    // Store WhatsApp URL in sessionStorage keyed by code, then navigate to clean URL
+    sessionStorage.setItem(`deepet_wa_${code}`, whatsappUrl);
+    router.push(`/thank-you/${code}`);
 
     onSuccess(
       'Appointment Booked! 🐾',
-      `Thank you ${name}! Your request for ${petType} - ${activeCategory} (${activeSubTest}) has been submitted. Our phlebotomist will contact ${phone} shortly.`
+      `Thank you ${name}! Your consultation code is ${code}. Our team will contact ${phone} shortly.`
     );
 
     setName('');

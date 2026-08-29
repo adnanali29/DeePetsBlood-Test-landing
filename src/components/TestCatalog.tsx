@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Check, Sparkles, Award } from 'lucide-react';
-import { CAT_PACKAGES, DOG_PACKAGES, PetPackage } from '@/data/testsData';
+import { useApp } from '@/context/AppContext';
 
 interface TestCatalogProps {
   onOpenBookingModal: (testTitle: string, price: number) => void;
@@ -10,9 +10,10 @@ interface TestCatalogProps {
 }
 
 export const TestCatalog: React.FC<TestCatalogProps> = ({ onOpenBookingModal, onExploreClick }) => {
+  const { catPackages, dogPackages } = useApp();
   const [selectedPet, setSelectedPet] = useState<'dog' | 'cat'>('dog');
 
-  const packages = selectedPet === 'dog' ? DOG_PACKAGES : CAT_PACKAGES;
+  const packages = selectedPet === 'dog' ? dogPackages : catPackages;
 
   const handleBook = (pkg: PetPackage) => {
     onOpenBookingModal(pkg.title, pkg.price);

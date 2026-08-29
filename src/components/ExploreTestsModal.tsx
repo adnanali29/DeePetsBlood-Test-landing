@@ -2,11 +2,7 @@
 
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { X, Search, CheckCircle, ArrowRight, ShieldCheck, Heart, Activity } from 'lucide-react';
-import { 
-  WholeBodyTestCategory, 
-  CAT_WHOLE_BODY_TESTS, 
-  DOG_WHOLE_BODY_TESTS 
-} from '@/data/testsData';
+import { useApp } from '@/context/AppContext';
 
 interface ExploreTestsModalProps {
   isOpen: boolean;
@@ -21,13 +17,14 @@ export const ExploreTestsModal: React.FC<ExploreTestsModalProps> = ({
   onClose,
   onBookTest,
 }) => {
+  const { catTests, dogTests } = useApp();
   const [activeCategory, setActiveCategory] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const modalRef = useRef<HTMLDivElement>(null);
 
   const categories = useMemo(() => {
-    return petType === 'cat' ? CAT_WHOLE_BODY_TESTS : DOG_WHOLE_BODY_TESTS;
-  }, [petType]);
+    return petType === 'cat' ? catTests : dogTests;
+  }, [petType, catTests, dogTests]);
 
   // Reset states when opening modal or changing pet type
   useEffect(() => {

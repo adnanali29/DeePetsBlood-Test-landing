@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { X, Calendar } from 'lucide-react';
+import { useApp } from '@/context/AppContext';
+import { useRouter } from 'next/navigation';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -18,6 +20,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   onClose,
   onConfirm,
 }) => {
+  const { addLead, contactConfig } = useApp();
+  const router = useRouter();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [date, setDate] = useState('');
@@ -28,23 +32,40 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     e.preventDefault();
     if (!name || !phone || !date) return;
 
-    // WhatsApp message formatting for modal bookings
-    const messageText = `Hi Dee Pets, I want to book an appointment:
-- Test: ${testTitle}
-- Price: ₹${testPrice.toLocaleString('en-IN')}
-- Name: ${name}
-- Phone Number: ${phone}
-- Preferred Collection Date: ${date}`.trim();
+    // WhatsApp message — line by line with bullet points
+    const lines = [
+      'Hi Dee Pets, I want to book an appointment:',
+      `\u2022 Test/Package: ${testTitle}`,
+      `\u2022 Price: \u20B9${testPrice.toLocaleString('en-IN')}`,
+      `\u2022 Name: ${name}`,
+      `\u2022 Phone Number: ${phone}`,
+      `\u2022 Preferred Collection Date: ${date}`,
+    ];
+    const messageText = lines.join('\n');
+    const whatsappUrl = `https://wa.me/${contactConfig.whatsappNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(messageText)}`;
 
-    const whatsappUrl = `https://wa.me/919591875232?text=${encodeURIComponent(messageText)}`;
-    
-    // Open immediately to guarantee user gesture stack is preserved
-    window.open(whatsappUrl, '_blank');
+    const deducedPetType: 'Dog' | 'Cat' = (
+      testTitle.toLowerCase().includes('cat') ||
+      testTitle.toLowerCase().includes('feline')
+    ) ? 'Cat' : 'Dog';
 
+    const code = addLead({
+      name,
+      phone,
+      petType: deducedPetType,
+      category: 'Direct Test Booking',
+      subTest: testTitle,
+      price: testPrice,
+      date,
+      message: `Preferred date: ${date}`,
+    });
+
+    sessionStorage.setItem(`deepet_wa_${code}`, whatsappUrl);
+    router.push(`/thank-you/${code}`);
     onClose();
     onConfirm(
-      'Booking Confirmed! 🐾',
-      `Our phlebotomist will call ${phone} to confirm your doorstep visit slot for ${testTitle}.`
+      'Booking Confirmed! \ud83d\udc3e',
+      `Your consultation code is ${code}. Our phlebotomist will call ${phone} to confirm your slot.`
     );
 
     setName('');

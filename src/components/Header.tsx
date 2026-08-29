@@ -7,7 +7,10 @@ interface HeaderProps {
   onBookClick: () => void;
 }
 
+import { useApp } from '@/context/AppContext';
+
 export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
+  const { contactConfig } = useApp();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
@@ -27,17 +30,11 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <a href="#home" className="flex items-center gap-3 group">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-deepblue-600 to-indigo-500 text-white flex items-center justify-center text-xl font-bold shadow-md shadow-deepblue-200 group-hover:scale-105 transition-transform">
-                🐾
-              </div>
-              <div className="flex flex-col">
-                <span className="text-2xl font-black tracking-tight font-heading text-slate-900 leading-none">
-                  DeePet<span className="text-deepblue-600">Services</span>
-                </span>
-                <span className="text-[10px] uppercase font-bold tracking-widest text-deepblue-600 mt-1">
-                  Doorstep Pet Diagnostics
-                </span>
-              </div>
+              <img
+                src="/deepetservices-logo.webp"
+                alt="DeePet Services"
+                className="h-12 w-auto object-contain group-hover:scale-102 transition-transform"
+              />
             </a>
 
             {/* Desktop Navigation */}
@@ -100,10 +97,10 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
                 Book Home Visit Now
               </button>
               <a
-                href="tel:+919591875232"
+                href={`tel:${contactConfig.primaryPhone}`}
                 className="text-center py-2.5 rounded-2xl bg-deepblue-50 text-deepblue-700 font-bold text-xs flex items-center justify-center gap-2"
               >
-                <Phone className="w-4 h-4" /> Call +91 95918 75232
+                <Phone className="w-4 h-4" /> Call {contactConfig.primaryPhone}
               </a>
             </div>
           </div>

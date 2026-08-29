@@ -34,7 +34,10 @@ const LOCAL_PET_VIDEOS: LocalPetVideo[] = [
   },
 ];
 
+import { useApp } from '@/context/AppContext';
+
 export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
+  const { heroConfig, contactConfig } = useApp();
   const [activeVideoIdx, setActiveVideoIdx] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -124,21 +127,27 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.15] font-heading drop-shadow-md text-center lg:text-left w-full">
-              Professional Vet & <br />
-              <span className="text-[#b2d650]">Pet Care at Your</span> <br />
-              Home
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.15] font-heading drop-shadow-md text-center lg:text-left w-full whitespace-pre-line">
+              {heroConfig.headline.includes('Pet Care') ? (
+                <>
+                  {heroConfig.headline.split('Pet Care')[0]}
+                  <span className="text-[#b2d650]">Pet Care</span>
+                  {heroConfig.headline.split('Pet Care')[1]}
+                </>
+              ) : (
+                heroConfig.headline
+              )}
             </h1>
 
             {/* Subtitle */}
             <p className="text-lg sm:text-xl text-slate-200 font-medium max-w-xl text-center lg:text-left mx-auto lg:mx-0 drop-shadow">
-              No travel. No waiting. No stress for your pet.
+              {heroConfig.subtitle}
             </p>
 
             {/* Highlight Banner Pill */}
             <div className="inline-block bg-black/65 border border-white/20 backdrop-blur-md rounded-2xl px-5 py-2.5 text-sm sm:text-base font-extrabold text-white shadow-md mx-auto lg:mx-0">
-              <span>Professional Home Consultation</span>
-              <span className="text-slate-300 font-normal ml-2 text-xs sm:text-sm">(All travel included)</span>
+              <span>{heroConfig.badgeText}</span>
+              <span className="text-slate-300 font-normal ml-2 text-xs sm:text-sm">{heroConfig.badgeSubtext}</span>
             </div>
 
             {/* Checkmarks Line */}
@@ -166,7 +175,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
             {/* Action Buttons: Call Now & WhatsApp */}
             <div className="hidden lg:flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-1 w-full">
               <a
-                href="tel:+919591875232"
+                href={`tel:${contactConfig.primaryPhone}`}
                 className="bg-[#b2d650] hover:bg-[#a1c83d] text-slate-900 px-8 py-3.5 rounded-full text-base font-extrabold transition-all shadow-lg hover:scale-105 flex items-center gap-2.5"
               >
                 <Phone className="w-5 h-5" />
@@ -174,7 +183,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
               </a>
 
               <a
-                href="https://wa.me/919591875232?text=Hi%20Deepet%20Services%0AI%20want%20to%20know%20more%20about%20your%20services."
+                href={`https://wa.me/${contactConfig.whatsappNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent("Hi DeePet Services, I want to know more about your services.")}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-[#b2d650] hover:bg-[#a1c83d] text-slate-900 px-8 py-3.5 rounded-full text-base font-extrabold transition-all shadow-lg hover:scale-105 flex items-center gap-2.5"

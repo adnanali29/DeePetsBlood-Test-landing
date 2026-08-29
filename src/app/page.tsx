@@ -15,7 +15,10 @@ import { Toast } from '@/components/Toast';
 import { TestCatalog } from '@/components/TestCatalog';
 import { ExploreTestsModal } from '@/components/ExploreTestsModal';
 
+import { useApp } from '@/context/AppContext';
+
 export default function Home() {
+  const { contactConfig } = useApp();
   const [toast, setToast] = useState<{ title: string; message: string } | null>(null);
   const [modalState, setModalState] = useState<{ isOpen: boolean; testTitle: string; testPrice: number }>({
     isOpen: false,
@@ -129,14 +132,14 @@ export default function Home() {
       {/* Sticky Call Now & WhatsApp Bottom Bar for Mobile (Image 1 style) */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2.5 flex gap-3 md:hidden shadow-[0_-4px_12px_rgba(0,0,0,0.08)] animate-fade-in">
         <a
-          href="tel:+919591875232"
+          href={`tel:${contactConfig.primaryPhone}`}
           className="flex-1 bg-[#1e88e5] hover:bg-[#1565c0] text-white py-2 px-4 rounded-xl font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-md transition-all active:scale-[0.98]"
         >
           <Phone className="w-4 h-4 flex-shrink-0" />
           <span>Call Now</span>
         </a>
         <a
-          href="https://wa.me/919591875232?text=Hi%20Deepet%20Services%0AI%20want%20to%20know%20more%20about%20your%20services."
+          href={`https://wa.me/${contactConfig.whatsappNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent("Hi DeePet Services, I want to know more about your services.")}`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex-1 bg-[#25D366] hover:bg-[#20ba5a] text-white py-2 px-4 rounded-xl font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-md transition-all active:scale-[0.98]"

@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import { Outfit, Plus_Jakarta_Sans } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
+
+import { AppContextProvider } from '@/context/AppContext';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -19,7 +22,7 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: 'DeePet Services - At-Home Pet Diagnostics & Doorstep Veterinary Care',
   description:
-    'Delhi NCR’s No.1 Doorstep Veterinary & Pet Diagnostics. Accurate blood testing and veterinary health checkups for cats & dogs in the comfort of your home.',
+    `Delhi NCR's No.1 Doorstep Veterinary & Pet Diagnostics. Accurate blood testing and veterinary health checkups for cats & dogs in the comfort of your home.`,
   keywords: [
     'pet blood test Delhi NCR',
     'at home vet visit Gurugram',
@@ -36,9 +39,34 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${outfit.variable} ${jakarta.variable} scroll-smooth`}>
-      <body className="antialiased text-slate-800 selection:bg-deepblue-200 selection:text-deepblue-900">
-        {children}
+    <html lang="en" className={`${outfit.variable} ${jakarta.variable} scroll-smooth`} suppressHydrationWarning>
+      <head>
+        {/* Google Tag Manager — placed as high as possible in <head> */}
+        <Script
+          id="gtm-head"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TL4W8TKZ');`,
+          }}
+        />
+      </head>
+      <body className="antialiased text-slate-800 selection:bg-deepblue-200 selection:text-deepblue-900" suppressHydrationWarning>
+        {/* Google Tag Manager (noscript) — immediately after <body> */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-TL4W8TKZ"
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
+        </noscript>
+        <AppContextProvider>
+          {children}
+        </AppContextProvider>
       </body>
     </html>
   );

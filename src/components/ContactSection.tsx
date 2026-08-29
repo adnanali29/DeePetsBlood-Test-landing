@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useApp } from '@/context/AppContext';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Phone, Mail, MessageSquare, MapPin, ArrowRight } from 'lucide-react';
 
@@ -9,6 +11,8 @@ interface ContactSectionProps {
 }
 
 export const ContactSection: React.FC<ContactSectionProps> = ({ onSuccess }) => {
+  const { contactConfig, addLead } = useApp();
+  const router = useRouter();
   const [selectedPetType, setSelectedPetType] = useState<'Dog' | 'Cat'>('Dog');
   const [formData, setFormData] = useState({
     userName: '',
@@ -25,22 +29,34 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onSuccess }) => 
       return;
     }
 
-    // Format WhatsApp message for contact form
-    const messageText = `Hi Dee Pets, I want to contact you:
-- Name: ${formData.userName}
-- Pet Name: ${formData.petName} (${selectedPetType})
-- Phone Number: ${formData.phoneNumber}
-${formData.emailAddress ? `- Email: ${formData.emailAddress}` : ''}
-- Message: ${formData.messageText}`.trim();
+    // WhatsApp message — line by line with bullet points
+    const lines = [
+      'Hi Dee Pets, I want to get in touch:',
+      `\u2022 Name: ${formData.userName}`,
+      `\u2022 Pet Name: ${formData.petName} (${selectedPetType})`,
+      `\u2022 Phone Number: ${formData.phoneNumber}`,
+    ];
+    if (formData.emailAddress) lines.push(`\u2022 Email: ${formData.emailAddress}`);
+    if (formData.messageText)  lines.push(`\u2022 Message: ${formData.messageText}`);
 
-    const whatsappUrl = `https://wa.me/919591875232?text=${encodeURIComponent(messageText)}`;
-    
-    // Open WhatsApp synchronously to bypass popup blocker
-    window.open(whatsappUrl, '_blank');
+    const messageText = lines.join('\n');
+    const whatsappUrl = `https://wa.me/${contactConfig.whatsappNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(messageText)}`;
+
+    const code = addLead({
+      name: formData.userName,
+      phone: formData.phoneNumber,
+      petType: selectedPetType,
+      category: 'Contact Us Consultation',
+      subTest: `Inquiry: ${formData.petName}`,
+      message: `Email: ${formData.emailAddress || 'N/A'}. Msg: ${formData.messageText}`,
+    });
+
+    sessionStorage.setItem(`deepet_wa_${code}`, whatsappUrl);
+    router.push(`/thank-you/${code}`);
 
     onSuccess(
       'Thank You! 🐾',
-      `Message received for ${formData.petName}. Our DeePet team will call you within 15 minutes.`
+      `Message received for ${formData.petName}. Consultation code: ${code}. Our DeePet team will call you within 15 minutes.`
     );
 
     setFormData({
