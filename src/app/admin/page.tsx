@@ -962,7 +962,13 @@ export default function AdminPanel() {
                           <tr 
                             key={lead.id} 
                             onClick={() => setSelectedLead(lead)}
-                            className="hover:bg-slate-50/60 transition-colors cursor-pointer"
+                            className={`transition-colors cursor-pointer ${
+                              lead.status === 'completed'
+                                ? 'bg-emerald-50/70 hover:bg-emerald-100/80'
+                                : lead.status === 'cancelled'
+                                  ? 'bg-red-50/70 hover:bg-red-100/80'
+                                  : 'bg-yellow-50/70 hover:bg-yellow-100/80'
+                            }`}
                           >
                             <td className="px-4 py-4 align-top">
                               {lead.consultationCode ? (
@@ -1021,8 +1027,8 @@ export default function AdminPanel() {
                                 )}
                                 {/* Message */}
                                 {lead.message && (
-                                  <div className="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 mt-0.5 max-w-[220px]">
-                                    <p className="text-[10.5px] text-slate-500 italic leading-snug line-clamp-2">"{lead.message}"</p>
+                                  <div className="bg-white/80 border border-slate-200 rounded-lg px-2.5 py-1.5 mt-0.5 max-w-[220px]">
+                                    <p className="text-[10.5px] text-slate-600 italic leading-snug line-clamp-2">"{lead.message}"</p>
                                   </div>
                                 )}
                                 {/* Follow-up */}
@@ -1073,16 +1079,9 @@ export default function AdminPanel() {
                                     </button>
                                   </>
                                 )}
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDeleteLead(lead.id);
-                                  }}
-                                  className="p-1.5 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition-all cursor-pointer border border-red-200"
-                                  title="Delete lead record"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
+                                {lead.status !== 'active' && (
+                                  <span className="text-[11px] text-slate-400 font-medium">—</span>
+                                )}
                               </div>
                             </td>
                           </tr>
