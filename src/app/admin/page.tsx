@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   useApp, 
   Lead, 
@@ -31,7 +32,11 @@ import {
   Settings,
   Link,
   ExternalLink,
-  Download
+  Download,
+  ShieldCheck,
+  LogOut,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 
 export default function AdminPanel() {
@@ -57,7 +62,21 @@ export default function AdminPanel() {
     updateGoogleSheetUrl,
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'home' | 'contacts' | 'leads' | 'packages' | 'testimonials' | 'settings'>('dashboard');
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'home' | 'contacts' | 'leads' | 'packages' | 'testimonials' | 'settings' | 'security'>('dashboard');
+
+  // Auth guard
+  useEffect(() => {
+    const session = sessionStorage.getItem('deepet_admin_session');
+    if (session !== 'true') {
+      router.replace('/admin/login');
+    }
+  }, [router]);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('deepet_admin_session');
+    router.push('/admin/login');
+  };
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [followUpForm, setFollowUpForm] = useState<{ date: string; medium: 'WhatsApp' | 'Call'; remark: string }>({
@@ -116,6 +135,14 @@ export default function AdminPanel() {
   const [leadsSearch, setLeadsSearch] = useState('');
   const [leadsStatusFilter, setLeadsStatusFilter] = useState<'all' | 'active' | 'completed' | 'cancelled'>('all');
 
+  // Security / Credentials state
+  const [credEmail, setCredEmail] = useState('');
+  const [credNewPw, setCredNewPw] = useState('');
+  const [credConfirmPw, setCredConfirmPw] = useState('');
+  const [credCurrentPw, setCredCurrentPw] = useState('');
+  const [showCredPw, setShowCredPw] = useState(false);
+  const [credMsg, setCredMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
   // Leads Calculation
   const totalLeads = leads.length;
   const activeLeads = leads.filter(l => l.status === 'active').length;
@@ -131,6 +158,7 @@ export default function AdminPanel() {
     { id: 'packages', name: 'Packages (Diagnostics)', icon: Package },
     { id: 'testimonials', name: 'Testimonials', icon: MessageSquare },
     { id: 'settings', name: 'Google Sheet', icon: Settings },
+    { id: 'security', name: 'Security', icon: ShieldCheck },
   ];
 
   // CSV Download helper
@@ -439,7 +467,7 @@ export default function AdminPanel() {
           })}
         </nav>
 
-        <div className="pt-6 border-t border-slate-100">
+        <div className="pt-4 border-t border-slate-100 space-y-2">
           <a
             href="/"
             className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all font-bold text-sm"
@@ -447,6 +475,13 @@ export default function AdminPanel() {
             <ArrowLeft className="w-4 h-4" />
             <span>Go to Website</span>
           </a>
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600 transition-all font-bold text-sm cursor-pointer"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Logout</span>
+          </button>
         </div>
       </aside>
 
@@ -463,7 +498,7 @@ export default function AdminPanel() {
               <Menu className="w-6 h-6" />
             </button>
             <h1 className="text-xl sm:text-2xl font-black text-slate-900 capitalize font-heading">
-              {activeTab === 'contacts' ? 'WhatsApp & Calls' : activeTab === 'leads' ? 'Consultations' : activeTab}
+              {activeTab === 'contacts' ? 'WhatsApp & Calls' : activeTab === 'leads' ? 'Consultations' : activeTab === 'security' ? 'Security & Credentials' : activeTab}
             </h1>
           </div>
           <div className="flex items-center gap-3">
@@ -1667,7 +1702,186 @@ export default function AdminPanel() {
         </div>
       )}
 
-      {/* Side Details Menu Drawer */}
+      {/* TAB: SECURITY & CREDENTIALS */}
+      {activeTab === 'security' && (
+        <div className="p-6 sm:p-8 max-w-2xl mx-auto space-y-6">
+
+          {/* Header */}
+          <div>
+            <h2 className="font-heading font-black text-2xl text-slate-900">Security & Credentials</h2>
+            <p className="text-slate-500 text-sm mt-1">Update your admin login email and password. Current password is required to make changes.</p>
+          </div>
+
+          {/* Current Login Info */}
+          <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-5 flex items-center gap-4">
+            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shrink-0">
+              <ShieldCheck className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <p className="text-xs font-black text-indigo-700 uppercase tracking-wider">Currently Logged In As</p>
+              <p className="text-sm text-indigo-900 font-bold mt-0.5">
+                {(() => {
+                  try {
+                    const stored = typeof window !== 'undefined' ? localStorage.getItem('deepet_admin_credentials') : null;
+                    if (stored) return JSON.parse(stored).email || '1';
+                  } catch {}
+                  return '1';
+                })()}
+              </p>
+            </div>
+          </div>
+
+          {/* Change Credentials Form */}
+          <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-5">
+            <h3 className="font-bold text-slate-800 text-base">Change Login Credentials</h3>
+
+            {/* Feedback message */}
+            {credMsg && (
+              <div className={`flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-bold border ${
+                credMsg.type === 'success'
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  : 'bg-red-50 text-red-600 border-red-200'
+              }`}>
+                {credMsg.type === 'success' ? <Check className="w-4 h-4 shrink-0" /> : <X className="w-4 h-4 shrink-0" />}
+                {credMsg.text}
+              </div>
+            )}
+
+            {/* New Email / ID */}
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">New Email / ID</label>
+              <input
+                type="text"
+                placeholder="Enter new email or ID"
+                value={credEmail}
+                onChange={e => { setCredEmail(e.target.value); setCredMsg(null); }}
+                className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:bg-white transition-all"
+              />
+            </div>
+
+            {/* New Password */}
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">New Password</label>
+              <div className="relative">
+                <input
+                  type={showCredPw ? 'text' : 'password'}
+                  placeholder="Min. 4 characters"
+                  value={credNewPw}
+                  onChange={e => { setCredNewPw(e.target.value); setCredMsg(null); }}
+                  className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 text-slate-900 rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:bg-white transition-all"
+                />
+                <button type="button" onClick={() => setShowCredPw(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer">
+                  {showCredPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Confirm New Password */}
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">Confirm New Password</label>
+              <input
+                type="password"
+                placeholder="Re-enter new password"
+                value={credConfirmPw}
+                onChange={e => { setCredConfirmPw(e.target.value); setCredMsg(null); }}
+                className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:bg-white transition-all"
+              />
+            </div>
+
+            <hr className="border-slate-100" />
+
+            {/* Current password to verify */}
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">Current Password <span className="text-red-400">*</span> (required to save)</label>
+              <input
+                type="password"
+                placeholder="Enter your current password to confirm"
+                value={credCurrentPw}
+                onChange={e => { setCredCurrentPw(e.target.value); setCredMsg(null); }}
+                className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:bg-white transition-all"
+              />
+            </div>
+
+            {/* Save button */}
+            <button
+              type="button"
+              onClick={() => {
+                setCredMsg(null);
+
+                // Load current stored credentials
+                let currentId = '1';
+                let currentPw = '1';
+                try {
+                  const stored = localStorage.getItem('deepet_admin_credentials');
+                  if (stored) {
+                    const parsed = JSON.parse(stored);
+                    currentId = parsed.email || '1';
+                    currentPw = parsed.password || '1';
+                  }
+                } catch {}
+
+                // Validate current password
+                if (!credCurrentPw) {
+                  setCredMsg({ type: 'error', text: 'Current password is required.' });
+                  return;
+                }
+                if (credCurrentPw !== currentPw) {
+                  setCredMsg({ type: 'error', text: 'Current password is incorrect.' });
+                  return;
+                }
+
+                // Validate at least one field is being changed
+                const newEmail = credEmail.trim();
+                const newPw = credNewPw.trim();
+                if (!newEmail && !newPw) {
+                  setCredMsg({ type: 'error', text: 'Enter a new email/ID or new password to update.' });
+                  return;
+                }
+
+                // Validate new password
+                if (newPw) {
+                  if (newPw.length < 4) {
+                    setCredMsg({ type: 'error', text: 'New password must be at least 4 characters.' });
+                    return;
+                  }
+                  if (newPw !== credConfirmPw.trim()) {
+                    setCredMsg({ type: 'error', text: 'New passwords do not match.' });
+                    return;
+                  }
+                }
+
+                // Save updated credentials
+                const updated = {
+                  email: newEmail || currentId,
+                  password: newPw || currentPw,
+                };
+                localStorage.setItem('deepet_admin_credentials', JSON.stringify(updated));
+
+                setCredMsg({ type: 'success', text: '✓ Credentials updated successfully! Use new credentials on next login.' });
+                setCredEmail('');
+                setCredNewPw('');
+                setCredConfirmPw('');
+                setCredCurrentPw('');
+              }}
+              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-sm py-3.5 rounded-xl transition-all shadow-lg shadow-indigo-600/15 cursor-pointer flex items-center justify-center gap-2"
+            >
+              <ShieldCheck className="w-4 h-4" />
+              Save New Credentials
+            </button>
+          </div>
+
+          {/* Info box */}
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex gap-3">
+            <span className="text-amber-500 text-lg shrink-0">⚠️</span>
+            <p className="text-xs text-amber-700 font-medium leading-relaxed">
+              After saving, your old password will no longer work. If you forget your credentials, reset <code className="bg-amber-100 px-1 rounded font-mono">deepet_admin_credentials</code> in browser localStorage.
+            </p>
+          </div>
+
+        </div>
+      )}
+
+
       {selectedLead && (() => {
         const activeLeadInDrawer = leads.find(l => l.id === selectedLead.id);
         if (!activeLeadInDrawer) return null;

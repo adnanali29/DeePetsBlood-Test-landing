@@ -1,0 +1,162 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { Eye, EyeOff, Lock, LogIn } from 'lucide-react';
+
+export default function AdminLoginPage() {
+  const router = useRouter();
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPw, setShowPw] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [checking, setChecking] = useState(true);
+
+  // If already logged in, redirect immediately
+  useEffect(() => {
+    const session = sessionStorage.getItem('deepet_admin_session');
+    if (session === 'true') {
+      router.replace('/admin');
+    } else {
+      setChecking(false);
+    }
+  }, [router]);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    setTimeout(() => {
+      // Load stored credentials or fall back to defaults
+      let storedId = '1';
+      let storedPw = '1';
+      try {
+        const stored = localStorage.getItem('deepet_admin_credentials');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          storedId = parsed.email || '1';
+          storedPw = parsed.password || '1';
+        }
+      } catch {}
+
+      if (identifier === storedId && password === storedPw) {
+        sessionStorage.setItem('deepet_admin_session', 'true');
+        router.push('/admin');
+      } else {
+        setError('Invalid credentials. Please try again.');
+        setLoading(false);
+      }
+    }, 600);
+  };
+
+  if (checking) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 flex items-center justify-center px-4 relative overflow-hidden">
+      
+      {/* Background glow orbs */}
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-600/8 rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="relative z-10 w-full max-w-md">
+        {/* Card */}
+        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
+          
+          {/* Logo */}
+          <div className="flex justify-center mb-8">
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/30">
+                <Lock className="w-7 h-7 text-white" />
+              </div>
+              <div className="text-center">
+                <h1 className="text-white font-black text-2xl tracking-tight">DeePet Admin</h1>
+                <p className="text-white/40 text-xs font-medium mt-0.5">Secure access portal</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleLogin} className="space-y-4">
+            {/* Email / ID */}
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-wider text-white/50 mb-1.5">
+                Email / ID
+              </label>
+              <input
+                type="text"
+                required
+                autoComplete="username"
+                placeholder="Enter your ID or email"
+                value={identifier}
+                onChange={e => { setIdentifier(e.target.value); setError(''); }}
+                className="w-full bg-white/8 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-indigo-400 focus:bg-white/12 transition-all"
+              />
+            </div>
+
+            {/* Password */}
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-wider text-white/50 mb-1.5">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPw ? 'text' : 'password'}
+                  required
+                  autoComplete="current-password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={e => { setPassword(e.target.value); setError(''); }}
+                  className="w-full bg-white/8 border border-white/15 rounded-xl px-4 py-3 pr-11 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-indigo-400 focus:bg-white/12 transition-all"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPw(v => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors cursor-pointer"
+                >
+                  {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Error */}
+            {error && (
+              <div className="bg-red-500/15 border border-red-500/30 text-red-400 text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
+                {error}
+              </div>
+            )}
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-70 text-white font-extrabold text-sm py-3.5 rounded-xl transition-all shadow-lg shadow-indigo-600/25 flex items-center justify-center gap-2 cursor-pointer mt-2"
+            >
+              {loading ? (
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <>
+                  <LogIn className="w-4 h-4" />
+                  Sign In to Admin
+                </>
+              )}
+            </button>
+          </form>
+
+          <p className="text-center text-white/25 text-[10px] font-medium mt-6">
+            DeePet Services · Admin Panel · Secure
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
