@@ -738,22 +738,13 @@ export default function AdminPanel() {
                   </div>
                 )}
 
-                {/* Add Category & Save Diagnostics Bar */}
-                <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-                  <button
-                    onClick={() => setShowAddCategoryModal(true)}
-                    className="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-indigo-600 text-xs font-extrabold px-4 py-2 rounded-xl transition-colors cursor-pointer"
-                  >
-                    <Plus className="w-3.5 h-3.5" /> Add Category
-                  </button>
-
-                  <button
-                    onClick={handleSaveDiagnostics}
-                    className="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold px-5 py-2 rounded-xl transition-colors cursor-pointer shadow-sm"
-                  >
-                    <Check className="w-3.5 h-3.5" /> Save Diagnostic Tests Settings
-                  </button>
-                </div>
+                {/* Add Category Trigger */}
+                <button
+                  onClick={() => setShowAddCategoryModal(true)}
+                  className="mb-4 inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-indigo-600 text-xs font-extrabold px-4 py-2 rounded-xl transition-colors cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" /> Add Category
+                </button>
 
                 {/* Categories & Sub Tests list */}
                 <div className="space-y-4">

@@ -250,7 +250,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [googleSheetUrl, setGoogleSheetUrl] = useState<string>('');
   const [leadCounter, setLeadCounter] = useState<number>(0);
 
-  // Load from LocalStorage on mount
+  // Load from LocalStorage & DB on mount
   useEffect(() => {
     try {
       const storedHero = localStorage.getItem('deepet_hero');
@@ -288,28 +288,58 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
       const storedCounter = localStorage.getItem('deepet_lead_counter');
       if (storedCounter) setLeadCounter(parseInt(storedCounter, 10));
+
+      // 🗄️ Fetch latest configurations from PostgreSQL DB on mount
+      fetch('/api/settings')
+        .then(res => res.json())
+        .then(data => {
+          if (data?.settings) {
+            const s = data.settings;
+            if (s.hero_config) { setHeroConfig(s.hero_config); localStorage.setItem('deepet_hero', JSON.stringify(s.hero_config)); }
+            if (s.contact_config) { setContactConfig(s.contact_config); localStorage.setItem('deepet_contact', JSON.stringify(s.contact_config)); }
+            if (s.cat_tests) { setCatTests(s.cat_tests); localStorage.setItem('deepet_cat_tests', JSON.stringify(s.cat_tests)); }
+            if (s.dog_tests) { setDogTests(s.dog_tests); localStorage.setItem('deepet_dog_tests', JSON.stringify(s.dog_tests)); }
+            if (s.cat_packages) { setCatPackages(s.cat_packages); localStorage.setItem('deepet_cat_packages', JSON.stringify(s.cat_packages)); }
+            if (s.dog_packages) { setDogPackages(s.dog_packages); localStorage.setItem('deepet_dog_packages', JSON.stringify(s.dog_packages)); }
+            if (s.testimonials) { setTestimonials(s.testimonials); localStorage.setItem('deepet_testimonials', JSON.stringify(s.testimonials)); }
+            if (s.google_sheet_url) { setGoogleSheetUrl(s.google_sheet_url); localStorage.setItem('deepet_sheet_url', s.google_sheet_url); }
+          }
+        })
+        .catch(() => {});
     } catch (e) {
-      console.error('Failed to load local storage configurations:', e);
+      console.error('Failed to load storage configurations:', e);
     }
   }, []);
+
+  const saveSettingToDB = (key: string, value: any) => {
+    fetch('/api/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key, value }),
+    }).catch(() => {});
+  };
 
   const updateHeroConfig = (config: HeroConfig) => {
     setHeroConfig(config);
     localStorage.setItem('deepet_hero', JSON.stringify(config));
+    saveSettingToDB('hero_config', config);
   };
 
   const updateContactConfig = (config: ContactConfig) => {
     setContactConfig(config);
     localStorage.setItem('deepet_contact', JSON.stringify(config));
+    saveSettingToDB('contact_config', config);
   };
 
   const updateTests = (petType: 'Dog' | 'Cat', tests: WholeBodyTestCategory[]) => {
     if (petType === 'Dog') {
       setDogTests(tests);
       localStorage.setItem('deepet_dog_tests', JSON.stringify(tests));
+      saveSettingToDB('dog_tests', tests);
     } else {
       setCatTests(tests);
       localStorage.setItem('deepet_cat_tests', JSON.stringify(tests));
+      saveSettingToDB('cat_tests', tests);
     }
   };
 
@@ -317,15 +347,18 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     if (petType === 'Dog') {
       setDogPackages(packages);
       localStorage.setItem('deepet_dog_packages', JSON.stringify(packages));
+      saveSettingToDB('dog_packages', packages);
     } else {
       setCatPackages(packages);
       localStorage.setItem('deepet_cat_packages', JSON.stringify(packages));
+      saveSettingToDB('cat_packages', packages);
     }
   };
 
   const updateTestimonials = (items: TestimonialItem[]) => {
     setTestimonials(items);
     localStorage.setItem('deepet_testimonials', JSON.stringify(items));
+    saveSettingToDB('testimonials', items);
   };
 
   const addLead = (leadData: Omit<Lead, 'id' | 'timestamp' | 'status'>) => {

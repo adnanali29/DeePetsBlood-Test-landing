@@ -37,7 +37,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
     const names = wholeBodycats.map(c => c.categoryName);
     const packageNames = packages.map(p => p.title);
     return [...names, ...packageNames];
-  }, [petType]);
+  }, [petType, catTests, dogTests, catPackages, dogPackages]);
 
   const activeCategory = selectedCategory || categoriesList[0] || '';
 
@@ -76,7 +76,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
         price: priceNum
       };
     });
-  }, [petType, activeCategory]);
+  }, [petType, activeCategory, catTests, dogTests, catPackages, dogPackages]);
 
   const activeSubTest = useMemo(() => {
     if (selectedSubTest && subTestsList.some(s => s.name === selectedSubTest)) {
