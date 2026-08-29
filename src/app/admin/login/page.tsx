@@ -61,15 +61,15 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 flex items-center justify-center px-4 relative overflow-hidden">
+    <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4 relative overflow-hidden">
       
       {/* Background glow orbs */}
-      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-600/8 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-600/15 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-md">
-        {/* Card */}
-        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
+        {/* Clean white card for high contrast readability */}
+        <div className="bg-white rounded-3xl p-8 shadow-2xl border border-slate-100">
           
           {/* Logo */}
           <div className="flex justify-center mb-8">
@@ -78,8 +78,8 @@ export default function AdminLoginPage() {
                 <Lock className="w-7 h-7 text-white" />
               </div>
               <div className="text-center">
-                <h1 className="text-white font-black text-2xl tracking-tight">DeePet Admin</h1>
-                <p className="text-white/40 text-xs font-medium mt-0.5">Secure access portal</p>
+                <h1 className="text-slate-900 font-black text-2xl tracking-tight font-heading">DeePet Admin</h1>
+                <p className="text-slate-500 text-xs font-medium mt-0.5">Secure access portal</p>
               </div>
             </div>
           </div>
@@ -88,7 +88,7 @@ export default function AdminLoginPage() {
           <form onSubmit={handleLogin} className="space-y-4">
             {/* Email / ID */}
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-wider text-white/50 mb-1.5">
+              <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">
                 Email / ID
               </label>
               <input
@@ -98,13 +98,13 @@ export default function AdminLoginPage() {
                 placeholder="Enter your ID or email"
                 value={identifier}
                 onChange={e => { setIdentifier(e.target.value); setError(''); }}
-                className="w-full bg-white/8 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-indigo-400 focus:bg-white/12 transition-all"
+                className="w-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 font-semibold rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white focus:ring-2 focus:ring-indigo-100 transition-all"
               />
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-wider text-white/50 mb-1.5">
+              <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">
                 Password
               </label>
               <div className="relative">
@@ -115,12 +115,12 @@ export default function AdminLoginPage() {
                   placeholder="Enter your password"
                   value={password}
                   onChange={e => { setPassword(e.target.value); setError(''); }}
-                  className="w-full bg-white/8 border border-white/15 rounded-xl px-4 py-3 pr-11 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-indigo-400 focus:bg-white/12 transition-all"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 font-semibold rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white focus:ring-2 focus:ring-indigo-100 transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPw(v => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer p-1"
                 >
                   {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -129,8 +129,8 @@ export default function AdminLoginPage() {
 
             {/* Error */}
             {error && (
-              <div className="bg-red-500/15 border border-red-500/30 text-red-400 text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
+              <div className="bg-red-50 border border-red-200 text-red-600 text-xs font-bold px-4 py-3 rounded-xl flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-red-500 shrink-0" />
                 {error}
               </div>
             )}
@@ -139,7 +139,7 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-70 text-white font-extrabold text-sm py-3.5 rounded-xl transition-all shadow-lg shadow-indigo-600/25 flex items-center justify-center gap-2 cursor-pointer mt-2"
+              className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-70 text-white font-extrabold text-sm py-3.5 rounded-xl transition-all shadow-lg shadow-indigo-600/20 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer mt-2"
             >
               {loading ? (
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -152,7 +152,7 @@ export default function AdminLoginPage() {
             </button>
           </form>
 
-          <p className="text-center text-white/25 text-[10px] font-medium mt-6">
+          <p className="text-center text-slate-400 text-[11px] font-medium mt-6">
             DeePet Services · Admin Panel · Secure
           </p>
         </div>
