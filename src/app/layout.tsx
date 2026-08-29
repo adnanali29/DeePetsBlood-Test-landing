@@ -33,11 +33,11 @@ export const metadata: Metadata = {
   ],
   icons: {
     icon: [
-      { url: '/icon.png?v=2', type: 'image/png' },
-      { url: '/favicon.ico?v=2', type: 'image/x-icon' },
+      { url: '/Favicon.png?v=3', type: 'image/png' },
+      { url: '/favicon.ico?v=3', type: 'image/x-icon' },
     ],
-    shortcut: '/favicon.ico?v=2',
-    apple: '/apple-icon.png?v=2',
+    shortcut: '/favicon.ico?v=3',
+    apple: '/apple-touch-icon.png?v=3',
   },
 };
 
@@ -49,11 +49,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${outfit.variable} ${jakarta.variable} scroll-smooth`} suppressHydrationWarning>
       <head>
-        {/* Favicon Icons */}
-        <link rel="icon" href="/icon.png?v=2" type="image/png" sizes="any" />
-        <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
-        <link rel="shortcut icon" href="/favicon.ico?v=2" />
-        <link rel="apple-touch-icon" href="/apple-icon.png?v=2" />
+        {/* Favicon Icons — explicit cache-busting v=3 */}
+        <link rel="icon" href="/Favicon.png?v=3" type="image/png" sizes="any" />
+        <link rel="icon" href="/favicon.ico?v=3" type="image/x-icon" />
+        <link rel="shortcut icon" href="/favicon.ico?v=3" type="image/x-icon" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3" />
 
         {/* Preload Hero Background Video for Instant Playback */}
         <link rel="preload" href="/dog2.mp4" as="video" type="video/mp4" />
