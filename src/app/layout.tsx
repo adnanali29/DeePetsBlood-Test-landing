@@ -32,9 +32,12 @@ export const metadata: Metadata = {
     'NABL pet lab',
   ],
   icons: {
-    icon: '/deepetservices-logo.webp',
-    shortcut: '/deepetservices-logo.webp',
-    apple: '/deepetservices-logo.webp',
+    icon: [
+      { url: '/icon.png?v=2', type: 'image/png' },
+      { url: '/favicon.ico?v=2', type: 'image/x-icon' },
+    ],
+    shortcut: '/favicon.ico?v=2',
+    apple: '/apple-icon.png?v=2',
   },
 };
 
@@ -46,10 +49,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${outfit.variable} ${jakarta.variable} scroll-smooth`} suppressHydrationWarning>
       <head>
-        {/* Favicon Icon */}
-        <link rel="icon" href="/deepetservices-logo.webp" type="image/webp" />
-        <link rel="shortcut icon" href="/deepetservices-logo.webp" type="image/webp" />
-        <link rel="apple-touch-icon" href="/deepetservices-logo.webp" />
+        {/* Favicon Icons */}
+        <link rel="icon" href="/icon.png?v=2" type="image/png" sizes="any" />
+        <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+        <link rel="shortcut icon" href="/favicon.ico?v=2" />
+        <link rel="apple-touch-icon" href="/apple-icon.png?v=2" />
 
         {/* Preload Hero Background Video for Instant Playback */}
         <link rel="preload" href="/dog2.mp4" as="video" type="video/mp4" />
