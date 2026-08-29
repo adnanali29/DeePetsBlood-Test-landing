@@ -31,6 +31,11 @@ export const metadata: Metadata = {
     'dog blood test',
     'NABL pet lab',
   ],
+  icons: {
+    icon: '/deepetservices-logo.webp',
+    shortcut: '/deepetservices-logo.webp',
+    apple: '/deepetservices-logo.webp',
+  },
 };
 
 export default function RootLayout({
@@ -41,6 +46,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${outfit.variable} ${jakarta.variable} scroll-smooth`} suppressHydrationWarning>
       <head>
+        {/* Favicon Icon */}
+        <link rel="icon" href="/deepetservices-logo.webp" type="image/webp" />
+        <link rel="shortcut icon" href="/deepetservices-logo.webp" type="image/webp" />
+        <link rel="apple-touch-icon" href="/deepetservices-logo.webp" />
+
         {/* Preload Hero Background Video for Instant Playback */}
         <link rel="preload" href="/dog2.mp4" as="video" type="video/mp4" />
 
