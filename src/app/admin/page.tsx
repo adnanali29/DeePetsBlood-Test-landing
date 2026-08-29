@@ -957,27 +957,27 @@ export default function AdminPanel() {
                           <th className="px-5 py-4 text-center w-[100px]">Actions</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100 text-xs sm:text-sm text-slate-700">
+                      <tbody className="divide-y divide-slate-200/60 text-xs sm:text-sm">
                         {filteredLeads.map(lead => (
                           <tr 
                             key={lead.id} 
                             onClick={() => setSelectedLead(lead)}
-                            className={`transition-colors cursor-pointer ${
+                            className={`transition-all duration-300 cursor-pointer border-b ${
                               lead.status === 'completed'
-                                ? 'bg-emerald-50/70 hover:bg-emerald-100/80'
+                                ? 'bg-emerald-100/90 hover:bg-emerald-200/90 border-emerald-300 text-emerald-950'
                                 : lead.status === 'cancelled'
-                                  ? 'bg-red-50/70 hover:bg-red-100/80'
-                                  : 'bg-yellow-50/70 hover:bg-yellow-100/80'
+                                  ? 'bg-red-100/90 hover:bg-red-200/90 border-red-300 text-red-950'
+                                  : 'bg-amber-100/90 hover:bg-amber-200/90 border-amber-300 text-amber-950'
                             }`}
                           >
                             <td className="px-4 py-4 align-top">
                               {lead.consultationCode ? (
-                                <span className="inline-block whitespace-nowrap text-indigo-700 font-black text-[10px] bg-indigo-50 border border-indigo-100 px-2 py-1 rounded-lg font-mono">{lead.consultationCode}</span>
+                                <span className="inline-block whitespace-nowrap text-indigo-900 font-black text-[10px] bg-white/80 border border-indigo-200 px-2 py-1 rounded-lg font-mono shadow-xs">{lead.consultationCode}</span>
                               ) : (
                                 <span className="text-slate-400 text-[10px]">—</span>
                               )}
                             </td>
-                            <td className="px-5 py-4 text-slate-500 font-medium whitespace-nowrap align-top text-xs">
+                            <td className="px-5 py-4 font-bold whitespace-nowrap align-top text-xs opacity-90">
                               {new Date(lead.timestamp).toLocaleDateString('en-IN', {
                                 day: 'numeric',
                                 month: 'short',
@@ -986,27 +986,27 @@ export default function AdminPanel() {
                               })}
                             </td>
                             <td className="px-6 py-4">
-                              <div className="font-bold text-slate-900">{lead.name}</div>
-                              <div className="text-[11px] text-slate-500 mt-0.5">{lead.phone}</div>
+                              <div className="font-extrabold text-slate-900">{lead.name}</div>
+                              <div className="text-[11px] font-semibold opacity-80 mt-0.5">{lead.phone}</div>
                             </td>
                             <td className="px-6 py-4">
-                              <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold ${
-                                lead.petType === 'Cat' ? 'bg-pink-100 text-pink-700' : 'bg-blue-100 text-blue-700'
+                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase ${
+                                lead.petType === 'Cat' ? 'bg-pink-200/90 text-pink-900' : 'bg-blue-200/90 text-blue-900'
                               }`}>
                                 {lead.petType === 'Cat' ? '🐱 Feline' : '🐶 Canine'}
                               </span>
                             </td>
                             <td className="px-5 py-4 align-top">
-                              <div className="font-bold text-slate-900 text-xs leading-snug">{lead.subTest}</div>
-                              <div className="text-[10px] text-slate-400 mt-0.5 font-medium leading-tight">{lead.category}</div>
+                              <div className="font-extrabold text-slate-900 text-xs leading-snug">{lead.subTest}</div>
+                              <div className="text-[10px] opacity-75 font-semibold leading-tight">{lead.category}</div>
                             </td>
                             <td className="px-5 py-4 align-top">
                               <div className="flex flex-col gap-1.5">
                                 {/* Location */}
                                 {(lead.city || lead.pincode) && (
                                   <div className="flex items-baseline gap-2">
-                                    <span className="text-[9px] font-black uppercase tracking-wider text-slate-400 w-[52px] shrink-0">Location</span>
-                                    <span className="text-[11px] text-slate-700 font-semibold leading-tight">
+                                    <span className="text-[9px] font-black uppercase tracking-wider opacity-60 w-[52px] shrink-0">Location</span>
+                                    <span className="text-[11px] font-bold leading-tight">
                                       {lead.city}{lead.pincode ? ` (${lead.pincode})` : ''}
                                     </span>
                                   </div>
@@ -1014,28 +1014,28 @@ export default function AdminPanel() {
                                 {/* Schedule */}
                                 {lead.date && (
                                   <div className="flex items-baseline gap-2">
-                                    <span className="text-[9px] font-black uppercase tracking-wider text-slate-400 w-[52px] shrink-0">Schedule</span>
-                                    <span className="text-[11px] text-slate-700 font-semibold leading-tight">{lead.date}</span>
+                                    <span className="text-[9px] font-black uppercase tracking-wider opacity-60 w-[52px] shrink-0">Schedule</span>
+                                    <span className="text-[11px] font-bold leading-tight">{lead.date}</span>
                                   </div>
                                 )}
                                 {/* Price */}
                                 {lead.price && (
                                   <div className="flex items-baseline gap-2">
-                                    <span className="text-[9px] font-black uppercase tracking-wider text-slate-400 w-[52px] shrink-0">Price</span>
-                                    <span className="text-[11px] text-green-600 font-black leading-tight">₹{lead.price.toLocaleString('en-IN')}</span>
+                                    <span className="text-[9px] font-black uppercase tracking-wider opacity-60 w-[52px] shrink-0">Price</span>
+                                    <span className="text-[11px] font-black text-emerald-800 leading-tight">₹{lead.price.toLocaleString('en-IN')}</span>
                                   </div>
                                 )}
                                 {/* Message */}
                                 {lead.message && (
-                                  <div className="bg-white/80 border border-slate-200 rounded-lg px-2.5 py-1.5 mt-0.5 max-w-[220px]">
-                                    <p className="text-[10.5px] text-slate-600 italic leading-snug line-clamp-2">"{lead.message}"</p>
+                                  <div className="bg-white/90 border border-slate-200 rounded-lg px-2.5 py-1.5 mt-0.5 max-w-[220px] shadow-xs">
+                                    <p className="text-[10.5px] text-slate-700 italic leading-snug line-clamp-2">"{lead.message}"</p>
                                   </div>
                                 )}
                                 {/* Follow-up */}
                                 {lead.followUp && (
-                                  <div className="flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 rounded-lg px-2 py-1">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse shrink-0" />
-                                    <span className="text-[10px] text-indigo-700 font-bold leading-tight">
+                                  <div className="flex items-center gap-1.5 bg-white/90 border border-indigo-200 rounded-lg px-2 py-1 shadow-xs">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse shrink-0" />
+                                    <span className="text-[10px] text-indigo-900 font-extrabold leading-tight">
                                       {lead.followUp.medium} · {new Date(lead.followUp.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                                     </span>
                                   </div>
@@ -1043,44 +1043,44 @@ export default function AdminPanel() {
                               </div>
                             </td>
                             <td className="px-5 py-4 text-center align-top">
-                              <span className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-black uppercase ${
+                              <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-xs ${
                                 lead.status === 'completed'
-                                  ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                                  ? 'bg-emerald-600 text-white border border-emerald-700'
                                   : lead.status === 'cancelled'
-                                    ? 'bg-red-100 text-red-600 border border-red-200'
-                                    : 'bg-yellow-100 text-yellow-700 border border-yellow-300'
+                                    ? 'bg-red-600 text-white border border-red-700'
+                                    : 'bg-amber-500 text-slate-950 border border-amber-600'
                               }`}>
-                                {lead.status === 'active' ? 'Pending' : lead.status}
+                                {lead.status === 'active' ? 'PENDING' : lead.status}
                               </span>
                             </td>
                             <td className="px-5 py-4 text-center whitespace-nowrap align-top">
-                              <div className="flex items-center justify-center gap-1.5">
-                                {lead.status === 'active' && (
-                                  <>
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleStatusChange(lead.id, 'completed');
-                                      }}
-                                      className="p-1.5 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 transition-all cursor-pointer border border-green-200"
-                                      title="Mark as completed"
-                                    >
-                                      <Check className="w-3.5 h-3.5" />
-                                    </button>
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleStatusChange(lead.id, 'cancelled');
-                                      }}
-                                      className="p-1.5 rounded-lg bg-slate-100 text-slate-500 hover:text-slate-800 transition-all cursor-pointer border border-slate-200"
-                                      title="Cancel lead"
-                                    >
-                                      <X className="w-3.5 h-3.5" />
-                                    </button>
-                                  </>
+                              <div className="flex items-center justify-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                                {lead.status !== 'completed' && (
+                                  <button
+                                    onClick={() => handleStatusChange(lead.id, 'completed')}
+                                    className="p-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition-all cursor-pointer shadow-sm border border-emerald-700"
+                                    title="Mark as Connected / Completed (Turn Green)"
+                                  >
+                                    <Check className="w-3.5 h-3.5" />
+                                  </button>
+                                )}
+                                {lead.status !== 'cancelled' && (
+                                  <button
+                                    onClick={() => handleStatusChange(lead.id, 'cancelled')}
+                                    className="p-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white transition-all cursor-pointer shadow-sm border border-red-700"
+                                    title="Mark as Cancelled (Turn Red)"
+                                  >
+                                    <X className="w-3.5 h-3.5" />
+                                  </button>
                                 )}
                                 {lead.status !== 'active' && (
-                                  <span className="text-[11px] text-slate-400 font-medium">—</span>
+                                  <button
+                                    onClick={() => handleStatusChange(lead.id, 'active')}
+                                    className="px-2 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-[10px] transition-all cursor-pointer shadow-sm border border-amber-600"
+                                    title="Reset to Pending (Turn Yellow)"
+                                  >
+                                    Reset
+                                  </button>
                                 )}
                               </div>
                             </td>
