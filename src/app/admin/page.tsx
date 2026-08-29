@@ -1769,7 +1769,7 @@ export default function AdminPanel() {
                 placeholder="Enter new email or ID"
                 value={credEmail}
                 onChange={e => { setCredEmail(e.target.value); setCredMsg(null); }}
-                className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:bg-white transition-all"
+                className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:bg-white transition-all font-medium"
               />
             </div>
 
@@ -1782,7 +1782,7 @@ export default function AdminPanel() {
                   placeholder="Min. 4 characters"
                   value={credNewPw}
                   onChange={e => { setCredNewPw(e.target.value); setCredMsg(null); }}
-                  className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 text-slate-900 rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:bg-white transition-all"
+                  className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 text-slate-900 rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:bg-white transition-all font-medium"
                 />
                 <button type="button" onClick={() => setShowCredPw(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer">
                   {showCredPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -1798,21 +1798,7 @@ export default function AdminPanel() {
                 placeholder="Re-enter new password"
                 value={credConfirmPw}
                 onChange={e => { setCredConfirmPw(e.target.value); setCredMsg(null); }}
-                className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:bg-white transition-all"
-              />
-            </div>
-
-            <hr className="border-slate-100" />
-
-            {/* Current password to verify */}
-            <div>
-              <label className="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">Current Password <span className="text-red-400">*</span> (required to save)</label>
-              <input
-                type="password"
-                placeholder="Enter your current password to confirm"
-                value={credCurrentPw}
-                onChange={e => { setCredCurrentPw(e.target.value); setCredMsg(null); }}
-                className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:bg-white transition-all"
+                className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:bg-white transition-all font-medium"
               />
             </div>
 
@@ -1833,16 +1819,6 @@ export default function AdminPanel() {
                     currentPw = parsed.password || '1';
                   }
                 } catch {}
-
-                // Validate current password
-                if (!credCurrentPw) {
-                  setCredMsg({ type: 'error', text: 'Current password is required.' });
-                  return;
-                }
-                if (credCurrentPw !== currentPw) {
-                  setCredMsg({ type: 'error', text: 'Current password is incorrect.' });
-                  return;
-                }
 
                 // Validate at least one field is being changed
                 const newEmail = credEmail.trim();
@@ -1875,21 +1851,12 @@ export default function AdminPanel() {
                 setCredEmail('');
                 setCredNewPw('');
                 setCredConfirmPw('');
-                setCredCurrentPw('');
               }}
-              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-sm py-3.5 rounded-xl transition-all shadow-lg shadow-indigo-600/15 cursor-pointer flex items-center justify-center gap-2"
+              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-sm py-3.5 rounded-xl transition-all shadow-lg shadow-indigo-600/15 cursor-pointer flex items-center justify-center gap-2 mt-2"
             >
               <ShieldCheck className="w-4 h-4" />
               Save New Credentials
             </button>
-          </div>
-
-          {/* Info box */}
-          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex gap-3">
-            <span className="text-amber-500 text-lg shrink-0">⚠️</span>
-            <p className="text-xs text-amber-700 font-medium leading-relaxed">
-              After saving, your old password will no longer work. If you forget your credentials, reset <code className="bg-amber-100 px-1 rounded font-mono">deepet_admin_credentials</code> in browser localStorage.
-            </p>
           </div>
 
         </div>
