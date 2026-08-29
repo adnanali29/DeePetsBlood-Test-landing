@@ -6,9 +6,11 @@ import {
   DOG_WHOLE_BODY_TESTS, 
   CAT_PACKAGES, 
   DOG_PACKAGES, 
-  WholeBodyTestCategory, 
-  PetPackage 
+  type WholeBodyTestCategory, 
+  type PetPackage 
 } from '@/data/testsData';
+
+export type { PetPackage, WholeBodyTestCategory };
 
 export interface HeroConfig {
   headline: string;

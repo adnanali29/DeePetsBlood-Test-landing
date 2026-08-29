@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 
 // PATCH /api/leads/[id] — update status or details
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
+    const params = await props.params;
     const body = await req.json();
     const { status, remark, follow_up } = body;
 
@@ -29,8 +30,9 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 }
 
 // DELETE /api/leads/[id]
-export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(_req: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
+    const params = await props.params;
     await pool.query(`DELETE FROM leads WHERE id = $1`, [params.id]);
     return NextResponse.json({ success: true });
   } catch (err) {

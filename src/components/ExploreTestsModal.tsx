@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { X, Search, CheckCircle, ArrowRight, ShieldCheck, Heart, Activity } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
+import { WholeBodyTestCategory } from '@/data/testsData';
 
 interface ExploreTestsModalProps {
   isOpen: boolean;

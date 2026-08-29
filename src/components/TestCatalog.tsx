@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Check, Sparkles, Award } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
+import { PetPackage } from '@/data/testsData';
 
 interface TestCatalogProps {
   onOpenBookingModal: (testTitle: string, price: number) => void;
