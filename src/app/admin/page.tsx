@@ -64,11 +64,15 @@ export default function AdminPanel() {
 
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'dashboard' | 'home' | 'contacts' | 'leads' | 'packages' | 'testimonials' | 'settings' | 'security'>('dashboard');
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
-  // Auth guard
+  // Strict Auth guard — check BEFORE rendering any dashboard UI
   useEffect(() => {
     const session = sessionStorage.getItem('deepet_admin_session');
-    if (session !== 'true') {
+    if (session === 'true') {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
       router.replace('/admin/login');
     }
   }, [router]);
@@ -416,6 +420,16 @@ export default function AdminPanel() {
       l.status === leadsStatusFilter;
     return matchesSearch && matchesStatus;
   });
+
+  // Strictly block render if unauthenticated
+  if (isAuthenticated !== true) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center gap-3">
+        <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+        <span className="text-slate-400 text-xs font-bold tracking-wider uppercase">Authenticating...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex font-sans">

@@ -8,40 +8,34 @@ export default function ThankYouPage() {
   const params = useParams();
   const code = (params?.code as string) || '';
   const [waUrl, setWaUrl] = useState('');
-  const [countdown, setCountdown] = useState(4);
-  const openedRef = useRef(false);
+  const [countdown, setCountdown] = useState(1);
+  const redirectedRef = useRef(false);
 
   // Load WhatsApp URL from sessionStorage on mount
   useEffect(() => {
     const stored = sessionStorage.getItem(`deepet_wa_${code}`);
     if (stored) {
       setWaUrl(stored);
-
-      // Open WhatsApp immediately on mount (closest to user gesture)
-      if (!openedRef.current) {
-        openedRef.current = true;
-        window.open(stored, '_blank');
-      }
     }
   }, [code]);
 
-  // Countdown timer (shows UI progress, opens WA again if still not opened)
+  // Fast 1-second countdown, then automatic smooth redirect to WhatsApp
   useEffect(() => {
     if (!waUrl) return;
-    const interval = setInterval(() => {
-      setCountdown(prev => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
+    const timer = setTimeout(() => {
+      if (!redirectedRef.current) {
+        redirectedRef.current = true;
+        window.location.href = waUrl;
+      }
+    }, 1200);
+    return () => clearTimeout(timer);
   }, [waUrl]);
 
   const handleOpenWhatsApp = () => {
-    if (waUrl) window.open(waUrl, '_blank');
+    if (waUrl) {
+      redirectedRef.current = true;
+      window.location.href = waUrl;
+    }
   };
 
   return (
@@ -101,24 +95,10 @@ export default function ThankYouPage() {
             <span className="text-white text-sm font-bold">Redirecting to WhatsApp</span>
           </div>
 
-          {/* Countdown ring */}
+          {/* Fast redirect loader */}
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="relative w-12 h-12">
-              <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
-                <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="3" />
-                <circle
-                  cx="24" cy="24" r="20"
-                  fill="none"
-                  stroke="#b2d650"
-                  strokeWidth="3"
-                  strokeDasharray={`${(countdown / 4) * 125.6} 125.6`}
-                  strokeLinecap="round"
-                  style={{ transition: 'stroke-dasharray 1s linear' }}
-                />
-              </svg>
-              <span className="absolute inset-0 flex items-center justify-center text-white font-black text-lg">{countdown}</span>
-            </div>
-            <span className="text-white/50 text-xs font-medium">seconds</span>
+            <div className="w-6 h-6 border-2 border-[#b2d650] border-t-transparent rounded-full animate-spin" />
+            <span className="text-white/60 text-xs font-semibold">Opening WhatsApp...</span>
           </div>
 
           <button

@@ -8,25 +8,17 @@ function ThankYouContent() {
   const searchParams = useSearchParams();
   const code = searchParams.get('code') || '';
   const waUrl = searchParams.get('wa') || '';
-  const [countdown, setCountdown] = useState(4);
   const redirected = useRef(false);
 
   useEffect(() => {
     if (!waUrl) return;
-    const interval = setInterval(() => {
-      setCountdown(prev => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          if (!redirected.current) {
-            redirected.current = true;
-            window.open(decodeURIComponent(waUrl), '_blank');
-          }
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
+    const timer = setTimeout(() => {
+      if (!redirected.current) {
+        redirected.current = true;
+        window.location.href = decodeURIComponent(waUrl);
+      }
+    }, 1200);
+    return () => clearTimeout(timer);
   }, [waUrl]);
 
   return (
@@ -87,24 +79,10 @@ function ThankYouContent() {
               <span className="text-white text-sm font-bold">Redirecting to WhatsApp</span>
             </div>
             
-            {/* Countdown ring */}
+            {/* Fast redirect loader */}
             <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="relative w-12 h-12">
-                <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
-                  <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="3" />
-                  <circle
-                    cx="24" cy="24" r="20"
-                    fill="none"
-                    stroke="#b2d650"
-                    strokeWidth="3"
-                    strokeDasharray={`${(countdown / 4) * 125.6} 125.6`}
-                    strokeLinecap="round"
-                    style={{ transition: 'stroke-dasharray 1s linear' }}
-                  />
-                </svg>
-                <span className="absolute inset-0 flex items-center justify-center text-white font-black text-lg">{countdown}</span>
-              </div>
-              <span className="text-white/50 text-xs font-medium">seconds</span>
+              <div className="w-6 h-6 border-2 border-[#b2d650] border-t-transparent rounded-full animate-spin" />
+              <span className="text-white/60 text-xs font-semibold">Opening WhatsApp...</span>
             </div>
 
             <button
