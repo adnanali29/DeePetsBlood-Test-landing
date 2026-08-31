@@ -66,9 +66,9 @@ export default function Home() {
   };
 
   const handleScrollToBooking = () => {
-    const contactElem = document.getElementById('contact');
-    if (contactElem) {
-      contactElem.scrollIntoView({ behavior: 'smooth' });
+    const bookingFormElem = document.getElementById('booking-form') || document.getElementById('home');
+    if (bookingFormElem) {
+      bookingFormElem.scrollIntoView({ behavior: 'smooth' });
     }
   };
 

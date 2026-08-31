@@ -36,7 +36,8 @@ import {
   ShieldCheck,
   LogOut,
   Eye,
-  EyeOff
+  EyeOff,
+  RefreshCw
 } from 'lucide-react';
 
 export default function AdminPanel() {
@@ -52,6 +53,7 @@ export default function AdminPanel() {
     updateHeroConfig,
     updateContactConfig,
     updateTests,
+    resetDefaultCatalog,
     updatePackages,
     updateTestimonials,
     updateLeadStatus,
@@ -738,13 +740,28 @@ export default function AdminPanel() {
                   </div>
                 )}
 
-                {/* Add Category Trigger */}
-                <button
-                  onClick={() => setShowAddCategoryModal(true)}
-                  className="mb-4 inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-indigo-600 text-xs font-extrabold px-4 py-2 rounded-xl transition-colors cursor-pointer"
-                >
-                  <Plus className="w-3.5 h-3.5" /> Add Category
-                </button>
+                {/* Add Category Trigger & Reset Catalog */}
+                <div className="flex flex-wrap items-center gap-2 mb-4">
+                  <button
+                    onClick={() => setShowAddCategoryModal(true)}
+                    className="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-indigo-600 text-xs font-extrabold px-4 py-2 rounded-xl transition-colors cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" /> Add Category
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      if (confirm('Reset diagnostic tests catalog to updated defaults (including Hormonal Assay, updated prices, and removing Imaging)?')) {
+                        resetDefaultCatalog();
+                        setTestsMsg('✓ Diagnostic test catalog reset to updated defaults!');
+                        setTimeout(() => setTestsMsg(''), 4000);
+                      }
+                    }}
+                    className="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 hover:bg-amber-100 text-amber-700 text-xs font-extrabold px-4 py-2 rounded-xl transition-colors cursor-pointer"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" /> Reset Catalog to Defaults
+                  </button>
+                </div>
 
                 {/* Categories & Sub Tests list */}
                 <div className="space-y-4">

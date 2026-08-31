@@ -281,10 +281,10 @@ export const ExploreTestsModal: React.FC<ExploreTestsModalProps> = ({
                                     {item.subTests.map((sub, sIdx) => (
                                       <div
                                         key={sIdx}
-                                        className="flex items-center gap-2 p-2 bg-slate-50/80 rounded-xl border border-slate-100/50"
+                                        className="flex items-start gap-2 p-2.5 bg-slate-50/80 rounded-xl border border-slate-100/50"
                                       >
-                                        <CheckCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                                        <span className="text-slate-700 text-xs font-medium truncate" title={sub}>
+                                        <CheckCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                                        <span className="text-slate-700 text-xs font-medium leading-snug break-words">
                                           {sub}
                                         </span>
                                       </div>

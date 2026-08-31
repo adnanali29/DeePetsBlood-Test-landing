@@ -85,18 +85,18 @@ export const WhyTrustSection: React.FC<WhyTrustSectionProps> = ({ onSuccess }) =
             <div className="flex -space-x-3 overflow-hidden">
               <img
                 className="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover"
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150"
-                alt="Pet Parent 1"
+                src="/madhu.webp"
+                alt="Madhu - Indian Pet Parent"
               />
               <img
                 className="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover"
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150"
-                alt="Pet Parent 2"
+                src="/nikhil.webp"
+                alt="Nikhil - Indian Pet Parent"
               />
               <img
                 className="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover"
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150"
-                alt="Pet Parent 3"
+                src="/ankita.webp"
+                alt="Ankita - Indian Pet Parent"
               />
             </div>
 

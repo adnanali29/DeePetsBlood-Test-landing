@@ -39,7 +39,7 @@ export interface Lead {
   id: string;
   name: string;
   phone: string;
-  petType: 'Dog' | 'Cat';
+  petType: string;
   category: string;
   subTest: string;
   price?: number;
@@ -73,10 +73,11 @@ interface AppContextType {
   updateContactConfig: (config: ContactConfig) => void;
   
   // Tests management
-  updateTests: (petType: 'Dog' | 'Cat', tests: WholeBodyTestCategory[]) => void;
+  updateTests: (petType: 'Dog' | 'Cat' | string, tests: WholeBodyTestCategory[]) => void;
+  resetDefaultCatalog: () => void;
   
   // Packages management
-  updatePackages: (petType: 'Dog' | 'Cat', packages: PetPackage[]) => void;
+  updatePackages: (petType: 'Dog' | 'Cat' | string, packages: PetPackage[]) => void;
   
   // Testimonials management
   updateTestimonials: (testimonials: TestimonialItem[]) => void;
@@ -250,6 +251,24 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [googleSheetUrl, setGoogleSheetUrl] = useState<string>('');
   const [leadCounter, setLeadCounter] = useState<number>(0);
 
+  const isValidCatalog = (tests: WholeBodyTestCategory[]): boolean => {
+    if (!Array.isArray(tests) || tests.length === 0) return false;
+    const jsonStr = JSON.stringify(tests);
+    if (
+      jsonStr.includes('"Imaging"') ||
+      jsonStr.includes('"ECG"') ||
+      jsonStr.includes('"Echocardiography"') ||
+      jsonStr.includes('Abdominal Ultrasound') ||
+      jsonStr.includes(';')
+    ) {
+      return false;
+    }
+    if (!jsonStr.includes('"Hormonal Assay"')) {
+      return false;
+    }
+    return true;
+  };
+
   // Load from LocalStorage & DB on mount
   useEffect(() => {
     try {
@@ -260,10 +279,28 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       if (storedContact) setContactConfig(JSON.parse(storedContact));
 
       const storedCatTests = localStorage.getItem('deepet_cat_tests');
-      if (storedCatTests) setCatTests(JSON.parse(storedCatTests));
+      if (storedCatTests) {
+        const parsed = JSON.parse(storedCatTests);
+        if (isValidCatalog(parsed)) {
+          setCatTests(parsed);
+        } else {
+          setCatTests(CAT_WHOLE_BODY_TESTS);
+          localStorage.setItem('deepet_cat_tests', JSON.stringify(CAT_WHOLE_BODY_TESTS));
+          saveSettingToDB('cat_tests', CAT_WHOLE_BODY_TESTS);
+        }
+      }
 
       const storedDogTests = localStorage.getItem('deepet_dog_tests');
-      if (storedDogTests) setDogTests(JSON.parse(storedDogTests));
+      if (storedDogTests) {
+        const parsed = JSON.parse(storedDogTests);
+        if (isValidCatalog(parsed)) {
+          setDogTests(parsed);
+        } else {
+          setDogTests(DOG_WHOLE_BODY_TESTS);
+          localStorage.setItem('deepet_dog_tests', JSON.stringify(DOG_WHOLE_BODY_TESTS));
+          saveSettingToDB('dog_tests', DOG_WHOLE_BODY_TESTS);
+        }
+      }
 
       const storedCatPackages = localStorage.getItem('deepet_cat_packages');
       if (storedCatPackages) setCatPackages(JSON.parse(storedCatPackages));
@@ -297,8 +334,26 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             const s = data.settings;
             if (s.hero_config) { setHeroConfig(s.hero_config); localStorage.setItem('deepet_hero', JSON.stringify(s.hero_config)); }
             if (s.contact_config) { setContactConfig(s.contact_config); localStorage.setItem('deepet_contact', JSON.stringify(s.contact_config)); }
-            if (s.cat_tests) { setCatTests(s.cat_tests); localStorage.setItem('deepet_cat_tests', JSON.stringify(s.cat_tests)); }
-            if (s.dog_tests) { setDogTests(s.dog_tests); localStorage.setItem('deepet_dog_tests', JSON.stringify(s.dog_tests)); }
+            if (s.cat_tests) {
+              if (isValidCatalog(s.cat_tests)) {
+                setCatTests(s.cat_tests);
+                localStorage.setItem('deepet_cat_tests', JSON.stringify(s.cat_tests));
+              } else {
+                setCatTests(CAT_WHOLE_BODY_TESTS);
+                localStorage.setItem('deepet_cat_tests', JSON.stringify(CAT_WHOLE_BODY_TESTS));
+                saveSettingToDB('cat_tests', CAT_WHOLE_BODY_TESTS);
+              }
+            }
+            if (s.dog_tests) {
+              if (isValidCatalog(s.dog_tests)) {
+                setDogTests(s.dog_tests);
+                localStorage.setItem('deepet_dog_tests', JSON.stringify(s.dog_tests));
+              } else {
+                setDogTests(DOG_WHOLE_BODY_TESTS);
+                localStorage.setItem('deepet_dog_tests', JSON.stringify(DOG_WHOLE_BODY_TESTS));
+                saveSettingToDB('dog_tests', DOG_WHOLE_BODY_TESTS);
+              }
+            }
             if (s.cat_packages) { setCatPackages(s.cat_packages); localStorage.setItem('deepet_cat_packages', JSON.stringify(s.cat_packages)); }
             if (s.dog_packages) { setDogPackages(s.dog_packages); localStorage.setItem('deepet_dog_packages', JSON.stringify(s.dog_packages)); }
             if (s.testimonials) { setTestimonials(s.testimonials); localStorage.setItem('deepet_testimonials', JSON.stringify(s.testimonials)); }
@@ -331,7 +386,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     saveSettingToDB('contact_config', config);
   };
 
-  const updateTests = (petType: 'Dog' | 'Cat', tests: WholeBodyTestCategory[]) => {
+  const updateTests = (petType: 'Dog' | 'Cat' | string, tests: WholeBodyTestCategory[]) => {
     if (petType === 'Dog') {
       setDogTests(tests);
       localStorage.setItem('deepet_dog_tests', JSON.stringify(tests));
@@ -343,7 +398,16 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }
   };
 
-  const updatePackages = (petType: 'Dog' | 'Cat', packages: PetPackage[]) => {
+  const resetDefaultCatalog = () => {
+    setDogTests(DOG_WHOLE_BODY_TESTS);
+    setCatTests(CAT_WHOLE_BODY_TESTS);
+    localStorage.setItem('deepet_dog_tests', JSON.stringify(DOG_WHOLE_BODY_TESTS));
+    localStorage.setItem('deepet_cat_tests', JSON.stringify(CAT_WHOLE_BODY_TESTS));
+    saveSettingToDB('dog_tests', DOG_WHOLE_BODY_TESTS);
+    saveSettingToDB('cat_tests', CAT_WHOLE_BODY_TESTS);
+  };
+
+  const updatePackages = (petType: 'Dog' | 'Cat' | string, packages: PetPackage[]) => {
     if (petType === 'Dog') {
       setDogPackages(packages);
       localStorage.setItem('deepet_dog_packages', JSON.stringify(packages));
@@ -483,6 +547,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       updateHeroConfig,
       updateContactConfig,
       updateTests,
+      resetDefaultCatalog,
       updatePackages,
       updateTestimonials,
       addLead,

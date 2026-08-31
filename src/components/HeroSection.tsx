@@ -98,18 +98,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
                 <div className="flex -space-x-2.5">
                   <img
                     className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-800 object-cover"
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100"
-                    alt="Happy pet parent avatar 1"
+                    src="/madhu.webp"
+                    alt="Madhu - Indian Pet Parent"
                   />
                   <img
                     className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-800 object-cover"
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100"
-                    alt="Happy pet parent avatar 2"
+                    src="/nikhil.webp"
+                    alt="Nikhil - Indian Pet Parent"
                   />
                   <img
                     className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-800 object-cover"
-                    src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=100"
-                    alt="Happy pet parent avatar 3"
+                    src="/jyoti.webp"
+                    alt="Jyoti - Indian Pet Parent"
                   />
                 </div>
 
@@ -200,7 +200,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
           </div>
 
           {/* RIGHT SIDE FORM CENTER-ALIGNED */}
-          <div className="lg:col-span-5 relative z-20 flex items-center justify-center w-full">
+          <div id="booking-form" className="lg:col-span-5 relative z-20 flex items-center justify-center w-full scroll-mt-24">
             <BookingForm onSuccess={onFormSuccess} />
           </div>
 

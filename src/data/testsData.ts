@@ -373,18 +373,50 @@ export const CAT_WHOLE_BODY_TESTS: WholeBodyTestCategory[] = [
       { name: "Feline Coronavirus", price: "Rs 1099 starting", subTests: ["FCoV Antibody/Antigen Screening"] },
       { name: "Toxoplasma IgG/IgM", price: "Rs 1099 starting", subTests: ["Toxoplasmosis Antibody Screen"] },
       { name: "Hemoplasma", price: "Rs 1099 starting", subTests: ["Mycoplasma haemofelis Screening"] },
-      { name: "Tick Fever Panel", price: "Rs 1099 starting", subTests: ["Tick-borne Pathogen Screening"] }
+      { name: "Tick Fever Panel", price: "Rs 3599", subTests: ["Tick-borne Pathogen Screening"] }
     ]
   },
   {
     categoryName: "Vitamins & Minerals",
-    price: "1099 starting",
+    price: "400 starting",
     items: [
-      {
-        name: "Vitamin & Mineral Profile",
-        price: "Rs 1099 starting",
-        subTests: ["Vitamin B12", "Folate", "Iron Profile", "Ferritin", "Magnesium"]
-      }
+      { name: "Iron", price: "Rs 1500", subTests: ["Serum Iron Level"] },
+      { name: "Iron Profile", price: "Rs 2100", subTests: ["Serum Iron", "TIBC", "Transferrin Saturation", "Ferritin"] },
+      { name: "Magnesium", price: "Rs 400", subTests: ["Serum Magnesium Level"] },
+      { name: "Phosphorus", price: "Rs 400", subTests: ["Inorganic Phosphorus Level"] },
+      { name: "Zinc", price: "Rs 2100", subTests: ["Serum Zinc Assessment"] },
+      { name: "Folic Acid", price: "Rs 1200", subTests: ["Serum Folate / Folic Acid Level"] },
+      { name: "Vit D3", price: "Rs 1800", subTests: ["25-Hydroxy Vitamin D3"] },
+      { name: "Vitamin A", price: "Rs 6500", subTests: ["Retinol / Vitamin A Level"] },
+      { name: "Vitamin B1", price: "Rs 6500", subTests: ["Thiamine / Vitamin B1 Level"] },
+      { name: "Vitamin B12", price: "Rs 1500", subTests: ["Cobalamin / Vitamin B12 Level"] },
+      { name: "Vitamin E", price: "Rs 6000", subTests: ["Alpha-Tocopherol / Vitamin E Level"] }
+    ]
+  },
+  {
+    categoryName: "Hormonal Assay",
+    price: "799 starting",
+    items: [
+      { name: "Aldosterone", price: "Rs 1500", subTests: ["Adrenal Aldosterone Hormone Level"] },
+      { name: "Adrenocorticotropic hormone (ACTH)", price: "Rs 1800", subTests: ["Pituitary ACTH Level"] },
+      { name: "Canine Free Thyroxine (FT4)", price: "Rs 800", subTests: ["Free T4 Hormone Level"] },
+      { name: "Cortisol Routine", price: "Rs 1099", subTests: ["Basal Cortisol Hormone Level"] },
+      { name: "Cortisol: LDDS Test (2 Analysis)", price: "Rs 1699", subTests: ["2-Sample Dexamethasone Suppression"] },
+      { name: "Cortisol: LDDS Test (3 Analysis)", price: "Rs 2299", subTests: ["3-Sample Dexamethasone Suppression"] },
+      { name: "Calcitonin Test", price: "Rs 1499", subTests: ["Serum Calcitonin Hormone Level"] },
+      { name: "Estrogen", price: "Rs 1099", subTests: ["Serum Estradiol / Estrogen Level"] },
+      { name: "FSH: Follicle Stimulating Hormone", price: "Rs 999", subTests: ["Follicle Stimulating Hormone"] },
+      { name: "Feline Free Thyroxine (FT4)", price: "Rs 799", subTests: ["Feline Free T4 Hormone Level"] },
+      { name: "GNRH (Stimulation Test)", price: "Rs 4399", subTests: ["Gonadotropin-Releasing Hormone Test"] },
+      { name: "Insulin", price: "Rs 888", subTests: ["Serum Fasting Insulin Level"] },
+      { name: "LH: Luteinising Hormone", price: "Rs 999", subTests: ["Luteinizing Hormone Level"] },
+      { name: "Para Thyroid Hormone (PTH)", price: "Rs 1599", subTests: ["Parathyroid Hormone Level"] },
+      { name: "Phenobarbitone", price: "Rs 1299", subTests: ["Serum Phenobarbital Drug Level"] },
+      { name: "Progesterone Serum", price: "Rs 1099", subTests: ["Serum Progesterone Level"] },
+      { name: "Prolactin", price: "Rs 999", subTests: ["Serum Prolactin Level"] },
+      { name: "Reproductive Hormones: FSH & LH", price: "Rs 1499", subTests: ["Combined FSH & LH Panel"] },
+      { name: "Testosterone", price: "Rs 1099", subTests: ["Serum Total Testosterone Level"] },
+      { name: "Thyroid Profile", price: "Rs 2099", subTests: ["Comprehensive Thyroid Panel (T3, T4, TSH)"] }
     ]
   },
   {
@@ -415,15 +447,6 @@ export const CAT_WHOLE_BODY_TESTS: WholeBodyTestCategory[] = [
         price: "Rs 1199 starting",
         subTests: ["PT (Prothrombin Time)", "aPTT (Activated Partial Thromboplastin Time)", "Fibrinogen"]
       }
-    ]
-  },
-  {
-    categoryName: "Imaging",
-    price: "1599 starting",
-    items: [
-      { name: "Chest X-ray", price: "Rs 1599 starting", subTests: ["Thoracic Radiographic Scan"] },
-      { name: "Abdominal X-ray", price: "Rs 1599 starting", subTests: ["Abdominal Radiographic Scan"] },
-      { name: "Abdominal Ultrasound", price: "Rs 1599 starting", subTests: ["Ultrasonography Imaging"] }
     ]
   }
 ];
@@ -515,28 +538,60 @@ export const DOG_WHOLE_BODY_TESTS: WholeBodyTestCategory[] = [
   },
   {
     categoryName: "Infectious Diseases (Dog Specific)",
-    price: "1599 starting",
+    price: "2599 starting",
     items: [
-      { name: "4Dx Test (Ehrlichia, Anaplasma, Lyme, Heartworm)", price: "Rs 1599 starting", subTests: ["4-Way Vector Vector-Borne Diagnostics"] },
-      { name: "Babesia", price: "Rs 1599 starting", subTests: ["Babesiosis Parasite Screening"] },
-      { name: "Ehrlichia", price: "Rs 1599 starting", subTests: ["Ehrlichiosis Antibody Screening"] },
-      { name: "Anaplasma", price: "Rs 1599 starting", subTests: ["Anaplasmosis Antibody Screening"] },
-      { name: "Heartworm Antigen", price: "Rs 1599 starting", subTests: ["Dirofilaria immitis Screen"] },
+      { name: "4Dx Test (Ehrlichia, Anaplasma, Lyme, Heartworm)", price: "Rs 3000", subTests: ["4-Way Vector Vector-Borne Diagnostics"] },
+      { name: "Babesia", price: "Rs 2599", subTests: ["Babesiosis Parasite Screening"] },
+      { name: "Ehrlichia", price: "Rs 2599", subTests: ["Ehrlichiosis Antibody Screening"] },
+      { name: "Anaplasma", price: "Rs 2599", subTests: ["Anaplasmosis Antibody Screening"] },
+      { name: "Heartworm Antigen", price: "Rs 2599", subTests: ["Dirofilaria immitis Screen"] },
       { name: "Leptospira", price: "Rs 1599 starting", subTests: ["Leptospirosis Antibody Screen"] },
       { name: "Canine Parvovirus", price: "Rs 1599 starting", subTests: ["Canine Parvovirus Antigen Screen"] },
       { name: "Distemper", price: "Rs 1599 starting", subTests: ["Canine Distemper Antigen Screen"] },
-      { name: "Tick Fever Panel", price: "Rs 1599 starting", subTests: ["Comprehensive Tick Fever Screen"] }
+      { name: "Tick Fever Panel", price: "Rs 3599", subTests: ["Comprehensive Tick Fever Screen"] }
     ]
   },
   {
     categoryName: "Vitamins & Minerals",
-    price: "1099 starting",
+    price: "400 starting",
     items: [
-      {
-        name: "Vitamin & Mineral Profile",
-        price: "Rs 1099 starting",
-        subTests: ["Vitamin B12", "Folate", "Iron Profile", "Ferritin", "Magnesium"]
-      }
+      { name: "Iron", price: "Rs 1500", subTests: ["Serum Iron Level"] },
+      { name: "Iron Profile", price: "Rs 2100", subTests: ["Serum Iron", "TIBC", "Transferrin Saturation", "Ferritin"] },
+      { name: "Magnesium", price: "Rs 400", subTests: ["Serum Magnesium Level"] },
+      { name: "Phosphorus", price: "Rs 400", subTests: ["Inorganic Phosphorus Level"] },
+      { name: "Zinc", price: "Rs 2100", subTests: ["Serum Zinc Assessment"] },
+      { name: "Folic Acid", price: "Rs 1200", subTests: ["Serum Folate / Folic Acid Level"] },
+      { name: "Vit D3", price: "Rs 1800", subTests: ["25-Hydroxy Vitamin D3"] },
+      { name: "Vitamin A", price: "Rs 6500", subTests: ["Retinol / Vitamin A Level"] },
+      { name: "Vitamin B1", price: "Rs 6500", subTests: ["Thiamine / Vitamin B1 Level"] },
+      { name: "Vitamin B12", price: "Rs 1500", subTests: ["Cobalamin / Vitamin B12 Level"] },
+      { name: "Vitamin E", price: "Rs 6000", subTests: ["Alpha-Tocopherol / Vitamin E Level"] }
+    ]
+  },
+  {
+    categoryName: "Hormonal Assay",
+    price: "799 starting",
+    items: [
+      { name: "Aldosterone", price: "Rs 1500", subTests: ["Adrenal Aldosterone Hormone Level"] },
+      { name: "Adrenocorticotropic hormone (ACTH)", price: "Rs 1800", subTests: ["Pituitary ACTH Level"] },
+      { name: "Canine Free Thyroxine (FT4)", price: "Rs 800", subTests: ["Free T4 Hormone Level"] },
+      { name: "Cortisol Routine", price: "Rs 1099", subTests: ["Basal Cortisol Hormone Level"] },
+      { name: "Cortisol: LDDS Test (2 Analysis)", price: "Rs 1699", subTests: ["2-Sample Dexamethasone Suppression"] },
+      { name: "Cortisol: LDDS Test (3 Analysis)", price: "Rs 2299", subTests: ["3-Sample Dexamethasone Suppression"] },
+      { name: "Calcitonin Test", price: "Rs 1499", subTests: ["Serum Calcitonin Hormone Level"] },
+      { name: "Estrogen", price: "Rs 1099", subTests: ["Serum Estradiol / Estrogen Level"] },
+      { name: "FSH: Follicle Stimulating Hormone", price: "Rs 999", subTests: ["Follicle Stimulating Hormone"] },
+      { name: "Feline Free Thyroxine (FT4)", price: "Rs 799", subTests: ["Feline Free T4 Hormone Level"] },
+      { name: "GNRH (Stimulation Test)", price: "Rs 4399", subTests: ["Gonadotropin-Releasing Hormone Test"] },
+      { name: "Insulin", price: "Rs 888", subTests: ["Serum Fasting Insulin Level"] },
+      { name: "LH: Luteinising Hormone", price: "Rs 999", subTests: ["Luteinizing Hormone Level"] },
+      { name: "Para Thyroid Hormone (PTH)", price: "Rs 1599", subTests: ["Parathyroid Hormone Level"] },
+      { name: "Phenobarbitone", price: "Rs 1299", subTests: ["Serum Phenobarbital Drug Level"] },
+      { name: "Progesterone Serum", price: "Rs 1099", subTests: ["Serum Progesterone Level"] },
+      { name: "Prolactin", price: "Rs 999", subTests: ["Serum Prolactin Level"] },
+      { name: "Reproductive Hormones: FSH & LH", price: "Rs 1499", subTests: ["Combined FSH & LH Panel"] },
+      { name: "Testosterone", price: "Rs 1099", subTests: ["Serum Total Testosterone Level"] },
+      { name: "Thyroid Profile", price: "Rs 2099", subTests: ["Comprehensive Thyroid Panel (T3, T4, TSH)"] }
     ]
   },
   {
@@ -544,9 +599,7 @@ export const DOG_WHOLE_BODY_TESTS: WholeBodyTestCategory[] = [
     price: "999 starting",
     items: [
       { name: "NT-proBNP", price: "Rs 999 starting", subTests: ["Cardiac Stretch Biomarker"] },
-      { name: "Troponin-I", price: "Rs 999 starting", subTests: ["Myocardial Injury Marker"] },
-      { name: "ECG", price: "Rs 999 starting", subTests: ["Electrocardiogram Rhythm Scan"] },
-      { name: "Echocardiography", price: "Rs 999 starting", subTests: ["Echocardiogram Heart Scan"] }
+      { name: "Troponin-I", price: "Rs 999 starting", subTests: ["Myocardial Injury Marker"] }
     ]
   },
   {
@@ -569,15 +622,6 @@ export const DOG_WHOLE_BODY_TESTS: WholeBodyTestCategory[] = [
         price: "Rs 1199 starting",
         subTests: ["PT (Prothrombin Time)", "aPTT (Activated Partial Thromboplastin Time)", "Fibrinogen"]
       }
-    ]
-  },
-  {
-    categoryName: "Imaging",
-    price: "1599 starting",
-    items: [
-      { name: "Chest X-ray", price: "Rs 1599 starting", subTests: ["Thoracic Radiographic Scan"] },
-      { name: "Abdominal X-ray", price: "Rs 1599 starting", subTests: ["Abdominal Radiographic Scan"] },
-      { name: "Abdominal Ultrasound", price: "Rs 1599 starting", subTests: ["Ultrasonography Imaging"] }
     ]
   }
 ];
@@ -647,7 +691,7 @@ export const CAT_PACKAGES: PetPackage[] = [
     title: "Premium Whole Body Package",
     price: 5000,
     idealFor: "Ideal for: Senior cats, illness screening, full preventive care",
-    testsCount: 40,
+    testsCount: 38,
     includedTests: [
       "All Complete Care Diagnostic Biomarkers",
       "Spec fPL (Feline Pancreatic Lipase)",
@@ -662,9 +706,7 @@ export const CAT_PACKAGES: PetPackage[] = [
       "Troponin-I (Heart Injury Marker)",
       "PT (Coagulation Panel)",
       "aPTT (Coagulation Panel)",
-      "Urine Culture",
-      "Chest X-ray",
-      "Abdominal Ultrasound"
+      "Urine Culture"
     ]
   }
 ];
@@ -733,7 +775,7 @@ export const DOG_PACKAGES: PetPackage[] = [
     title: "Premium Whole Body Package",
     price: 4000,
     idealFor: "Ideal for: Senior dogs & complete disease screening",
-    testsCount: 45,
+    testsCount: 42,
     includedTests: [
       "All Complete Care Diagnostic Biomarkers",
       "Spec cPL (Canine Pancreatic Lipase)",
@@ -749,10 +791,7 @@ export const DOG_PACKAGES: PetPackage[] = [
       "Troponin-I (Heart Injury Marker)",
       "PT (Coagulation Panel)",
       "aPTT (Coagulation Panel)",
-      "Urine Culture",
-      "Chest X-ray",
-      "Abdominal Ultrasound",
-      "ECG (Electrocardiography)"
+      "Urine Culture"
     ]
   }
 ];

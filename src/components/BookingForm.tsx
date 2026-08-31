@@ -23,6 +23,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
   const [petType, setPetType] = useState<'Dog' | 'Cat'>('Dog');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [selectedSubTest, setSelectedSubTest] = useState<string>('');
+  const [customSubTest, setCustomSubTest] = useState<string>('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [city, setCity] = useState('');
@@ -36,30 +37,28 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
     const packages = petType === 'Cat' ? catPackages : dogPackages;
     const names = wholeBodycats.map(c => c.categoryName);
     const packageNames = packages.map(p => p.title);
-    return [...names, ...packageNames];
+    return [...names, ...packageNames, 'Other Category'];
   }, [petType, catTests, dogTests, catPackages, dogPackages]);
 
   const activeCategory = selectedCategory || categoriesList[0] || '';
 
   // Generate sub-tests list dynamically based on selected category
   const subTestsList = useMemo(() => {
+    if (activeCategory === 'Other Category') {
+      return [];
+    }
+
     const wholeBodycats = petType === 'Cat' ? catTests : dogTests;
     const packages = petType === 'Cat' ? catPackages : dogPackages;
     
     // Check if the selected category is one of the packages
     const activePackage = packages.find(pkg => pkg.title === activeCategory || pkg.name === activeCategory);
     if (activePackage) {
-      return [{
-        name: activePackage.title,
-        price: activePackage.price
-      }];
+      return [{ name: activePackage.title, price: activePackage.price }];
     }
     
     if (activeCategory === "Health Packages") {
-      return packages.map(pkg => ({
-        name: pkg.title,
-        price: pkg.price
-      }));
+      return packages.map(pkg => ({ name: pkg.title, price: pkg.price }));
     }
     
     const cat = wholeBodycats.find(c => c.categoryName === activeCategory);
@@ -115,15 +114,18 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
       return;
     }
 
-    // WhatsApp message — build line by line, skip empty optional fields
+    const finalSubTest = activeCategory === 'Other Category' 
+      ? (customSubTest.trim() || 'Custom Test Booking') 
+      : activeSubTest;
+
     const activeSubTestObj = subTestsList.find(s => s.name === activeSubTest);
-    const priceStr = activeSubTestObj ? ` (\u20B9${activeSubTestObj.price})` : '';
+    const priceStr = activeSubTestObj && activeSubTestObj.price > 0 ? ` (\u20B9${activeSubTestObj.price})` : '';
 
     const lines = [
       'Hi Dee Pets, I want to book an appointment:',
       `\u2022 Pet Type: ${petType}`,
       `\u2022 Main Category: ${activeCategory}`,
-      `\u2022 Test/Package: ${activeSubTest}${priceStr}`,
+      `\u2022 Test/Package: ${finalSubTest}${priceStr}`,
       `\u2022 Name: ${name}`,
       `\u2022 Phone Number: ${phone}`,
     ];
@@ -139,8 +141,8 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
       phone,
       petType,
       category: activeCategory,
-      subTest: activeSubTest,
-      price: activeSubTestObj?.price,
+      subTest: finalSubTest,
+      price: activeSubTestObj?.price || undefined,
       city,
       pincode,
       message,
@@ -162,6 +164,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
     setMessage('');
     setSelectedCategory('');
     setSelectedSubTest('');
+    setCustomSubTest('');
   };
 
   return (
@@ -232,6 +235,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
               onChange={(e) => {
                 setSelectedCategory(e.target.value);
                 setSelectedSubTest('');
+                setCustomSubTest('');
               }}
               className="w-full bg-black/30 border border-white/20 rounded-lg py-2 px-3 text-xs sm:text-sm font-medium text-white appearance-none cursor-pointer focus:outline-none focus:border-cyan-400 pr-9 backdrop-blur-sm"
             >
@@ -250,20 +254,34 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
           <label className="block text-[9.5px] font-bold uppercase tracking-wider text-white/80 mb-1 drop-shadow-sm">
             SELECT SPECIFIC TEST / PACKAGE
           </label>
-          <div className="relative">
-            <select
-              value={activeSubTest}
-              onChange={(e) => setSelectedSubTest(e.target.value)}
-              className="w-full bg-black/30 border border-white/20 rounded-lg py-2 px-3 text-xs sm:text-sm font-medium text-white appearance-none cursor-pointer focus:outline-none focus:border-cyan-400 pr-9 backdrop-blur-sm"
-            >
-              {subTestsList.map((sub, index) => (
-                <option key={index} value={sub.name} className="bg-slate-950 text-white py-1.5">
-                  {sub.name} (₹{sub.price})
-                </option>
-              ))}
-            </select>
-            <ChevronDown className="w-3.5 h-3.5 text-white/80 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-          </div>
+
+          {activeCategory === 'Other Category' ? (
+            /* Write option input when "Other Category" is selected */
+            <input
+              type="text"
+              required
+              placeholder="Write your specific test or package name..."
+              value={customSubTest}
+              onChange={(e) => setCustomSubTest(e.target.value)}
+              className="w-full bg-black/30 border border-cyan-400 rounded-lg py-2 px-3 text-xs sm:text-sm text-white placeholder:text-white/50 focus:outline-none focus:border-cyan-300 font-medium backdrop-blur-sm animate-fade-in"
+            />
+          ) : (
+            /* Standard dropdown select for normal categories */
+            <div className="relative">
+              <select
+                value={activeSubTest}
+                onChange={(e) => setSelectedSubTest(e.target.value)}
+                className="w-full bg-black/30 border border-white/20 rounded-lg py-2 px-3 text-xs sm:text-sm font-medium text-white appearance-none cursor-pointer focus:outline-none focus:border-cyan-400 pr-9 backdrop-blur-sm"
+              >
+                {subTestsList.map((sub, index) => (
+                  <option key={index} value={sub.name} className="bg-slate-950 text-white py-1.5">
+                    {sub.name} {sub.price > 0 ? `(₹${sub.price})` : ''}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="w-3.5 h-3.5 text-white/80 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
+          )}
         </div>
 
         {/* NAME & PHONE */}
