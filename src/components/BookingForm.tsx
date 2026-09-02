@@ -109,13 +109,17 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !phone) {
-      alert('Please enter your name and phone number.');
+    if (!name.trim() || !phone.trim() || !city) {
+      alert('Please fill in all mandatory fields: Pet Type, Test Category, Specific Test/Package, Name, Phone, and City.');
+      return;
+    }
+    if (activeCategory === 'Other Category' && !customSubTest.trim()) {
+      alert('Please enter your specific test or package name.');
       return;
     }
 
     const finalSubTest = activeCategory === 'Other Category' 
-      ? (customSubTest.trim() || 'Custom Test Booking') 
+      ? customSubTest.trim() 
       : activeSubTest;
 
     const activeSubTestObj = subTestsList.find(s => s.name === activeSubTest);
@@ -185,7 +189,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
         {/* SELECT PET TYPE */}
         <div>
           <label className="block text-[9.5px] font-bold uppercase tracking-wider text-white/80 mb-1 drop-shadow-sm">
-            SELECT PET TYPE
+            SELECT PET TYPE <span className="text-cyan-400">*</span>
           </label>
           <div className="grid grid-cols-2 gap-2.5">
             <button
@@ -227,10 +231,11 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
         {/* TEST CATEGORY */}
         <div>
           <label className="block text-[9.5px] font-bold uppercase tracking-wider text-white/80 mb-1 drop-shadow-sm">
-            TEST CATEGORY
+            TEST CATEGORY <span className="text-cyan-400">*</span>
           </label>
           <div className="relative">
             <select
+              required
               value={activeCategory}
               onChange={(e) => {
                 setSelectedCategory(e.target.value);
@@ -252,7 +257,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
         {/* SELECT SPECIFIC TEST / PACKAGE */}
         <div>
           <label className="block text-[9.5px] font-bold uppercase tracking-wider text-white/80 mb-1 drop-shadow-sm">
-            SELECT SPECIFIC TEST / PACKAGE
+            SELECT SPECIFIC TEST / PACKAGE <span className="text-cyan-400">*</span>
           </label>
 
           {activeCategory === 'Other Category' ? (
@@ -269,6 +274,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
             /* Standard dropdown select for normal categories */
             <div className="relative">
               <select
+                required
                 value={activeSubTest}
                 onChange={(e) => setSelectedSubTest(e.target.value)}
                 className="w-full bg-black/30 border border-white/20 rounded-lg py-2 px-3 text-xs sm:text-sm font-medium text-white appearance-none cursor-pointer focus:outline-none focus:border-cyan-400 pr-9 backdrop-blur-sm"
@@ -288,7 +294,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <div>
             <label className="block text-[9.5px] font-bold uppercase tracking-wider text-white/80 mb-0.5 drop-shadow-sm">
-              NAME
+              NAME <span className="text-cyan-400">*</span>
             </label>
             <input
               type="text"
@@ -302,7 +308,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
 
           <div>
             <label className="block text-[9.5px] font-bold uppercase tracking-wider text-white/80 mb-0.5 drop-shadow-sm">
-              PHONE
+              PHONE <span className="text-cyan-400">*</span>
             </label>
             <input
               type="tel"
@@ -315,19 +321,20 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
           </div>
         </div>
 
-        {/* CITY & PINCODE* */}
+        {/* CITY & PINCODE */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <div>
             <label className="block text-[9.5px] font-bold uppercase tracking-wider text-white/80 mb-0.5 drop-shadow-sm">
-              CITY
+              CITY <span className="text-cyan-400">*</span>
             </label>
             <div className="relative">
               <select
+                required
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
                 className="w-full bg-black/30 border border-white/20 rounded-lg py-2 px-3 text-xs sm:text-sm font-medium text-white appearance-none cursor-pointer focus:outline-none focus:border-cyan-400 pr-8 backdrop-blur-sm"
               >
-                <option value="" className="bg-slate-950 text-white/60">Select City</option>
+                <option value="" disabled className="bg-slate-950 text-white/60">Select City</option>
                 <option value="Delhi NCR" className="bg-slate-950 text-white">Delhi NCR</option>
                 <option value="Gurgaon" className="bg-slate-950 text-white">Gurgaon</option>
                 <option value="Noida" className="bg-slate-950 text-white">Noida</option>
@@ -340,7 +347,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
 
           <div>
             <label className="block text-[9.5px] font-bold uppercase tracking-wider text-white/80 mb-0.5 drop-shadow-sm">
-              PINCODE*
+              PINCODE
             </label>
             <div className="relative">
               <select
