@@ -116,13 +116,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onSuccess }) => 
                 <div className="space-y-3">
                   
                   {/* Call Us */}
-                  <a href="tel:+919591875232" className="flex items-center gap-3 p-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 transition-all group backdrop-blur-sm">
+                  <a href={`tel:${contactConfig.primaryPhone}`} className="flex items-center gap-3 p-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 transition-all group backdrop-blur-sm">
                     <div className="w-9 h-9 rounded-lg bg-white/20 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                       <Phone className="w-4 h-4" />
                     </div>
                     <div>
                       <span className="text-[10px] font-bold text-blue-100/70 block uppercase tracking-wider">Call Us</span>
-                      <span className="text-xs font-extrabold text-white group-hover:text-blue-50 transition-colors">+91 95918 75232</span>
+                      <span className="text-xs font-extrabold text-white group-hover:text-blue-50 transition-colors">+91 72380 02900</span>
                     </div>
                   </a>
 
@@ -138,13 +138,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onSuccess }) => 
                   </a>
 
                   {/* WhatsApp */}
-                  <a href="https://wa.me/919591875232?text=Hi%20Deepet%20Services%0AI%20want%20to%20know%20more%20about%20your%20services." target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-xl bg-emerald-400/15 hover:bg-emerald-400/25 border border-emerald-300/30 transition-all group backdrop-blur-sm">
+                  <a href={`https://wa.me/${contactConfig.whatsappNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent('Hi DeePet Services, I want to know more about your services.')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-xl bg-emerald-400/15 hover:bg-emerald-400/25 border border-emerald-300/30 transition-all group backdrop-blur-sm">
                     <div className="w-9 h-9 rounded-lg bg-emerald-500 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                       <MessageSquare className="w-4 h-4" />
                     </div>
                     <div>
                       <span className="text-[10px] font-bold text-emerald-200 block uppercase tracking-wider">WhatsApp</span>
-                      <span className="text-xs font-extrabold text-white group-hover:text-emerald-100 transition-colors">Chat with Support</span>
+                      <span className="text-xs font-extrabold text-white group-hover:text-emerald-100 transition-colors">+91 72380 02900</span>
                     </div>
                   </a>
 

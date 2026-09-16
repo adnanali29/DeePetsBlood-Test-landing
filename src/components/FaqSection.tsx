@@ -21,8 +21,8 @@ export const FaqSection: React.FC = () => {
           <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-brand-dark mt-3">
             Frequently Asked <span className="text-brand-purple">Questions</span>
           </h2>
-          <p className="text-brand-muted text-sm sm:text-base mt-1">
-            Everything you need to know about pet sample collection, fasting, and reports.
+          <p className="text-slate-500 text-sm sm:text-base mt-1">
+            Everything you need to know about doorstep vet care, all-inclusive packages, and pet recovery.
           </p>
         </div>
 

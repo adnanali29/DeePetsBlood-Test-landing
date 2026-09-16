@@ -61,21 +61,21 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4 relative overflow-hidden">
+    <div className="min-h-screen bg-slate-100/70 flex items-center justify-center px-4 relative overflow-hidden">
       
       {/* Background glow orbs */}
-      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-600/15 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-lime-400/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-md">
         {/* Clean white card for high contrast readability */}
-        <div className="bg-white rounded-3xl p-8 shadow-2xl border border-slate-100">
+        <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-200/80">
           
           {/* Logo */}
           <div className="flex justify-center mb-8">
             <div className="flex flex-col items-center gap-3">
-              <div className="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/30">
-                <Lock className="w-7 h-7 text-white" />
+              <div className="w-14 h-14 bg-lime-400 rounded-2xl flex items-center justify-center shadow-lg shadow-lime-400/20 border border-lime-500/20">
+                <Lock className="w-7 h-7 text-slate-950" />
               </div>
               <div className="text-center">
                 <h1 className="text-slate-900 font-black text-2xl tracking-tight font-heading">DeePet Admin</h1>
@@ -98,7 +98,7 @@ export default function AdminLoginPage() {
                 placeholder="Enter your ID or email"
                 value={identifier}
                 onChange={e => { setIdentifier(e.target.value); setError(''); }}
-                className="w-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 font-semibold rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white focus:ring-2 focus:ring-indigo-100 transition-all"
+                className="w-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 font-semibold rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-lime-500 focus:bg-white focus:ring-2 focus:ring-lime-500/20 transition-all"
               />
             </div>
 
@@ -115,7 +115,7 @@ export default function AdminLoginPage() {
                   placeholder="Enter your password"
                   value={password}
                   onChange={e => { setPassword(e.target.value); setError(''); }}
-                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 font-semibold rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white focus:ring-2 focus:ring-indigo-100 transition-all"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 font-semibold rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:border-lime-500 focus:bg-white focus:ring-2 focus:ring-lime-500/20 transition-all"
                 />
                 <button
                   type="button"
@@ -139,13 +139,13 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-70 text-white font-extrabold text-sm py-3.5 rounded-xl transition-all shadow-lg shadow-indigo-600/20 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer mt-2"
+              className="w-full bg-lime-400 hover:bg-lime-500 disabled:opacity-70 text-slate-950 font-black text-sm py-3.5 rounded-xl transition-all shadow-md shadow-lime-400/20 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer mt-2"
             >
               {loading ? (
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
               ) : (
                 <>
-                  <LogIn className="w-4 h-4" />
+                  <LogIn className="w-4 h-4 text-slate-950" />
                   Sign In to Admin
                 </>
               )}

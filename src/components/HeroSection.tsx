@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Phone, MessageSquare, Check } from 'lucide-react';
+import { Home as HomeIcon, ShieldCheck, FileText, Star, Phone, MessageCircle } from 'lucide-react';
 import { BookingForm } from './BookingForm';
+import { useApp } from '@/context/AppContext';
 
 interface HeroSectionProps {
   onBookNowClick?: () => void;
@@ -15,7 +16,6 @@ interface LocalPetVideo {
   videoUrl: string;
 }
 
-// User specified order: Dog 2 -> cat -> Dog 5
 const LOCAL_PET_VIDEOS: LocalPetVideo[] = [
   {
     id: 'dog2',
@@ -34,14 +34,11 @@ const LOCAL_PET_VIDEOS: LocalPetVideo[] = [
   },
 ];
 
-import { useApp } from '@/context/AppContext';
-
 export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
-  const { heroConfig, contactConfig } = useApp();
+  const { contactConfig } = useApp();
   const [activeVideoIdx, setActiveVideoIdx] = useState(0);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
-  // Auto-advance video carousel smoothly every 7 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveVideoIdx((prev) => (prev + 1) % LOCAL_PET_VIDEOS.length);
@@ -49,7 +46,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
     return () => clearInterval(timer);
   }, []);
 
-  // Ensure active video is playing smoothly
   useEffect(() => {
     const activeVideo = videoRefs.current[activeVideoIdx];
     if (activeVideo) {
@@ -59,9 +55,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
   }, [activeVideoIdx]);
 
   return (
-    <section id="home" className="relative min-h-[90vh] lg:min-h-screen flex items-center overflow-hidden py-10 lg:py-14 text-white">
+    <section id="home" className="relative min-h-[90vh] lg:min-h-screen flex items-center overflow-hidden py-10 lg:py-16 text-white">
       
-      {/* INSTANT PRELOADED FULL-COVER BACKGROUND VIDEO CAROUSEL WITH ZERO FLICKER CROSSFADE */}
+      {/* INSTANT PRELOADED FULL-COVER BACKGROUND VIDEO CAROUSEL */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-950">
         {LOCAL_PET_VIDEOS.map((vid, idx) => (
           <video
@@ -79,127 +75,95 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
           />
         ))}
         
-        {/* Soft Ambient Overlay so background video is clearly visible while keeping text readable */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/35 z-20" />
-        <div className="absolute inset-0 bg-black/15 z-20" />
+        {/* Soft Ambient Overlay for clear text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/65 to-black/45 z-20" />
+        <div className="absolute inset-0 bg-black/20 z-20" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          {/* LEFT SIDE CONTENT OVERLAY — CENTER-ALIGNED ON PHONE / MOBILE, LEFT-ALIGNED ON DESKTOP */}
-          <div className="lg:col-span-7 space-y-5 text-center lg:text-left flex flex-col items-center lg:items-start justify-center">
+          {/* LEFT SIDE CONTENT — MATCHING REFERENCE IMAGES */}
+          <div className="lg:col-span-7 space-y-5 text-left flex flex-col items-start justify-center">
             
-            {/* Happy Parents Badge */}
-            <div className="flex justify-center lg:justify-start w-full">
-              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-black/70 border border-white/20 text-white backdrop-blur-md shadow-lg">
-                
-                {/* 3 Overlapping Avatars */}
-                <div className="flex -space-x-2.5">
-                  <img
-                    className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-800 object-cover"
-                    src="/madhu.webp"
-                    alt="Madhu - Indian Pet Parent"
-                  />
-                  <img
-                    className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-800 object-cover"
-                    src="/nikhil.webp"
-                    alt="Nikhil - Indian Pet Parent"
-                  />
-                  <img
-                    className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-800 object-cover"
-                    src="/jyoti.webp"
-                    alt="Jyoti - Indian Pet Parent"
-                  />
-                </div>
-
-                {/* 5 Stars */}
-                <div className="flex items-center gap-0.5">
-                  <span className="text-yellow-400 text-xs sm:text-sm">★</span>
-                  <span className="text-yellow-400 text-xs sm:text-sm">★</span>
-                  <span className="text-yellow-400 text-xs sm:text-sm">★</span>
-                  <span className="text-yellow-400 text-xs sm:text-sm">★</span>
-                  <span className="text-yellow-400 text-xs sm:text-sm">★</span>
-                </div>
-
-                {/* Text Description */}
-                <span className="text-[10px] sm:text-xs font-extrabold uppercase tracking-wide text-white/95">
-                  5000+ Happy Pet Parents
-                </span>
-
+            {/* 5000+ HAPPY PET PARENTS BADGE (Matching Image 1) */}
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-black/80 backdrop-blur-md border border-slate-700/80 shadow-xl">
+              <div className="flex -space-x-2.5 overflow-hidden">
+                <img className="inline-block h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-slate-900 object-cover" src="/ankita.webp" alt="Pet Parent" />
+                <img className="inline-block h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-slate-900 object-cover" src="/jyoti.webp" alt="Pet Parent" />
+                <img className="inline-block h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-slate-900 object-cover" src="/madhu.webp" alt="Pet Parent" />
               </div>
+              <div className="flex items-center text-amber-400 gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-amber-400 stroke-amber-400" />
+                ))}
+              </div>
+              <span className="text-xs sm:text-sm font-extrabold text-white tracking-wide uppercase">
+                5000+ HAPPY PET PARENTS
+              </span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.15] font-heading drop-shadow-md text-center lg:text-left w-full whitespace-pre-line">
-              {heroConfig.headline.includes('Pet Care') ? (
-                <>
-                  {heroConfig.headline.split('Pet Care')[0]}
-                  <span className="text-[#b2d650]">Pet Care</span>
-                  {heroConfig.headline.split('Pet Care')[1]}
-                </>
-              ) : (
-                heroConfig.headline
-              )}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.08] font-heading">
+              Pet Health Care <br />
+              Packages
             </h1>
 
             {/* Subtitle */}
-            <p className="text-lg sm:text-xl text-slate-200 font-medium max-w-xl text-center lg:text-left mx-auto lg:mx-0 drop-shadow">
-              {heroConfig.subtitle}
+            <p className="text-base sm:text-lg lg:text-xl text-slate-200 font-medium max-w-xl leading-relaxed">
+              One complete price — from home check-ups and bloodwork to surgery, medicines, home monitoring and follow-up — instead of itemised quotes.
             </p>
 
-            {/* Highlight Banner Pill */}
-            <div className="inline-block bg-black/65 border border-white/20 backdrop-blur-md rounded-2xl px-5 py-2.5 text-sm sm:text-base font-extrabold text-white shadow-md mx-auto lg:mx-0">
-              <span>{heroConfig.badgeText}</span>
-              <span className="text-slate-300 font-normal ml-2 text-xs sm:text-sm">{heroConfig.badgeSubtext}</span>
+            {/* 3 Bullet Features List with Neon Green Icons */}
+            <div className="space-y-3 pt-1 text-sm sm:text-base font-semibold text-white">
+              
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-black/50 border border-[#a3e635]/40 text-[#a3e635] flex items-center justify-center shrink-0 shadow-sm">
+                  <HomeIcon className="w-4 h-4 text-[#a3e635]" />
+                </div>
+                <span>Vet visits at your home</span>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-black/50 border border-[#a3e635]/40 text-[#a3e635] flex items-center justify-center shrink-0 shadow-sm">
+                  <ShieldCheck className="w-4 h-4 text-[#a3e635]" />
+                </div>
+                <span>Pre-anaesthetic bloodwork as standard</span>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-black/50 border border-[#a3e635]/40 text-[#a3e635] flex items-center justify-center shrink-0 shadow-sm">
+                  <FileText className="w-4 h-4 text-[#a3e635]" />
+                </div>
+                <span>One transparent package price</span>
+              </div>
+
             </div>
 
-            {/* Checkmarks Line */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 pt-1 text-sm sm:text-base font-bold text-white drop-shadow-sm w-full">
-              <span className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-[#b2d650] text-slate-900 flex items-center justify-center text-xs font-black">
-                  <Check className="w-3.5 h-3.5" />
-                </div>
-                Licensed Vets
-              </span>
-              <span className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-[#b2d650] text-slate-900 flex items-center justify-center text-xs font-black">
-                  <Check className="w-3.5 h-3.5" />
-                </div>
-                Insured
-              </span>
-              <span className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-[#b2d650] text-slate-900 flex items-center justify-center text-xs font-black">
-                  <Check className="w-3.5 h-3.5" />
-                </div>
-                Same-Day Visits
-              </span>
-            </div>
-
-            {/* Action Buttons: Call Now & WhatsApp */}
-            <div className="hidden lg:flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-1 w-full">
+            {/* CTA BUTTONS BELOW "One transparent package price" (Image 2 Neon Green CTAs) */}
+            <div className="flex flex-wrap items-center gap-3.5 pt-3">
               <a
-                href={`tel:${contactConfig.primaryPhone}`}
-                className="bg-[#b2d650] hover:bg-[#a1c83d] text-slate-900 px-8 py-3.5 rounded-full text-base font-extrabold transition-all shadow-lg hover:scale-105 flex items-center gap-2.5"
+                href={`tel:${contactConfig.primaryPhone || '+917238002900'}`}
+                className="bg-[#a3e635] hover:bg-[#92d029] text-slate-950 px-6 py-3 rounded-full text-sm sm:text-base font-extrabold flex items-center gap-2.5 shadow-lg shadow-[#a3e635]/25 transition-all transform hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
               >
-                <Phone className="w-5 h-5" />
+                <Phone className="w-4 h-4 fill-slate-950 stroke-slate-950" />
                 <span>Call Now</span>
               </a>
 
               <a
-                href={`https://wa.me/${contactConfig.whatsappNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent("Hi DeePet Services, I want to know more about your services.")}`}
+                href={`https://wa.me/${(contactConfig.whatsappNumber || '+917238002900').replace(/[^0-9]/g, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#b2d650] hover:bg-[#a1c83d] text-slate-900 px-8 py-3.5 rounded-full text-base font-extrabold transition-all shadow-lg hover:scale-105 flex items-center gap-2.5"
+                className="bg-[#a3e635] hover:bg-[#92d029] text-slate-950 px-6 py-3 rounded-full text-sm sm:text-base font-extrabold flex items-center gap-2.5 shadow-lg shadow-[#a3e635]/25 transition-all transform hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
               >
-                <MessageSquare className="w-5 h-5" />
+                <MessageCircle className="w-4 h-4 stroke-[2.5]" />
                 <span>WhatsApp</span>
               </a>
             </div>
 
           </div>
 
-          {/* RIGHT SIDE FORM CENTER-ALIGNED */}
+          {/* RIGHT SIDE FORM — MATCHING REFERENCE IMAGE 1 & 2 */}
           <div id="booking-form" className="lg:col-span-5 relative z-20 flex items-center justify-center w-full scroll-mt-24">
             <BookingForm onSuccess={onFormSuccess} />
           </div>

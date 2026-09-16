@@ -78,28 +78,28 @@ export const Footer: React.FC = () => {
             <h4 className="font-heading font-extrabold text-lg text-[#b2d650]">Quick Links</h4>
             <ul className="space-y-3.5 text-xs sm:text-sm font-medium">
               <li>
-                <a href="#about" className="text-slate-400 hover:text-white transition-all hover:translate-x-1 inline-block">
-                  About Us
+                <a href="#packages" className="text-slate-400 hover:text-white transition-all hover:translate-x-1 inline-block">
+                  Wellness Packages
                 </a>
               </li>
               <li>
-                <a href="#categories" className="text-slate-400 hover:text-white transition-all hover:translate-x-1 inline-block">
-                  Services
+                <a href="#packages" className="text-slate-400 hover:text-white transition-all hover:translate-x-1 inline-block">
+                  Blood Check & Diagnostics
                 </a>
               </li>
               <li>
-                <a href="#process" className="text-slate-400 hover:text-white transition-all hover:translate-x-1 inline-block">
-                  How it Works
+                <a href="#packages" className="text-slate-400 hover:text-white transition-all hover:translate-x-1 inline-block">
+                  Residential Rehab (45-Day)
                 </a>
               </li>
               <li>
-                <a href="#why-trust" className="text-slate-400 hover:text-white transition-all hover:translate-x-1 inline-block">
-                  Reviews
+                <a href="#packages" className="text-slate-400 hover:text-white transition-all hover:translate-x-1 inline-block">
+                  Surgery Care Packages
                 </a>
               </li>
               <li>
                 <a href="#contact" className="text-slate-400 hover:text-white transition-all hover:translate-x-1 inline-block">
-                  Contact
+                  Contact Us
                 </a>
               </li>
             </ul>

@@ -14,18 +14,17 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About Us', href: '#about' },
-    { name: 'Pet Tests', href: '#categories' },
-    { name: 'How It Works', href: '#process' },
-    { name: 'Packages', href: '#packages' },
+    { name: 'Blood Check', href: '#blood-health-check' },
+    { name: 'Rehab', href: '#rehab' },
+    { name: 'Surgery Care', href: '#surgery-care' },
+    { name: 'Why Trust Us', href: '#why-trust' },
     { name: 'Contact', href: '#contact' },
   ];
 
   return (
     <>
-      {/* Main Header Navigation (Top Announcement Banner Removed as requested) */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-deepblue-100 shadow-sm transition-all">
+      {/* Main Header Navigation */}
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
@@ -38,12 +37,12 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
             </a>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-7 text-sm font-bold text-slate-600">
+            <nav className="hidden md:flex items-center space-x-7 text-sm font-bold text-slate-700">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  className="hover:text-deepblue-600 transition-colors"
+                  className="hover:text-[#653bf7] transition-colors"
                 >
                   {link.name}
                 </a>
@@ -52,12 +51,19 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
 
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center space-x-3">
+              <a
+                href={`tel:${contactConfig.primaryPhone}`}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-slate-100 text-slate-900 hover:bg-slate-200 font-extrabold text-xs transition-colors"
+              >
+                <Phone className="w-3.5 h-3.5" />
+                <span>+91 72380 02900</span>
+              </a>
               <button
                 onClick={onBookClick}
-                className="btn-electric text-white px-6 py-3 rounded-full text-sm font-extrabold flex items-center gap-2"
+                className="bg-[#a3e635] hover:bg-[#92d029] text-slate-950 px-6 py-3 rounded-full text-sm font-extrabold flex items-center gap-2 shadow-md transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
               >
-                <span>Book Home Test</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>Book a Home Visit</span>
+                <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
               </button>
             </div>
 

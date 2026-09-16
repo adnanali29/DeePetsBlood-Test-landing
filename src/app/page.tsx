@@ -5,7 +5,10 @@ import { Phone } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { HeroSection } from '@/components/HeroSection';
 import { PetCategoryCards } from '@/components/PetCategoryCards';
+import { BloodHealthCheckSection } from '@/components/BloodHealthCheckSection';
 import { ProcessSection } from '@/components/ProcessSection';
+import { RecoveryRehabSection } from '@/components/RecoveryRehabSection';
+import { SurgeryCareSection } from '@/components/SurgeryCareSection';
 import { WhyTrustSection } from '@/components/WhyTrustSection';
 import { GallerySection } from '@/components/GallerySection';
 import { ContactSection } from '@/components/ContactSection';
@@ -83,14 +86,20 @@ export default function Home() {
         onFormSuccess={(title, msg) => setToast({ title, message: msg })}
       />
 
-      {/* Pet Blood Testing Categories */}
-      <PetCategoryCards onExploreClick={handleOpenExploreModal} />
+      {/* Pet Blood Testing & Preventive Wellness Packages */}
+      <PetCategoryCards onOpenBookingModal={handleOpenBookingModal} />
+
+      {/* Complete Blood Health Check Section */}
+      <BloodHealthCheckSection onOpenBookingModal={handleOpenBookingModal} />
 
       {/* 4-Step Home Diagnostic Process */}
       <ProcessSection />
 
-      {/* Complete Package Tiers Section (Cat/Dog packages selector) */}
-      <TestCatalog onOpenBookingModal={handleOpenBookingModal} onExploreClick={handleOpenExploreModal} />
+      {/* Recovery & Rehabilitation Section */}
+      <RecoveryRehabSection onOpenBookingModal={handleOpenBookingModal} />
+
+      {/* Surgery Care Packages Section */}
+      <SurgeryCareSection onOpenBookingModal={handleOpenBookingModal} />
 
       {/* Why Pet Parents Trust DeePet + Promise Banner + Newsletter */}
       <WhyTrustSection onSuccess={(title, msg) => setToast({ title, message: msg })} />

@@ -8,11 +8,11 @@ interface WhyTrustSectionProps {
 export const WhyTrustSection: React.FC<WhyTrustSectionProps> = ({ onSuccess }) => {
 
   const trustFeatures = [
-    'NABL-Certified Labs',
-    'Accurate & Reliable Reports',
-    'Home Sample Collection',
-    'Expert Veterinary Support',
-    'Affordable & Transparent Pricing',
+    'One Transparent Package Price (Zero Hidden Costs)',
+    'Zero Clinic Travel & Stress-Free Home Care',
+    'Standard Pre-Anaesthetic Safety Bloodwork Included',
+    'Licensed Veterinary Doctors & Phlebotomists',
+    'Complete Post-Op & Recovery Follow-ups Included',
   ];
 
   return (

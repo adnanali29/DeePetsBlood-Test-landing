@@ -207,24 +207,24 @@ export const SERVICES = [
 
 export const FAQS = [
   {
-    q: "How does home sample collection work for pets?",
-    a: "Our certified veterinary phlebotomist visits your home at your chosen time slot. They are trained in low-stress, gentle handling so your pet feels safe and calm right in their comfortable surroundings."
+    q: "How does doorstep veterinary care work?",
+    a: "Our qualified veterinarian arrives at your home with diagnostic tools and medication to examine, collect samples, or treat your pet stress-free in their familiar surroundings."
   },
   {
-    q: "Does my pet need to fast before a blood test?",
-    a: "For tests involving Liver Function (LFT), Kidney Function (KFT), and Full Body profiles, an 8–10 hour fasting (water is allowed) is recommended for accurate biochemical values. CBC and Thyroid tests usually do not require fasting."
+    q: "Are the package prices all-inclusive?",
+    a: "Yes. Package prices include home visits, pre-anaesthetic testing, surgery/procedure, medications, and follow-up checks without itemised surprise bills."
   },
   {
-    q: "How soon will I receive the test results?",
-    a: "Most routine reports (CBC, KFT, LFT) are generated within 12–24 hours. Specialized panels or cultures are delivered within 24–48 hours directly to your email and WhatsApp."
+    q: "What if my pet needs surgery or inpatient stay?",
+    a: "Surgery and rehab packages include transportation, pre-op testing, procedure, medicines, and recovery care at our dedicated farm facility or hospital partner."
   },
   {
-    q: "Are DeePet lab reports accepted by my regular veterinarian?",
-    a: "Yes, 100%! All samples are tested in NABL-certified veterinary diagnostic reference laboratories. Our reports are signed by certified veterinary pathologists and widely accepted across all veterinary clinics in Delhi NCR."
+    q: "Which areas in Delhi NCR do you cover?",
+    a: "We serve Gurgaon, Delhi, Noida, Greater Noida, and Ghaziabad with full doorstep coverage."
   },
   {
-    q: "How do I prepare my dog or cat for sample collection?",
-    a: "Keep your pet in a quiet room, avoid heavy exercise right before collection, and keep their favorite treats ready! Our phlebotomist brings gentle restraint aids and treats to ensure a zero-stress experience."
+    q: "How do I prepare my pet for a home visit or blood test?",
+    a: "Keep your pet in a quiet room, avoid heavy exercise right before collection, and keep their favorite treats ready. For fasting tests, an 8–10 hour fast is recommended."
   }
 ];
 
@@ -795,4 +795,539 @@ export const DOG_PACKAGES: PetPackage[] = [
     ]
   }
 ];
+
+export interface DetailedPackage {
+  id: string;
+  code: string;
+  title: string;
+  priceDisplay: string;
+  price: number;
+  category: 'wellness' | 'blood' | 'rehab' | 'surgery';
+  badge?: string;
+  subtitle?: string;
+  overview: string;
+  isPopular?: boolean;
+  inclusions: {
+    title?: string;
+    items: string[];
+  }[];
+}
+
+export const DETAILED_PACKAGES: DetailedPackage[] = [
+  // CATEGORY 1: WELLNESS
+  {
+    id: 'pkg-1',
+    code: 'Package 1',
+    title: 'Puppy / Kitten First-Year Wellness Package',
+    priceDisplay: '₹3,499',
+    price: 3499,
+    category: 'wellness',
+    subtitle: 'Delivered over 3 scheduled visits',
+    overview: 'Everything a young pet needs in their first year: full core vaccination series, deworming schedule, growth checks, and diet plan — delivered at home over 3 scheduled visits.',
+    inclusions: [
+      {
+        title: 'Visit 1 (6–8 weeks)',
+        items: [
+          'At-home veterinary consultation',
+          'Physical examination',
+          'Core vaccine #1 (DHPPi / FVRCP)',
+          'Deworming protocol',
+          'Kitten / puppy growth log',
+          'Feeding & nutrition guidance'
+        ]
+      },
+      {
+        title: 'Visit 2 (10–12 weeks)',
+        items: [
+          'At-home veterinary consultation',
+          'Core vaccine #2 (booster)',
+          'Deworming check & repeat',
+          'Socialisation & behavioural advice'
+        ]
+      },
+      {
+        title: 'Visit 3 (14–16 weeks)',
+        items: [
+          'At-home veterinary consultation',
+          'Rabies vaccination',
+          'Core vaccine #3',
+          'Microchip guidance & registration advice',
+          'First-year wellness certificate',
+          'WhatsApp vet support between visits'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-2',
+    code: 'Package 2',
+    title: 'Adult Pet Annual Preventive Care Package',
+    priceDisplay: '₹2,499',
+    price: 2499,
+    category: 'wellness',
+    subtitle: '13 Items in 1 Visit',
+    overview: 'Annual boosters, routine health check, basic bloodwork, and parasite prevention — the once-a-year reset every adult pet needs.',
+    inclusions: [
+      {
+        title: 'Full Single-Visit Care',
+        items: [
+          'At-home veterinary consultation',
+          'Full physical examination',
+          'Annual core booster (DHPPi / FVRCP)',
+          'Rabies booster',
+          'CBC (Complete Blood Count)',
+          'Blood glucose test',
+          'Ear & eye check',
+          'Dental & oral screening',
+          'Heart & lung auscultation',
+          'Deworming dose',
+          'Flea/tick preventive recommendation',
+          'Personalised wellness summary report',
+          'WhatsApp vet Q&A for 14 days post-visit'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-3',
+    code: 'Package 3',
+    title: 'Senior Pet Care Package (Ages 7+)',
+    priceDisplay: '₹4,999',
+    price: 4999,
+    category: 'wellness',
+    subtitle: '18 Items across 2 Visits',
+    overview: 'Proactive screening for kidney disease, arthritis, heart issues, and thyroid changes before symptoms appear.',
+    inclusions: [
+      {
+        title: 'Visit 1 — Screening Visit',
+        items: [
+          'Comprehensive home veterinary examination',
+          'Extended blood panel (CBC, LFT, KFT)',
+          'Blood glucose & thyroid (T4) screening',
+          'SDMA kidney marker (early-stage detection)',
+          'Blood pressure measurement',
+          'Urine routine & microscopy',
+          'Mobility & joint assessment',
+          'Pain scoring',
+          'Body condition & weight tracking',
+          'Senior nutrition plan'
+        ]
+      },
+      {
+        title: 'Visit 2 — Follow-Up Visit',
+        items: [
+          'Follow-up vet visit to discuss lab results',
+          'Tailored senior care plan',
+          'Joint supplement recommendations',
+          'Prescription management',
+          'WhatsApp vet support for 30 days'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-4',
+    code: 'Package 4',
+    title: 'Chronic Disease Management — Quarterly Track',
+    priceDisplay: '₹7,999 / quarter',
+    price: 7999,
+    category: 'wellness',
+    subtitle: '90-Day Structured Care (18 Items)',
+    overview: 'Structured, 90-day monitoring for pets with renal failure, diabetes, cardiac disease, or chronic liver conditions.',
+    inclusions: [
+      {
+        title: 'Quarterly Inclusions',
+        items: [
+          '3 home vet visits (1 per month)',
+          '2 blood panels (CBC, LFT/KFT as clinically indicated)',
+          'Targeted monitoring (blood glucose curve / blood pressure / electrolyte checks)',
+          'Medication review & dosage adjustment',
+          'Urine monitoring',
+          'Prescription renewals',
+          'Direct vet WhatsApp line for non-emergency queries',
+          'Emergency referral priority',
+          'End-of-quarter progress summary report'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-5',
+    code: 'Package 5',
+    title: 'Pre-Flight & Travel Fitness Certificate',
+    priceDisplay: '₹1,999',
+    price: 1999,
+    category: 'wellness',
+    subtitle: '9 Inclusions for Travel',
+    overview: 'Everything required for domestic pet travel by air, rail, or road — fit-to-fly assessment, microchip check, and health certificate.',
+    inclusions: [
+      {
+        title: 'Travel Certification',
+        items: [
+          'At-home veterinary examination',
+          'Microchip verification & scan',
+          'Vaccination record verification',
+          'Fit-to-fly / fit-to-travel health certificate',
+          'Internal & external parasite treatment stamp',
+          'Deworming certificate',
+          'Airline / rail compliance check',
+          'Travel-stress advice & mild sedative prescription (where required)',
+          'Digital & printed certificate set'
+        ]
+      }
+    ]
+  },
+
+  // CATEGORY 2: BLOOD CHECK
+  {
+    id: 'pkg-b1',
+    code: 'Basic Blood',
+    title: 'Basic Blood Check',
+    priceDisplay: '₹1,499',
+    price: 1499,
+    category: 'blood',
+    overview: 'Essential routine diagnostic check covering blood counts, glucose, kidney and liver function.',
+    inclusions: [
+      {
+        title: 'Included Panels',
+        items: [
+          'CBC (Complete Blood Count)',
+          'Blood Glucose',
+          'LFT (Liver Function Profile)',
+          'KFT (Kidney Function Profile)'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-b2',
+    code: 'Advanced Blood',
+    title: 'Advanced Blood Check',
+    priceDisplay: '₹2,999',
+    price: 2999,
+    category: 'blood',
+    badge: 'Most Popular',
+    isPopular: true,
+    overview: 'Comprehensive organ screening with early renal biomarker SDMA, thyroid, and electrolyte balance.',
+    inclusions: [
+      {
+        title: 'Included Panels',
+        items: [
+          'CBC (Complete Blood Count)',
+          'LFT (Liver Function Profile)',
+          'KFT (Kidney Function Profile)',
+          'Electrolytes Panel (Na+, K+, Cl-)',
+          'Thyroid (T4) Screening',
+          'SDMA Early Kidney Marker'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-b3',
+    code: 'Premium Blood',
+    title: 'Premium Blood Check',
+    priceDisplay: '₹4,999',
+    price: 4999,
+    category: 'blood',
+    overview: 'Full-spectrum diagnostic master panel with disease-specific biomarkers, cardiac markers, and urinalysis.',
+    inclusions: [
+      {
+        title: 'Included Panels',
+        items: [
+          'Everything in Advanced Blood Check',
+          'Cardiac Stretch Biomarker (NT-proBNP)',
+          'Cardiac Injury Marker (Troponin-I)',
+          'Coagulation Profile (PT / aPTT)',
+          'Urine Routine & UPC Ratio',
+          'Pancreatic Lipase (Spec cPL/fPL)'
+        ]
+      }
+    ]
+  },
+
+  // CATEGORY 3: REHABILITATION
+  {
+    id: 'pkg-6',
+    code: 'Package 6',
+    title: 'Joint Rehabilitation Programme — 45 Days',
+    priceDisplay: 'From ₹49,999',
+    price: 49999,
+    category: 'rehab',
+    badge: 'Residential Stay',
+    subtitle: '45-Day Farm Boarding & Physio (33 Items across 6 Stages)',
+    overview: 'Covers boarding, physiotherapy, hydrotherapy, diet, standard medication, and vet monitoring at DeePet Farm Facility. Pickup & drop included.',
+    inclusions: [
+      {
+        title: 'Stage 1 — Intake Assessment',
+        items: [
+          'Orthopedic & mobility assessment',
+          'Gait analysis',
+          'Pain scoring',
+          'Baseline weight & BCS score',
+          'Rehab goal-setting'
+        ]
+      },
+      {
+        title: 'Stage 2 — Physiotherapy & Hydrotherapy',
+        items: [
+          'Structured physio sessions',
+          'Range-of-motion exercises',
+          'Therapeutic massage',
+          'Assisted walking & muscle-strengthening',
+          'Infrared therapy',
+          'Supervised swimming in farm pool/pond'
+        ]
+      },
+      {
+        title: 'Stage 3 — Nutrition & Medication',
+        items: [
+          'Customised joint-support diet plan',
+          'Glucosamine / Chondroitin / Omega-3 supplementation',
+          'Prescribed pain management & anti-inflammatory course',
+          'Daily activity & mobility logs'
+        ]
+      },
+      {
+        title: 'Stage 4 — Progress Tracking & Discharge',
+        items: [
+          'Weekly mobility scoring',
+          'Gait video comparison (Day 1 vs 45)',
+          'Final vet reassessment',
+          'Discharge report + home-care plan'
+        ]
+      }
+    ]
+  },
+
+  // CATEGORY 4: SURGERY CARE
+  {
+    id: 'pkg-7',
+    code: 'Package 7',
+    title: 'Minor Surgery Care Package',
+    priceDisplay: 'Starting ₹6,999',
+    price: 6999,
+    category: 'surgery',
+    subtitle: '17 Items (Pre-Op, Surgery, Post-Op)',
+    overview: 'Small mass/lump removal, wound repair, abscess surgery, small cyst removal, minor skin procedures, suture-related procedures, cherry eye.',
+    inclusions: [
+      {
+        title: 'Pre-Op & Diagnostics (At Home)',
+        items: [
+          'Home vet consultation',
+          'Pre-anesthetic assessment',
+          'CBC & Blood Glucose',
+          'LFT/KFT (as appropriate)',
+          'Blood pressure',
+          'Surgical fitness check'
+        ]
+      },
+      {
+        title: 'Surgery & Post-Op Care',
+        items: [
+          'Procedure & Anaesthesia',
+          'Surgical consumables & vital monitoring',
+          'Recovery monitoring',
+          'Discharge medicines & wound-care instructions',
+          '1 post-op home visit',
+          'Suture-removal visit'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-8',
+    code: 'Package 8',
+    title: 'Soft Tissue Surgery Care',
+    priceDisplay: 'Starting ₹11,999',
+    price: 11999,
+    category: 'surgery',
+    subtitle: '24 Items (Pre-Op, Surgery, Post-Op)',
+    overview: 'Pyometra, C-Section, tumour/mass removal, hernia, major wound repair, abdominal soft-tissue procedures, entropion.',
+    inclusions: [
+      {
+        title: 'Pre-Op & Diagnostics (At Home)',
+        items: [
+          'Vet exam & Pre-anesthetic assessment',
+          'Blood collection: CBC, LFT, KFT, Glucose, Electrolytes',
+          'Urine testing',
+          'Ultrasound/X-ray coordination (pickup/drop included)'
+        ]
+      },
+      {
+        title: 'Surgery & Post-Op Care',
+        items: [
+          'Procedure, Anaesthesia & IV fluids',
+          'Vital monitoring & consumables',
+          'Discharge medicines & Wound-care kit',
+          '2 post-op home visits',
+          'Suture removal & post-op boarding options'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-9',
+    code: 'Package 9',
+    title: 'Major Surgery / Advanced Care',
+    priceDisplay: 'Starting ₹24,999',
+    price: 24999,
+    category: 'surgery',
+    subtitle: '25 Items (Pre-Op, Surgery, Post-Op)',
+    overview: 'Major abdominal surgery, tumour surgery, amputation, foreign body removal, cystotomy / bladder stone removal / urethrostomy, fracture repair.',
+    inclusions: [
+      {
+        title: 'Comprehensive Inclusions',
+        items: [
+          'Pre-op bloods: CBC, LFT, KFT, Electrolytes, Coagulation',
+          'ECG, X-ray & Ultrasound imaging coordination',
+          'Surgeon, Anaesthesia, IV fluids & Hospitalisation',
+          'Pain-management plan & Antibiotics',
+          '3 home follow-ups & Post-op bloodwork',
+          'Suture/staple removal & Final recovery assessment'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-10',
+    code: 'Package 10',
+    title: 'Orthopedic Surgery Care',
+    priceDisplay: 'Starting ₹41,999',
+    price: 41999,
+    category: 'surgery',
+    subtitle: '22 Items (Implants extra)',
+    overview: 'Fractures, TPLO / CCL repair, patellar luxation, hip/elbow procedures. (Implants priced additionally).',
+    inclusions: [
+      {
+        title: 'Orthopedic Inclusions',
+        items: [
+          'Orthopedic consultation & Gait assessment',
+          'Digital X-rays, CBC, LFT/KFT & Pre-anesthetic check',
+          'Surgical procedure & Anaesthesia',
+          'Vital monitoring & Scaled hospitalisation',
+          'Post-op home exam & Pain assessment',
+          'Exercise restriction plan & Rehab add-on options'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-11',
+    code: 'Package 11',
+    title: 'Cancer Surgery Care',
+    priceDisplay: 'Starting ₹12,999',
+    price: 12999,
+    category: 'surgery',
+    subtitle: '18 Items (Add Coordinator +₹4,999)',
+    overview: 'Full diagnostic, surgical, and post-op oncology coordination.',
+    inclusions: [
+      {
+        title: 'Oncology Care Inclusions',
+        items: [
+          'Home vet consultation & Blood collection',
+          'CBC, LFT/KFT, Cytology/Biopsy & Histopathology coordination',
+          'Surgery, Anaesthesia & Vital monitoring',
+          'Hospitalisation & Post-op wound care',
+          'Histopathology discussion & Oncology referral coordination'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-12',
+    code: 'Package 12',
+    title: 'Female Pet — Spay Care Package',
+    priceDisplay: 'Starting ₹12,999',
+    price: 12999,
+    category: 'surgery',
+    subtitle: '20 Items (Pre-Op, Surgery, Post-Op)',
+    overview: 'Complete, safe, sterile spaying with pre-anesthetic bloodwork, surgery, and 2 post-op home visits.',
+    inclusions: [
+      {
+        title: 'Spay Package Inclusions',
+        items: [
+          'Home consultation & Physical exam',
+          'CBC, LFT, KFT, Blood glucose',
+          'Pre-anesthetic assessment',
+          'Spay procedure, Anaesthesia & IV fluids',
+          'Wound-care kit & Medicines',
+          '2 post-op home visits & Suture removal',
+          'Post-sterilisation weight-management advice'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-13',
+    code: 'Package 13',
+    title: 'Male Pet — Neuter Care',
+    priceDisplay: 'Starting ₹9,499',
+    price: 9499,
+    category: 'surgery',
+    subtitle: '12 Inclusions',
+    overview: 'Safe doorstep pre-op screening, neutering procedure, discharge medications, and suture-removal visit.',
+    inclusions: [
+      {
+        title: 'Neuter Package Inclusions',
+        items: [
+          'Home consultation & Pre-op bloods (CBC, LFT/KFT)',
+          'Anaesthetic assessment',
+          'Neutering procedure & Anaesthesia',
+          'Vital monitoring',
+          'Discharge medicines & Wound care',
+          'Follow-up visit & Suture removal'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-14',
+    code: 'Package 14',
+    title: 'Emergency Surgery Support — Rapid Surgery Care',
+    priceDisplay: 'Coordination Fee ₹1,999',
+    price: 1999,
+    category: 'surgery',
+    subtitle: '7-Step Emergency Protocol',
+    overview: 'Rapid home assessment, blood collection, and referral/hospital coordination within the hour.',
+    inclusions: [
+      {
+        title: 'Emergency 7-Step Protocol',
+        items: [
+          'Step 1: Rapid home vet assessment',
+          'Step 2: Emergency blood collection at home',
+          'Step 3: Emergency diagnostics',
+          'Step 4: Immediate referral/transfer to target hospital facility',
+          'Step 5: Surgery coordination',
+          'Step 6: Hospitalisation coordination',
+          'Step 7: Post-discharge home care'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'pkg-15',
+    code: 'Package 15',
+    title: 'Dental Care — Scale & Polish',
+    priceDisplay: 'Starting ₹4,999',
+    price: 4999,
+    category: 'surgery',
+    subtitle: '12 Items (Scaling, Polishing & Extractions)',
+    overview: 'Base ultrasonic scale & polish at ₹4,999. If extractions are required, ₹6,999+ (extractions billed ~₹500–₹800 per tooth).',
+    inclusions: [
+      {
+        title: 'Dental Inclusions',
+        items: [
+          'Oral exam & Pre-anaesthetic bloodwork (CBC, LFT, KFT)',
+          'Fitness-for-anaesthesia assessment',
+          'Ultrasonic scaling above & below gumline',
+          'Polishing & Anaesthesia monitoring',
+          'Simple extractions (if necessary)',
+          'Pain management & Home dental-care plan'
+        ]
+      }
+    ]
+  }
+];
+
 

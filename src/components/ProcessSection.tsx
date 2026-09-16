@@ -7,8 +7,8 @@ export const ProcessSection: React.FC = () => {
   const steps = [
     {
       num: 1,
-      title: 'Book a Test',
-      desc: 'Choose the test and schedule at your convenience.',
+      title: 'Book',
+      desc: 'Request a callback or select your required pet health care package online.',
       color: 'pink',
       icon: <Calendar className="w-7 h-7 text-[#eb366d]" />,
       badgeBg: 'bg-[#eb366d]',
@@ -16,8 +16,8 @@ export const ProcessSection: React.FC = () => {
     },
     {
       num: 2,
-      title: 'Home Collection',
-      desc: 'Our expert collects the sample from your home hassle-free.',
+      title: 'Home Visit',
+      desc: 'A certified veterinary doctor visits your home to examine your pet and collect samples.',
       color: 'purple',
       icon: <HomeIcon className="w-7 h-7 text-[#653bf7]" />,
       badgeBg: 'bg-[#653bf7]',
@@ -25,8 +25,8 @@ export const ProcessSection: React.FC = () => {
     },
     {
       num: 3,
-      title: 'Advanced Testing',
-      desc: 'Samples are analyzed in NABL-certified labs using advanced technology.',
+      title: 'Treatment & Recovery',
+      desc: 'Diagnostics, surgical procedures, or rehabilitation care performed with full medical oversight.',
       color: 'pink',
       icon: <FlaskConical className="w-7 h-7 text-[#eb366d]" />,
       badgeBg: 'bg-[#eb366d]',
@@ -34,8 +34,8 @@ export const ProcessSection: React.FC = () => {
     },
     {
       num: 4,
-      title: 'Get Reports',
-      desc: 'Receive accurate reports within 24–48 hours on email/WhatsApp.',
+      title: 'Follow-up',
+      desc: 'Continuous recovery monitoring, home checks, and post-operative progress evaluations.',
       color: 'purple',
       icon: <FileText className="w-7 h-7 text-[#653bf7]" />,
       badgeBg: 'bg-[#653bf7]',
@@ -49,9 +49,15 @@ export const ProcessSection: React.FC = () => {
         
         {/* Title Container with compact bottom margin */}
         <div className="text-center max-w-3xl mx-auto mb-8 lg:mb-10">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-purple-50 text-[#653bf7] text-xs font-black uppercase tracking-wider mb-2 border border-purple-100">
+            Doorstep Process
+          </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
-            Simple Process, Stress-Free for You & Your Pet
+            Care That Comes To You
           </h2>
+          <p className="text-slate-500 mt-2 font-medium text-xs sm:text-sm">
+            Simple, transparent 4-step doorstep veterinary care process
+          </p>
         </div>
 
         {/* 4 Steps Timeline Container */}
