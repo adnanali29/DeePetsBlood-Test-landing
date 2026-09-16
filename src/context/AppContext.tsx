@@ -963,8 +963,9 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   };
 
   const addLead = (leadData: Omit<Lead, 'id' | 'timestamp' | 'status'>) => {
-    const nextCounter = Math.max(leadCounter + 1, 10);
-    const consultationCode = `DEPE-${String(nextCounter).padStart(2, '0')}-${Math.floor(10 + Math.random() * 90)}`;
+    const currentMax = Math.max(leadCounter, leads.length);
+    const nextCounter = currentMax + 1;
+    const consultationCode = `DEPE-${String(nextCounter).padStart(3, '0')}`;
     setLeadCounter(nextCounter);
     localStorage.setItem('deepet_lead_counter', String(nextCounter));
 

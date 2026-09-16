@@ -24,6 +24,10 @@ export async function POST(req: NextRequest) {
       price, city, pincode, schedule_date, message, status, timestamp
     } = body;
 
+    const parsedPrice = (price !== null && price !== undefined && !isNaN(Number(price)) && Number(price) <= 2147483647)
+      ? parseInt(String(price), 10)
+      : null;
+
     const { rows } = await pool.query(
       `INSERT INTO leads
         (id, consultation_code, name, phone, pet_type, category, sub_test,
@@ -39,7 +43,7 @@ export async function POST(req: NextRequest) {
          created_at = EXCLUDED.created_at
        RETURNING *`,
       [id, consultation_code, name, phone, pet_type, category, sub_test,
-       price ?? null, city ?? null, pincode ?? null, schedule_date ?? null,
+       parsedPrice, city ?? null, pincode ?? null, schedule_date ?? null,
        message ?? null, status ?? 'active', timestamp ?? new Date().toISOString()]
     );
 
