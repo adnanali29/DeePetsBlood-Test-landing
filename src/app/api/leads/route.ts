@@ -45,10 +45,12 @@ export async function POST(req: NextRequest) {
 
     const createdLead = rows[0] || body;
 
-    // Trigger email notification in background (non-blocking for fast lead submission)
-    sendLeadNotificationEmail(createdLead).catch((err) => {
-      console.error('Background lead notification email failed:', err);
-    });
+    // Await email notification so serverless functions (Vercel/Netlify) complete HTTP dispatch before returning response
+    try {
+      await sendLeadNotificationEmail(createdLead);
+    } catch (emailErr) {
+      console.error('Lead notification email error:', emailErr);
+    }
 
     return NextResponse.json({ lead: createdLead }, { status: 201 });
   } catch (err) {
