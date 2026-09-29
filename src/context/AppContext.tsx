@@ -399,8 +399,8 @@ export function mapDbLeadToLead(row: any, idx?: number): Lead {
 
 const MOCK_LEADS: Lead[] = [
   {
-    id: 'mock-lead-1',
-    consultationCode: 'DEMO-01',
+    id: 'lead-mock-01',
+    consultationCode: 'DEPE-01',
     name: 'Rohan Sharma',
     phone: '9812345678',
     petType: 'Dog',
@@ -415,8 +415,8 @@ const MOCK_LEADS: Lead[] = [
     status: 'completed',
   },
   {
-    id: 'mock-lead-2',
-    consultationCode: 'DEMO-02',
+    id: 'lead-mock-02',
+    consultationCode: 'DEPE-02',
     name: 'Priyanka Sen',
     phone: '9560987654',
     petType: 'Cat',
@@ -431,8 +431,8 @@ const MOCK_LEADS: Lead[] = [
     status: 'active',
   },
   {
-    id: 'mock-lead-3',
-    consultationCode: 'DEMO-03',
+    id: 'lead-mock-03',
+    consultationCode: 'DEPE-03',
     name: 'Vikram Malhotra',
     phone: '9899778855',
     petType: 'Dog',
@@ -447,8 +447,8 @@ const MOCK_LEADS: Lead[] = [
     status: 'active',
   },
   {
-    id: 'mock-lead-4',
-    consultationCode: 'DEMO-04',
+    id: 'lead-mock-04',
+    consultationCode: 'DEPE-04',
     name: 'Sneha Rao',
     phone: '8800123456',
     petType: 'Cat',
@@ -463,8 +463,8 @@ const MOCK_LEADS: Lead[] = [
     status: 'cancelled',
   },
   {
-    id: 'mock-lead-5',
-    consultationCode: 'DEMO-05',
+    id: 'lead-mock-05',
+    consultationCode: 'DEPE-05',
     name: 'Anuj Verma',
     phone: '9910012233',
     petType: 'Dog',
