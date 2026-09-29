@@ -966,13 +966,6 @@ export default function AdminPanel() {
                               >
                                 <PhoneCall className="w-3.5 h-3.5" />
                               </a>
-                              <button
-                                onClick={() => deleteLead(lead.id)}
-                                className="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 cursor-pointer"
-                                title="Delete Lead"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
                             </td>
                           </tr>
                         );
