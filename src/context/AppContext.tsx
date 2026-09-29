@@ -842,18 +842,27 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
           if (Array.isArray(parsed) && parsed.length > 0) {
             const mapped = parsed.map((l: any, i: number) => mapDbLeadToLead(l, i));
             setLeads(mapped);
+          } else {
+            setLeads(MOCK_LEADS);
           }
-        } catch {}
+        } catch {
+          setLeads(MOCK_LEADS);
+        }
+      } else {
+        setLeads(MOCK_LEADS);
       }
 
-      // 🗄️ Fetch latest leads from PostgreSQL DB on mount
+      // 🗄️ Fetch latest leads from PostgreSQL DB on mount and merge with sample leads
       fetch('/api/leads')
         .then(res => res.json())
         .then(data => {
           if (data?.leads && Array.isArray(data.leads)) {
             const dbLeads = data.leads.map((row: any, i: number) => mapDbLeadToLead(row, i));
-            setLeads(dbLeads);
-            localStorage.setItem('deepet_leads', JSON.stringify(dbLeads));
+            const dbCodes = new Set(dbLeads.map((l: any) => l.consultationCode || l.id));
+            const uniqueMocks = MOCK_LEADS.filter(m => !dbCodes.has(m.consultationCode) && !dbCodes.has(m.id));
+            const combined = [...dbLeads, ...uniqueMocks];
+            setLeads(combined);
+            localStorage.setItem('deepet_leads', JSON.stringify(combined));
           }
         })
         .catch(err => console.error('Error loading DB leads:', err));
@@ -1009,8 +1018,11 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       const data = await res.json();
       if (data?.leads && Array.isArray(data.leads)) {
         const dbLeads = data.leads.map((row: any, i: number) => mapDbLeadToLead(row, i));
-        setLeads(dbLeads);
-        localStorage.setItem('deepet_leads', JSON.stringify(dbLeads));
+        const dbCodes = new Set(dbLeads.map((l: any) => l.consultationCode || l.id));
+        const uniqueMocks = MOCK_LEADS.filter(m => !dbCodes.has(m.consultationCode) && !dbCodes.has(m.id));
+        const combined = [...dbLeads, ...uniqueMocks];
+        setLeads(combined);
+        localStorage.setItem('deepet_leads', JSON.stringify(combined));
       }
     } catch (err) {
       console.error('Failed to refresh leads:', err);
