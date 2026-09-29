@@ -70,17 +70,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
             playsInline
             preload="auto"
             className={`absolute inset-0 w-full h-full object-cover scale-[1.32] object-center transition-opacity duration-1000 ease-in-out ${
-              idx === activeVideoIdx ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+              idx === activeVideoIdx ? 'opacity-100 z-0' : 'opacity-0 z-0 pointer-events-none'
             }`}
           />
         ))}
         
         {/* Soft Ambient Overlay for clear text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/65 to-black/45 z-20" />
-        <div className="absolute inset-0 bg-black/20 z-20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/65 to-black/45 z-10" />
+        <div className="absolute inset-0 bg-black/20 z-10" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
           {/* LEFT SIDE CONTENT — MATCHING REFERENCE IMAGES */}

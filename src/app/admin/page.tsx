@@ -42,7 +42,8 @@ import {
   Droplet,
   Mail,
   Send,
-  CheckCircle2
+  CheckCircle2,
+  RotateCw
 } from 'lucide-react';
 
 export default function AdminPanel() {
@@ -76,6 +77,7 @@ export default function AdminPanel() {
     updateLeadDetails,
     deleteLead,
     clearAllLeads,
+    refreshLeads,
     googleSheetUrl,
     updateGoogleSheetUrl,
   } = useApp();
@@ -83,6 +85,18 @@ export default function AdminPanel() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'dashboard' | 'email' | 'home' | 'contacts' | 'packages' | 'blood' | 'rehab' | 'surgery' | 'testimonials' | 'settings' | 'security'>('dashboard');
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isRefreshingLeads, setIsRefreshingLeads] = useState(false);
+
+  // Auto-refresh DB leads whenever Dashboard tab is opened and poll every 10s
+  useEffect(() => {
+    if (activeTab === 'dashboard' && refreshLeads) {
+      refreshLeads();
+      const interval = setInterval(() => {
+        refreshLeads();
+      }, 10000);
+      return () => clearInterval(interval);
+    }
+  }, [activeTab]);
 
   // Strict Auth guard
   useEffect(() => {
@@ -797,25 +811,24 @@ export default function AdminPanel() {
                 </div>
                 <div className="flex gap-2">
                   <button
+                    onClick={async () => {
+                      setIsRefreshingLeads(true);
+                      await refreshLeads();
+                      setTimeout(() => setIsRefreshingLeads(false), 500);
+                    }}
+                    disabled={isRefreshingLeads}
+                    className="flex items-center gap-1.5 bg-lime-400 hover:bg-lime-500 text-slate-950 px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer shadow-xs disabled:opacity-50"
+                  >
+                    <RotateCw className={`w-3.5 h-3.5 ${isRefreshingLeads ? 'animate-spin' : ''}`} />
+                    <span>{isRefreshingLeads ? 'Syncing...' : 'Sync DB'}</span>
+                  </button>
+                  <button
                     onClick={handleExportCSV}
                     className="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer border border-slate-200 shadow-xs"
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>Export CSV</span>
                   </button>
-                  {leads.length > 0 && (
-                    <button
-                      onClick={() => {
-                        if (confirm('Are you sure you want to clear ALL consultation leads?')) {
-                          clearAllLeads();
-                        }
-                      }}
-                      className="flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                      <span>Clear All</span>
-                    </button>
-                  )}
                 </div>
               </div>
 
@@ -890,10 +903,12 @@ export default function AdminPanel() {
                           </td>
                         </tr>
                       ) : (
-                        filteredLeads.map((lead) => (
+                        filteredLeads.map((lead, idx) => {
+                          const displayCode = lead.consultationCode || (lead as any).consultation_code || `DEPE-${String(idx + 1).padStart(2, '0')}`;
+                          return (
                           <tr key={lead.id} className="hover:bg-slate-50/80 transition-colors">
                             <td className="p-4 font-mono">
-                              <span className="font-extrabold text-lime-700 block">{lead.consultationCode || 'DEPE-XX'}</span>
+                              <span className="font-extrabold text-lime-700 block">{displayCode}</span>
                               <span className="text-[10px] text-slate-500 block mt-0.5">
                                 {lead.timestamp ? new Date(lead.timestamp).toLocaleDateString() : ''}
                               </span>
@@ -930,7 +945,13 @@ export default function AdminPanel() {
                             </td>
                             <td className="p-4 text-right space-x-2">
                               <a
-                                href={`https://wa.me/91${lead.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hi ${lead.name}, regarding your DeePet consultation request (${lead.consultationCode || ''})...`)}`}
+                                href={`https://api.whatsapp.com/send?phone=${lead.phone.replace(/[^0-9]/g, '').length === 10 ? '91' + lead.phone.replace(/[^0-9]/g, '') : lead.phone.replace(/[^0-9]/g, '')}&text=${encodeURIComponent([
+                                  'Hi DeePet Services, I want to request a callback:',
+                                  `• Pet: ${lead.petType || 'Pet'}`,
+                                  `• Package of interest: ${lead.subTest || lead.category || 'Consultation'}`,
+                                  `• Name: ${lead.name}`,
+                                  `• Phone / WhatsApp: ${lead.phone}`,
+                                ].join('\n'))}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-block p-2 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200 cursor-pointer"
@@ -954,8 +975,9 @@ export default function AdminPanel() {
                               </button>
                             </td>
                           </tr>
-                        ))
-                      )}
+                        );
+                      })
+                    )}
                     </tbody>
                   </table>
                 </div>

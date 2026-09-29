@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronDown, Lock, CheckCircle2 } from 'lucide-react';
+import { ChevronDown, Calendar } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { useRouter } from 'next/navigation';
+import { buildWhatsAppUrl } from '@/lib/whatsapp';
 
 interface BookingFormProps {
   initialTestName?: string;
@@ -12,55 +13,66 @@ interface BookingFormProps {
 
 export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuccess }) => {
   const router = useRouter();
-  const { contactConfig, addLead, contactCategories } = useApp();
+  const { contactConfig, addLead, contactCategories, rehabConfig, surgeryPackages, bloodCheckCards } = useApp();
 
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [date, setDate] = useState('');
   const [petType, setPetType] = useState<'Dog' | 'Cat'>('Dog');
   const [selectedPackage, setSelectedPackage] = useState<string>(
     initialTestName || 'Wellness 360° — Adult Pet'
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Price lookup helper
+  const getPackagePrice = (pkgName: string): number | string | undefined => {
+    if (pkgName === rehabConfig.packageTitle) return rehabConfig.price;
+    const surg = surgeryPackages.find(s => s.title === pkgName);
+    if (surg) return surg.priceDisplay;
+    const card = bloodCheckCards.find(c => c.title === pkgName);
+    if (card) return card.price;
+    return undefined;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !phone.trim()) {
-      alert('Please fill in your name and 10-digit mobile number.');
-      return;
-    }
 
     setIsSubmitting(true);
 
-    const lines = [
-      'Hi DeePet Services, I want to request a callback:',
-      `• Pet: ${petType}`,
-      `• Package of interest: ${selectedPackage}`,
-      `• Name: ${name}`,
-      `• Phone / WhatsApp: ${phone}`,
-    ];
-
-    const messageText = lines.join('\n');
-    const whatsappUrl = `https://wa.me/${contactConfig.whatsappNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(messageText)}`;
+    const priceVal = getPackagePrice(selectedPackage);
+    const numericPrice = typeof priceVal === 'number' ? priceVal : undefined;
 
     const code = addLead({
-      name,
-      phone,
+      name: name.trim() || 'Guest User',
+      phone: phone.trim() || 'Not Provided',
       petType,
       category: 'Package Request',
       subTest: selectedPackage,
-      message: `Requested callback for ${selectedPackage}`,
+      date: date.trim() || undefined,
+      price: numericPrice,
+      message: `Requested callback for ${selectedPackage}${date ? `. Preferred date: ${date}` : ''}`,
+    });
+
+    const whatsappUrl = buildWhatsAppUrl(contactConfig.whatsappNumber, {
+      testOrPackage: selectedPackage,
+      petType,
+      price: priceVal,
+      name: name.trim() || undefined,
+      phone: phone.trim() || undefined,
+      date: date.trim() || undefined,
     });
 
     sessionStorage.setItem(`deepet_wa_${code}`, whatsappUrl);
-    router.push(`/thank-you/${code}`);
+    router.push(`/thank-you/${code}?wa=${encodeURIComponent(whatsappUrl)}`);
 
     onSuccess(
       'Request Received! 🐾',
-      `Thank you ${name}! Your reference code is ${code}. Our veterinary team will call ${phone} shortly.`
+      `Thank you ${name || 'for reaching out'}! Your reference code is ${code}. Our veterinary team will call ${phone || 'you'} shortly.`
     );
 
     setName('');
     setPhone('');
+    setDate('');
     setIsSubmitting(false);
   };
 
@@ -79,7 +91,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
         {/* YOUR NAME */}
         <div>
           <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-            Your name
+            Your name <span className="text-lime-400">*</span>
           </label>
           <input
             type="text"
@@ -94,7 +106,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
         {/* PHONE / WHATSAPP */}
         <div>
           <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-            Phone / WhatsApp
+            Phone / WhatsApp <span className="text-lime-400">*</span>
           </label>
           <input
             type="tel"
@@ -109,10 +121,11 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
         {/* PET DROPDOWN */}
         <div>
           <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-            Pet
+            Pet <span className="text-lime-400">*</span>
           </label>
           <div className="relative">
             <select
+              required
               value={petType}
               onChange={(e) => setPetType(e.target.value as 'Dog' | 'Cat')}
               className="w-full bg-[#050b09] border border-[#1e342a] rounded-xl py-3 px-4 text-sm font-medium text-white appearance-none cursor-pointer focus:outline-none focus:border-[#b2d650] pr-10"
@@ -127,10 +140,11 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
         {/* PACKAGE OF INTEREST GROUPED DROPDOWN */}
         <div>
           <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-            Package of interest
+            Package of interest <span className="text-lime-400">*</span>
           </label>
           <div className="relative">
             <select
+              required
               value={selectedPackage}
               onChange={(e) => setSelectedPackage(e.target.value)}
               className="w-full bg-[#050b09] border border-[#1e342a] rounded-xl py-3 px-4 text-sm font-medium text-white appearance-none cursor-pointer focus:outline-none focus:border-[#b2d650] pr-10"
@@ -154,6 +168,26 @@ export const BookingForm: React.FC<BookingFormProps> = ({ initialTestName, onSuc
               ))}
             </select>
             <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          </div>
+        </div>
+
+        {/* PREFERRED COLLECTION DATE */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center justify-between">
+            <span>Preferred Collection Date</span>
+            <span className="text-[10px] text-slate-400 font-normal">(Optional)</span>
+          </label>
+          <div className="relative">
+            <input
+              type="date"
+              min={new Date().toISOString().split('T')[0]}
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className="w-full bg-[#050b09] border border-[#1e342a] rounded-xl py-3 px-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#b2d650] font-medium transition-all cursor-pointer pr-11 [color-scheme:dark]"
+            />
+            <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-[#b2d650] flex items-center">
+              <Calendar className="w-4 h-4" />
+            </div>
           </div>
         </div>
 

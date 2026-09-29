@@ -24,9 +24,29 @@ export async function POST(req: NextRequest) {
       price, city, pincode, schedule_date, message, status, timestamp
     } = body;
 
-    const parsedPrice = (price !== null && price !== undefined && !isNaN(Number(price)) && Number(price) <= 2147483647)
+    const cleanId = id || 'lead-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+    const cleanCode = consultation_code || 'DEPE-00';
+    const cleanName = (name && String(name).trim()) ? String(name).trim() : 'Guest User';
+    const cleanPhone = (phone && String(phone).trim()) ? String(phone).trim() : 'Not Provided';
+
+    let cleanPetType = (pet_type && String(pet_type).trim()) ? String(pet_type).trim() : 'Dog';
+    if (cleanPetType !== 'Dog' && cleanPetType !== 'Cat') {
+      cleanPetType = cleanPetType.toLowerCase().includes('cat') ? 'Cat' : 'Dog';
+    }
+
+    const cleanCategory = (category && String(category).trim()) ? String(category).trim() : 'General Inquiry';
+    const cleanSubTest = (sub_test && String(sub_test).trim()) ? String(sub_test).trim() : 'Consultation';
+
+    const parsedPrice = (price !== null && price !== undefined && price !== '' && !isNaN(Number(price)) && Number(price) <= 2147483647)
       ? parseInt(String(price), 10)
       : null;
+
+    const cleanCity = (city && String(city).trim()) ? String(city).trim() : null;
+    const cleanPincode = (pincode && String(pincode).trim()) ? String(pincode).trim() : null;
+    const cleanDate = (schedule_date && String(schedule_date).trim()) ? String(schedule_date).trim() : null;
+    const cleanMessage = (message && String(message).trim()) ? String(message).trim() : null;
+    const cleanStatus = (status === 'completed' || status === 'cancelled') ? status : 'active';
+    const cleanCreatedAt = (timestamp && String(timestamp).trim()) ? String(timestamp).trim() : new Date().toISOString();
 
     const { rows } = await pool.query(
       `INSERT INTO leads
@@ -39,17 +59,31 @@ export async function POST(req: NextRequest) {
          pet_type = EXCLUDED.pet_type,
          category = EXCLUDED.category,
          sub_test = EXCLUDED.sub_test,
+         schedule_date = EXCLUDED.schedule_date,
          message = EXCLUDED.message,
          created_at = EXCLUDED.created_at
        RETURNING *`,
-      [id, consultation_code, name, phone, pet_type, category, sub_test,
-       parsedPrice, city ?? null, pincode ?? null, schedule_date ?? null,
-       message ?? null, status ?? 'active', timestamp ?? new Date().toISOString()]
+      [
+        cleanId,
+        cleanCode,
+        cleanName,
+        cleanPhone,
+        cleanPetType,
+        cleanCategory,
+        cleanSubTest,
+        parsedPrice,
+        cleanCity,
+        cleanPincode,
+        cleanDate,
+        cleanMessage,
+        cleanStatus,
+        cleanCreatedAt,
+      ]
     );
 
     const createdLead = rows[0] || body;
 
-    // Await email notification so serverless functions (Vercel/Netlify) complete HTTP dispatch before returning response
+    // Await email notification so serverless functions complete HTTP dispatch before returning response
     try {
       await sendLeadNotificationEmail(createdLead);
     } catch (emailErr) {

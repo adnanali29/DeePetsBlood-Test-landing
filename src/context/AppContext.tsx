@@ -296,6 +296,7 @@ interface AppContextType {
   updateLeadDetails: (id: string, details: Partial<Lead>) => void;
   deleteLead: (id: string) => void;
   clearAllLeads: () => void;
+  refreshLeads: () => Promise<void>;
 
   // Google Sheet integration
   googleSheetUrl: string;
@@ -375,9 +376,31 @@ const DEFAULT_TESTIMONIALS: TestimonialItem[] = [
   },
 ];
 
+export function mapDbLeadToLead(row: any, idx?: number): Lead {
+  return {
+    id: row.id || `lead-${Date.now()}-${idx ?? 0}`,
+    consultationCode: row.consultation_code || row.consultationCode || `DEPE-${String((idx ?? 0) + 1).padStart(2, '0')}`,
+    name: row.name || 'Anonymous',
+    phone: row.phone || '',
+    petType: row.pet_type || row.petType || 'Dog',
+    category: row.category || '',
+    subTest: row.sub_test || row.subTest || '',
+    price: row.price ? Number(row.price) : undefined,
+    city: row.city || undefined,
+    pincode: row.pincode || undefined,
+    date: row.schedule_date || row.date || undefined,
+    message: row.message || undefined,
+    timestamp: row.created_at || row.timestamp || new Date().toISOString(),
+    status: row.status || 'active',
+    remark: row.remark || undefined,
+    followUp: row.follow_up ? (typeof row.follow_up === 'string' ? JSON.parse(row.follow_up) : row.follow_up) : undefined,
+  };
+}
+
 const MOCK_LEADS: Lead[] = [
   {
     id: 'lead-1',
+    consultationCode: 'DEPE-01',
     name: 'Rohan Sharma',
     phone: '9812345678',
     petType: 'Dog',
@@ -393,6 +416,7 @@ const MOCK_LEADS: Lead[] = [
   },
   {
     id: 'lead-2',
+    consultationCode: 'DEPE-02',
     name: 'Priyanka Sen',
     phone: '9560987654',
     petType: 'Cat',
@@ -408,6 +432,7 @@ const MOCK_LEADS: Lead[] = [
   },
   {
     id: 'lead-3',
+    consultationCode: 'DEPE-03',
     name: 'Vikram Malhotra',
     phone: '9899778855',
     petType: 'Dog',
@@ -423,6 +448,7 @@ const MOCK_LEADS: Lead[] = [
   },
   {
     id: 'lead-4',
+    consultationCode: 'DEPE-04',
     name: 'Sneha Rao',
     phone: '8800123456',
     petType: 'Cat',
@@ -438,6 +464,7 @@ const MOCK_LEADS: Lead[] = [
   },
   {
     id: 'lead-5',
+    consultationCode: 'DEPE-05',
     name: 'Anuj Verma',
     phone: '9910012233',
     petType: 'Dog',
@@ -810,12 +837,30 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
       const storedLeads = localStorage.getItem('deepet_leads');
       if (storedLeads) {
-        setLeads(JSON.parse(storedLeads));
+        try {
+          const parsed = JSON.parse(storedLeads);
+          const mapped = Array.isArray(parsed) ? parsed.map((l: any, i: number) => mapDbLeadToLead(l, i)) : MOCK_LEADS;
+          setLeads(mapped);
+        } catch {
+          setLeads(MOCK_LEADS);
+        }
       } else {
         // Seed mock leads on first run
         localStorage.setItem('deepet_leads', JSON.stringify(MOCK_LEADS));
         setLeads(MOCK_LEADS);
       }
+
+      // 🗄️ Fetch latest leads from PostgreSQL DB on mount
+      fetch('/api/leads')
+        .then(res => res.json())
+        .then(data => {
+          if (data?.leads && Array.isArray(data.leads) && data.leads.length > 0) {
+            const dbLeads = data.leads.map((row: any, i: number) => mapDbLeadToLead(row, i));
+            setLeads(dbLeads);
+            localStorage.setItem('deepet_leads', JSON.stringify(dbLeads));
+          }
+        })
+        .catch(err => console.error('Error loading DB leads:', err));
 
       const storedSheetUrl = localStorage.getItem('deepet_sheet_url');
       if (storedSheetUrl) setGoogleSheetUrl(storedSheetUrl);
@@ -962,15 +1007,32 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     saveSettingToDB('testimonials', items);
   };
 
+  const refreshLeads = async () => {
+    try {
+      const res = await fetch('/api/leads');
+      const data = await res.json();
+      if (data?.leads && Array.isArray(data.leads)) {
+        const dbLeads = data.leads.map((row: any, i: number) => mapDbLeadToLead(row, i));
+        setLeads(dbLeads);
+        localStorage.setItem('deepet_leads', JSON.stringify(dbLeads));
+      }
+    } catch (err) {
+      console.error('Failed to refresh leads:', err);
+    }
+  };
+
   const addLead = (leadData: Omit<Lead, 'id' | 'timestamp' | 'status'>) => {
     const currentMax = Math.max(leadCounter, leads.length);
     const nextCounter = currentMax + 1;
-    const consultationCode = `DEPE-${String(nextCounter).padStart(3, '0')}`;
+    const consultationCode = `DEPE-${String(nextCounter).padStart(2, '0')}`;
     setLeadCounter(nextCounter);
     localStorage.setItem('deepet_lead_counter', String(nextCounter));
 
     const newLead: Lead = {
       ...leadData,
+      name: (leadData.name && leadData.name.trim()) ? leadData.name.trim() : 'Guest User',
+      phone: (leadData.phone && leadData.phone.trim()) ? leadData.phone.trim() : 'Not Provided',
+      date: (leadData.date && leadData.date.trim()) ? leadData.date.trim() : undefined,
       id: 'lead-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
       timestamp: new Date().toISOString(),
       status: 'active',
@@ -1105,6 +1167,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       updateLeadDetails,
       deleteLead,
       clearAllLeads,
+      refreshLeads,
       googleSheetUrl,
       updateGoogleSheetUrl,
     }}>
