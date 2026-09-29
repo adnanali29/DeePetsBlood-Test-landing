@@ -320,7 +320,7 @@ const DEFAULT_CONTACT: ContactConfig = {
 };
 
 const DEFAULT_EMAIL_SETTINGS: EmailSettings = {
-  recipientEmail: 'Sayedadnanali905@gmail.com',
+  recipientEmail: 'deepetservices1@gmail.com',
   enabled: true,
   senderName: 'DeePets Notifications',
 };
@@ -399,8 +399,8 @@ export function mapDbLeadToLead(row: any, idx?: number): Lead {
 
 const MOCK_LEADS: Lead[] = [
   {
-    id: 'lead-1',
-    consultationCode: 'DEPE-01',
+    id: 'mock-lead-1',
+    consultationCode: 'DEMO-01',
     name: 'Rohan Sharma',
     phone: '9812345678',
     petType: 'Dog',
@@ -411,12 +411,12 @@ const MOCK_LEADS: Lead[] = [
     pincode: '122001',
     date: '2026-08-31',
     message: 'My dog has been lethargic. Need blood test.',
-    timestamp: new Date(Date.now() - 3600000 * 24 * 3).toISOString(), // 3 days ago
+    timestamp: new Date(Date.now() - 3600000 * 24 * 3).toISOString(),
     status: 'completed',
   },
   {
-    id: 'lead-2',
-    consultationCode: 'DEPE-02',
+    id: 'mock-lead-2',
+    consultationCode: 'DEMO-02',
     name: 'Priyanka Sen',
     phone: '9560987654',
     petType: 'Cat',
@@ -427,12 +427,12 @@ const MOCK_LEADS: Lead[] = [
     pincode: '110001',
     date: '2026-08-30',
     message: 'Routine test for my 8 year old cat.',
-    timestamp: new Date(Date.now() - 3600000 * 8).toISOString(), // 8 hours ago
+    timestamp: new Date(Date.now() - 3600000 * 8).toISOString(),
     status: 'active',
   },
   {
-    id: 'lead-3',
-    consultationCode: 'DEPE-03',
+    id: 'mock-lead-3',
+    consultationCode: 'DEMO-03',
     name: 'Vikram Malhotra',
     phone: '9899778855',
     petType: 'Dog',
@@ -447,8 +447,8 @@ const MOCK_LEADS: Lead[] = [
     status: 'active',
   },
   {
-    id: 'lead-4',
-    consultationCode: 'DEPE-04',
+    id: 'mock-lead-4',
+    consultationCode: 'DEMO-04',
     name: 'Sneha Rao',
     phone: '8800123456',
     petType: 'Cat',
@@ -459,12 +459,12 @@ const MOCK_LEADS: Lead[] = [
     pincode: '121001',
     date: '2026-08-28',
     message: 'Adopting a stray cat, want to test FIV first.',
-    timestamp: new Date(Date.now() - 3600000 * 24 * 5).toISOString(), // 5 days ago
+    timestamp: new Date(Date.now() - 3600000 * 24 * 5).toISOString(),
     status: 'cancelled',
   },
   {
-    id: 'lead-5',
-    consultationCode: 'DEPE-05',
+    id: 'mock-lead-5',
+    consultationCode: 'DEMO-05',
     name: 'Anuj Verma',
     phone: '9910012233',
     petType: 'Dog',
@@ -475,7 +475,7 @@ const MOCK_LEADS: Lead[] = [
     pincode: '110001',
     date: '2026-08-29',
     message: 'Skin allergies checkup.',
-    timestamp: new Date(Date.now() - 3600000 * 2).toISOString(), // 2 hours ago
+    timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
     status: 'active',
   }
 ];
