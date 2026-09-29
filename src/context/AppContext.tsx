@@ -839,22 +839,18 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       if (storedLeads) {
         try {
           const parsed = JSON.parse(storedLeads);
-          const mapped = Array.isArray(parsed) ? parsed.map((l: any, i: number) => mapDbLeadToLead(l, i)) : MOCK_LEADS;
-          setLeads(mapped);
-        } catch {
-          setLeads(MOCK_LEADS);
-        }
-      } else {
-        // Seed mock leads on first run
-        localStorage.setItem('deepet_leads', JSON.stringify(MOCK_LEADS));
-        setLeads(MOCK_LEADS);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            const mapped = parsed.map((l: any, i: number) => mapDbLeadToLead(l, i));
+            setLeads(mapped);
+          }
+        } catch {}
       }
 
       // 🗄️ Fetch latest leads from PostgreSQL DB on mount
       fetch('/api/leads')
         .then(res => res.json())
         .then(data => {
-          if (data?.leads && Array.isArray(data.leads) && data.leads.length > 0) {
+          if (data?.leads && Array.isArray(data.leads)) {
             const dbLeads = data.leads.map((row: any, i: number) => mapDbLeadToLead(row, i));
             setLeads(dbLeads);
             localStorage.setItem('deepet_leads', JSON.stringify(dbLeads));
