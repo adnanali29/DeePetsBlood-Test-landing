@@ -338,10 +338,12 @@ export default function AdminPanel() {
 
   const GOOGLE_APPS_SCRIPT_CODE = `function doPost(e) {
   try {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getActiveSheet();
     
-    // Auto-create Header Row if sheet is empty or missing headers
-    if (sheet.getLastRow() === 0 || sheet.getRange(1, 1).getValue() === "") {
+    // Check cell A1: ONLY add headers once if A1 is empty
+    var firstCell = sheet.getRange(1, 1).getValue();
+    if (!firstCell || firstCell.toString().trim() === "") {
       var headers = [
         "Consultation Code",
         "Customer Name",
@@ -355,7 +357,8 @@ export default function AdminPanel() {
         "Message / Preferred Date",
         "Submission Timestamp"
       ];
-      sheet.appendRow(headers);
+      // Explicitly set headers in Row 1 only (A1:K1)
+      sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
       
       // Style headers: Bold text, dark background, white font, frozen top row
       var headerRange = sheet.getRange(1, 1, 1, headers.length);
@@ -366,10 +369,15 @@ export default function AdminPanel() {
     }
     
     var data = JSON.parse(e.postData.contents);
+    
+    // Format phone with ' prefix so Google Sheets treats it as plain text and avoids +91 formula #ERROR!
+    var rawPhone = data.phone ? String(data.phone).trim() : '';
+    var formattedPhone = rawPhone ? "'" + rawPhone : '';
+
     sheet.appendRow([
       data.consultationCode || '',
       data.name || '',
-      data.phone || '',
+      formattedPhone,
       data.petType || '',
       data.category || '',
       data.subTest || '',
