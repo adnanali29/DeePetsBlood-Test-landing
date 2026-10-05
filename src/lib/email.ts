@@ -20,16 +20,18 @@ export async function getEmailSettings(): Promise<EmailSettings> {
     recipientEmail: defaultRecipient,
   };
   try {
-    const { rows } = await pool.query(
-      `SELECT value FROM admin_settings WHERE key = 'email_settings'`
-    );
-    if (rows.length > 0) {
-      const val = typeof rows[0].value === 'string' ? JSON.parse(rows[0].value) : rows[0].value;
-      return {
-        ...defaultSettings,
-        ...val,
-        recipientEmail: (val && val.recipientEmail && val.recipientEmail.trim()) || defaultRecipient,
-      };
+    if (pool) {
+      const { rows } = await pool.query(
+        `SELECT value FROM admin_settings WHERE key = 'email_settings'`
+      );
+      if (rows.length > 0) {
+        const val = typeof rows[0].value === 'string' ? JSON.parse(rows[0].value) : rows[0].value;
+        return {
+          ...defaultSettings,
+          ...val,
+          recipientEmail: (val && val.recipientEmail && val.recipientEmail.trim()) || defaultRecipient,
+        };
+      }
     }
   } catch (err) {
     console.error('Error reading email_settings from db:', err);
