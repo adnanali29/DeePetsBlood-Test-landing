@@ -8,6 +8,10 @@ export async function PATCH(req: NextRequest, props: { params: Promise<{ id: str
     const body = await req.json();
     const { status, remark, follow_up } = body;
 
+    if (!pool) {
+      return NextResponse.json({ lead: { id: params.id, status, remark, follow_up } });
+    }
+
     const { rows } = await pool.query(
       `UPDATE leads
        SET status = COALESCE($1, status),
@@ -33,7 +37,9 @@ export async function PATCH(req: NextRequest, props: { params: Promise<{ id: str
 export async function DELETE(_req: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
     const params = await props.params;
-    await pool.query(`DELETE FROM leads WHERE id = $1`, [params.id]);
+    if (pool) {
+      await pool.query(`DELETE FROM leads WHERE id = $1`, [params.id]);
+    }
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error('DELETE /api/leads/[id] error:', err);

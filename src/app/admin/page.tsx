@@ -43,7 +43,9 @@ import {
   Mail,
   Send,
   CheckCircle2,
-  RotateCw
+  RotateCw,
+  Copy,
+  FileSpreadsheet
 } from 'lucide-react';
 
 export default function AdminPanel() {
@@ -266,6 +268,9 @@ export default function AdminPanel() {
   // Google Sheet State
   const [sheetUrlInput, setSheetUrlInput] = useState(googleSheetUrl);
   const [sheetMsg, setSheetMsg] = useState('');
+  const [copiedScript, setCopiedScript] = useState(false);
+  const [testSheetLoading, setTestSheetLoading] = useState(false);
+  const [testSheetMsg, setTestSheetMsg] = useState('');
 
   // Password & Email Security Form
   const [adminEmail, setAdminEmail] = useState(contactConfig.email || 'contact@deepetservices.com');
@@ -331,12 +336,109 @@ export default function AdminPanel() {
     setTimeout(() => setRehabMsg(''), 3000);
   };
 
+  const GOOGLE_APPS_SCRIPT_CODE = `function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    
+    // Auto-create Header Row if sheet is empty or missing headers
+    if (sheet.getLastRow() === 0 || sheet.getRange(1, 1).getValue() === "") {
+      var headers = [
+        "Consultation Code",
+        "Customer Name",
+        "Phone Number",
+        "Pet Type",
+        "Category",
+        "Service / Package",
+        "Price (₹)",
+        "City",
+        "Pincode",
+        "Message / Preferred Date",
+        "Submission Timestamp"
+      ];
+      sheet.appendRow(headers);
+      
+      // Style headers: Bold text, dark background, white font, frozen top row
+      var headerRange = sheet.getRange(1, 1, 1, headers.length);
+      headerRange.setFontWeight("bold");
+      headerRange.setBackground("#1e293b");
+      headerRange.setFontColor("#ffffff");
+      sheet.setFrozenRows(1);
+    }
+    
+    var data = JSON.parse(e.postData.contents);
+    sheet.appendRow([
+      data.consultationCode || '',
+      data.name || '',
+      data.phone || '',
+      data.petType || '',
+      data.category || '',
+      data.subTest || '',
+      data.price || '',
+      data.city || '',
+      data.pincode || '',
+      data.message || (data.date ? 'Preferred date: ' + data.date : ''),
+      new Date().toLocaleString()
+    ]);
+    
+    return ContentService.createTextOutput(JSON.stringify({ status: 'success' })).setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({ status: 'error', error: err.toString() })).setMimeType(ContentService.MimeType.JSON);
+  }
+}`;
+
+  const handleCopyScript = () => {
+    navigator.clipboard.writeText(GOOGLE_APPS_SCRIPT_CODE);
+    setCopiedScript(true);
+    setTimeout(() => setCopiedScript(false), 3000);
+  };
+
   // Save Google Sheet URL
   const handleSaveSheetUrl = (e: React.FormEvent) => {
     e.preventDefault();
     updateGoogleSheetUrl(sheetUrlInput);
     setSheetMsg('Google Sheet integration URL saved!');
     setTimeout(() => setSheetMsg(''), 3000);
+  };
+
+  // Send Test Lead to Google Sheet Webhook
+  const handleTestSheetWebhook = async () => {
+    const targetUrl = sheetUrlInput.trim() || googleSheetUrl;
+    if (!targetUrl) {
+      alert('Please enter and save your Google App Script Webhook URL first.');
+      return;
+    }
+
+    setTestSheetLoading(true);
+    setTestSheetMsg('');
+
+    try {
+      await fetch(targetUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          consultationCode: `DEPE-TEST-${Math.floor(100 + Math.random() * 900)}`,
+          timestamp: new Date().toISOString(),
+          name: 'Test Customer (Admin Test)',
+          phone: '+91 9876543210',
+          petType: 'Dog',
+          category: 'Preventive Wellness',
+          subTest: 'Wellness 360° — Adult Pet',
+          price: 4999,
+          city: 'Delhi NCR',
+          pincode: '110001',
+          date: new Date().toISOString().slice(0, 10),
+          message: 'This is a test submission sent from the Admin Panel.',
+          status: 'Active',
+        }),
+      });
+
+      setTestSheetMsg('✅ Test lead dispatched to your Google Sheet! Please open your Google Sheet to verify headers and data.');
+    } catch (err: any) {
+      setTestSheetMsg(`❌ Error sending test lead: ${err.message || 'Network error'}`);
+    } finally {
+      setTestSheetLoading(false);
+    }
   };
 
   // Save Admin Password & Admin Email
@@ -1750,76 +1852,176 @@ export default function AdminPanel() {
 
           {/* 9. GOOGLE SHEET INTEGRATION */}
           {activeTab === 'settings' && (
-            <div className="space-y-6 animate-fade-in max-w-3xl">
+            <div className="space-y-6 animate-fade-in max-w-4xl">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-heading">
-                  Google Sheet Integration
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-heading flex items-center gap-2">
+                  <FileSpreadsheet className="w-7 h-7 text-lime-600" />
+                  <span>Google Sheet Integration</span>
                 </h1>
                 <p className="text-slate-500 text-xs sm:text-sm font-medium mt-1">
-                  Connect your Google Sheet via Apps Script Webhook to automatically receive all incoming consultation leads in real-time.
+                  Connect your Google Sheet via Apps Script Webhook to automatically receive all incoming consultation leads in real-time with proper table headers.
                 </p>
               </div>
 
               {/* STEP BY STEP SETUP GUIDE */}
-              <div className="bg-white border border-slate-200/80 p-6 rounded-2xl space-y-4 shadow-xs">
-                <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-lime-600" />
-                  <span>Step-by-Step Google Sheet Setup Instructions</span>
-                </h2>
+              <div className="bg-white border border-slate-200/80 p-6 rounded-2xl space-y-5 shadow-xs">
+                <div className="flex items-center justify-between flex-wrap gap-3">
+                  <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-lime-600" />
+                    <span>Step-by-Step Google Sheet Setup Instructions</span>
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={handleCopyScript}
+                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      copiedScript 
+                        ? 'bg-emerald-500 text-white' 
+                        : 'bg-slate-900 hover:bg-slate-800 text-white shadow-xs'
+                    }`}
+                  >
+                    {copiedScript ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedScript ? 'Copied to Clipboard! 🎉' : 'Copy Apps Script Code'}</span>
+                  </button>
+                </div>
 
                 <div className="space-y-3.5 text-xs text-slate-700">
                   <div className="flex items-start gap-2.5">
                     <span className="w-5 h-5 rounded-full bg-lime-500/10 text-lime-800 font-extrabold flex items-center justify-center shrink-0 text-[11px] border border-lime-500/20">1</span>
-                    <p><strong className="text-slate-900">Create a Google Sheet:</strong> Open <a href="https://sheets.new" target="_blank" rel="noreferrer" className="text-lime-700 underline font-bold">sheets.new</a> and add column headers in Row 1: <code className="bg-slate-100 px-1.5 py-0.5 rounded text-lime-800 border border-slate-200 font-mono">Consultation Code, Name, Phone, Pet Type, Service, Price, City, Pincode, Message, Date</code>.</p>
+                    <p><strong className="text-slate-900">Create a Google Sheet:</strong> Open <a href="https://sheets.new" target="_blank" rel="noreferrer" className="text-lime-700 underline font-bold">sheets.new</a> (or use your existing sheet). If the sheet is brand new or missing headers, the script below will automatically create, format, and freeze the header row for you!</p>
                   </div>
 
                   <div className="flex items-start gap-2.5">
                     <span className="w-5 h-5 rounded-full bg-lime-500/10 text-lime-800 font-extrabold flex items-center justify-center shrink-0 text-[11px] border border-lime-500/20">2</span>
-                    <p><strong className="text-slate-900">Open Script Editor:</strong> In your Google Sheet, click <strong>Extensions → Apps Script</strong> from the top navigation bar.</p>
+                    <p><strong className="text-slate-900">Open Script Editor:</strong> In your Google Sheet, click <strong>Extensions → Apps Script</strong> from the top navigation menu.</p>
                   </div>
 
                   <div className="flex items-start gap-2.5">
                     <span className="w-5 h-5 rounded-full bg-lime-500/10 text-lime-800 font-extrabold flex items-center justify-center shrink-0 text-[11px] border border-lime-500/20">3</span>
                     <div className="w-full">
-                      <p><strong className="text-slate-900">Paste Apps Script Code:</strong> Erase any code inside <code className="text-lime-700 font-mono">Code.gs</code> and paste this exact script:</p>
-                      <pre className="bg-slate-50 border border-slate-200 p-3 rounded-xl mt-2 text-[11px] font-mono text-slate-800 overflow-x-auto leading-relaxed select-all">
-{`function doPost(e) {
-  try {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    var data = JSON.parse(e.postData.contents);
-    sheet.appendRow([
-      data.consultationCode || '',
-      data.name || '',
-      data.phone || '',
-      data.petType || '',
-      data.subTest || data.category || '',
-      data.price || '',
-      data.city || '',
-      data.pincode || '',
-      data.message || '',
-      new Date().toLocaleString()
-    ]);
-    return ContentService.createTextOutput(JSON.stringify({ status: 'success' })).setMimeType(ContentService.MimeType.JSON);
-  } catch(err) {
-    return ContentService.createTextOutput(JSON.stringify({ status: 'error', error: err.toString() })).setMimeType(ContentService.MimeType.JSON);
-  }
-}`}
+                      <div className="flex items-center justify-between mb-1.5">
+                        <p><strong className="text-slate-900">Paste Apps Script Code:</strong> Erase everything inside <code className="text-lime-700 font-mono">Code.gs</code> and paste this exact script:</p>
+                        <button
+                          type="button"
+                          onClick={handleCopyScript}
+                          className="text-[11px] font-bold text-lime-700 hover:text-lime-800 flex items-center gap-1 cursor-pointer"
+                        >
+                          <Copy className="w-3 h-3" />
+                          <span>{copiedScript ? 'Copied!' : 'Copy Code'}</span>
+                        </button>
+                      </div>
+                      <pre className="bg-slate-900 border border-slate-800 p-4 rounded-xl text-[11px] font-mono text-emerald-400 overflow-x-auto leading-relaxed select-all">
+{GOOGLE_APPS_SCRIPT_CODE}
                       </pre>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-2.5">
                     <span className="w-5 h-5 rounded-full bg-lime-500/10 text-lime-800 font-extrabold flex items-center justify-center shrink-0 text-[11px] border border-lime-500/20">4</span>
-                    <p><strong className="text-slate-900">Deploy Web App:</strong> Click <strong>Deploy → New deployment</strong>. Click the gear icon, select <em>Web app</em>. Set <strong>Execute as: Me</strong> and <strong>Who has access: Anyone</strong>. Click <em>Deploy</em>, grant permissions, and copy the Web App URL.</p>
+                    <p><strong className="text-slate-900">Deploy Web App:</strong> Click <strong>Deploy → New deployment</strong>. Click the gear icon next to "Select type", select <em>Web app</em>. Set <strong>Execute as: Me</strong> and <strong>Who has access: Anyone</strong>. Click <em>Deploy</em>, Authorize Access, and copy the Web App URL.</p>
                   </div>
 
                   <div className="flex items-start gap-2.5">
                     <span className="w-5 h-5 rounded-full bg-lime-500/10 text-lime-800 font-extrabold flex items-center justify-center shrink-0 text-[11px] border border-lime-500/20">5</span>
-                    <p><strong className="text-slate-900">Save URL Below:</strong> Paste the copied Web App URL into the form below and click <strong>Save Google Sheet Webhook URL</strong>.</p>
+                    <p><strong className="text-slate-900">Save &amp; Test:</strong> Paste the copied Web App URL into the form below, click <strong>Save Google Sheet Webhook URL</strong>, and click <strong>Send Test Lead</strong> to verify!</p>
                   </div>
                 </div>
               </div>
 
+              {/* COLUMN HEADERS REFERENCE TABLE */}
+              <div className="bg-white border border-slate-200/80 p-6 rounded-2xl space-y-3 shadow-xs">
+                <div className="flex items-center gap-2">
+                  <FileSpreadsheet className="w-4 h-4 text-lime-600" />
+                  <h2 className="text-sm font-bold text-slate-900">
+                    Google Sheet Column Structure &amp; Headings Reference
+                  </h2>
+                </div>
+                <p className="text-xs text-slate-500">
+                  When leads are submitted, each piece of data is placed into the designated column as mapped below:
+                </p>
+
+                <div className="overflow-x-auto rounded-xl border border-slate-200">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-slate-900 text-white font-bold">
+                      <tr>
+                        <th className="py-2.5 px-3">Col</th>
+                        <th className="py-2.5 px-3">Header Name</th>
+                        <th className="py-2.5 px-3">Data Field</th>
+                        <th className="py-2.5 px-3">Example Value</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 font-medium text-slate-700 bg-white">
+                      <tr className="hover:bg-slate-50">
+                        <td className="py-2 px-3 font-bold font-mono text-slate-900">A</td>
+                        <td className="py-2 px-3 font-bold text-slate-900">Consultation Code</td>
+                        <td className="py-2 px-3 text-slate-500">Unique ID</td>
+                        <td className="py-2 px-3 font-mono text-lime-700">DEPE-30</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50">
+                        <td className="py-2 px-3 font-bold font-mono text-slate-900">B</td>
+                        <td className="py-2 px-3 font-bold text-slate-900">Customer Name</td>
+                        <td className="py-2 px-3 text-slate-500">Name</td>
+                        <td className="py-2 px-3">Adnan Ali</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50">
+                        <td className="py-2 px-3 font-bold font-mono text-slate-900">C</td>
+                        <td className="py-2 px-3 font-bold text-slate-900">Phone Number</td>
+                        <td className="py-2 px-3 text-slate-500">Contact Number</td>
+                        <td className="py-2 px-3 font-mono">+91 9889989899</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50">
+                        <td className="py-2 px-3 font-bold font-mono text-slate-900">D</td>
+                        <td className="py-2 px-3 font-bold text-slate-900">Pet Type</td>
+                        <td className="py-2 px-3 text-slate-500">Dog / Cat</td>
+                        <td className="py-2 px-3">Dog</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50">
+                        <td className="py-2 px-3 font-bold font-mono text-slate-900">E</td>
+                        <td className="py-2 px-3 font-bold text-slate-900">Category</td>
+                        <td className="py-2 px-3 text-slate-500">Service Category</td>
+                        <td className="py-2 px-3">Preventive Wellness</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50">
+                        <td className="py-2 px-3 font-bold font-mono text-slate-900">F</td>
+                        <td className="py-2 px-3 font-bold text-slate-900">Service / Package</td>
+                        <td className="py-2 px-3 text-slate-500">Selected Package / Test</td>
+                        <td className="py-2 px-3">Wellness 360° — Adult Pet</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50">
+                        <td className="py-2 px-3 font-bold font-mono text-slate-900">G</td>
+                        <td className="py-2 px-3 font-bold text-slate-900">Price (₹)</td>
+                        <td className="py-2 px-3 text-slate-500">Package Cost</td>
+                        <td className="py-2 px-3 font-mono text-slate-900">4999</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50">
+                        <td className="py-2 px-3 font-bold font-mono text-slate-900">H</td>
+                        <td className="py-2 px-3 font-bold text-slate-900">City</td>
+                        <td className="py-2 px-3 text-slate-500">Location</td>
+                        <td className="py-2 px-3">Delhi NCR</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50">
+                        <td className="py-2 px-3 font-bold font-mono text-slate-900">I</td>
+                        <td className="py-2 px-3 font-bold text-slate-900">Pincode</td>
+                        <td className="py-2 px-3 text-slate-500">Postal Code</td>
+                        <td className="py-2 px-3 font-mono">110001</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50">
+                        <td className="py-2 px-3 font-bold font-mono text-slate-900">J</td>
+                        <td className="py-2 px-3 font-bold text-slate-900">Message / Preferred Date</td>
+                        <td className="py-2 px-3 text-slate-500">Notes / Schedule</td>
+                        <td className="py-2 px-3 text-slate-600">Preferred date: 2026-11-05</td>
+                      </tr>
+                      <tr className="hover:bg-slate-50">
+                        <td className="py-2 px-3 font-bold font-mono text-slate-900">K</td>
+                        <td className="py-2 px-3 font-bold text-slate-900">Submission Timestamp</td>
+                        <td className="py-2 px-3 text-slate-500">Date &amp; Time</td>
+                        <td className="py-2 px-3 text-slate-500 font-mono">05/10/2026, 12:44:50</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* WEBHOOK URL FORM & TEST DISPATCHER */}
               <form onSubmit={handleSaveSheetUrl} className="bg-white border border-slate-200/80 p-6 rounded-2xl space-y-4 shadow-xs">
                 {sheetMsg && (
                   <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs rounded-xl font-bold flex items-center gap-2">
@@ -1839,12 +2041,30 @@ export default function AdminPanel() {
                   />
                 </div>
 
-                <button
-                  type="submit"
-                  className="bg-lime-400 hover:bg-lime-500 text-slate-950 px-6 py-2.5 rounded-xl font-extrabold text-xs transition-all cursor-pointer shadow-xs"
-                >
-                  Save Google Sheet Webhook URL
-                </button>
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <button
+                    type="submit"
+                    className="bg-lime-400 hover:bg-lime-500 text-slate-950 px-6 py-2.5 rounded-xl font-extrabold text-xs transition-all cursor-pointer shadow-xs"
+                  >
+                    Save Google Sheet Webhook URL
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleTestSheetWebhook}
+                    disabled={testSheetLoading}
+                    className="bg-slate-900 hover:bg-slate-800 text-white px-5 py-2.5 rounded-xl font-bold text-xs transition-all cursor-pointer flex items-center gap-2 disabled:opacity-50"
+                  >
+                    <Send className="w-3.5 h-3.5 text-lime-400" />
+                    <span>{testSheetLoading ? 'Sending Test Lead...' : 'Send Test Lead to Google Sheet'}</span>
+                  </button>
+                </div>
+
+                {testSheetMsg && (
+                  <div className={`p-3.5 rounded-xl text-xs font-bold mt-2 ${testSheetMsg.startsWith('✅') ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-800 border border-rose-200'}`}>
+                    {testSheetMsg}
+                  </div>
+                )}
               </form>
             </div>
           )}

@@ -5,13 +5,16 @@ import { sendLeadNotificationEmail } from '@/lib/email';
 // GET /api/leads — fetch all leads ordered by newest first
 export async function GET() {
   try {
+    if (!pool) {
+      return NextResponse.json({ leads: [] });
+    }
     const { rows } = await pool.query(
       `SELECT * FROM leads ORDER BY created_at DESC`
     );
     return NextResponse.json({ leads: rows });
   } catch (err) {
     console.error('GET /api/leads error:', err);
-    return NextResponse.json({ error: 'Failed to fetch leads' }, { status: 500 });
+    return NextResponse.json({ leads: [] });
   }
 }
 
@@ -48,40 +51,58 @@ export async function POST(req: NextRequest) {
     const cleanStatus = (status === 'completed' || status === 'cancelled') ? status : 'active';
     const cleanCreatedAt = (timestamp && String(timestamp).trim()) ? String(timestamp).trim() : new Date().toISOString();
 
-    const { rows } = await pool.query(
-      `INSERT INTO leads
-        (id, consultation_code, name, phone, pet_type, category, sub_test,
-         price, city, pincode, schedule_date, message, status, created_at)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
-       ON CONFLICT (consultation_code) DO UPDATE SET
-         name = EXCLUDED.name,
-         phone = EXCLUDED.phone,
-         pet_type = EXCLUDED.pet_type,
-         category = EXCLUDED.category,
-         sub_test = EXCLUDED.sub_test,
-         schedule_date = EXCLUDED.schedule_date,
-         message = EXCLUDED.message,
-         created_at = EXCLUDED.created_at
-       RETURNING *`,
-      [
-        cleanId,
-        cleanCode,
-        cleanName,
-        cleanPhone,
-        cleanPetType,
-        cleanCategory,
-        cleanSubTest,
-        parsedPrice,
-        cleanCity,
-        cleanPincode,
-        cleanDate,
-        cleanMessage,
-        cleanStatus,
-        cleanCreatedAt,
-      ]
-    );
+    let createdLead = {
+      id: cleanId,
+      consultation_code: cleanCode,
+      name: cleanName,
+      phone: cleanPhone,
+      pet_type: cleanPetType,
+      category: cleanCategory,
+      sub_test: cleanSubTest,
+      price: parsedPrice,
+      city: cleanCity,
+      pincode: cleanPincode,
+      schedule_date: cleanDate,
+      message: cleanMessage,
+      status: cleanStatus,
+      created_at: cleanCreatedAt,
+    };
 
-    const createdLead = rows[0] || body;
+    if (pool) {
+      const { rows } = await pool.query(
+        `INSERT INTO leads
+          (id, consultation_code, name, phone, pet_type, category, sub_test,
+           price, city, pincode, schedule_date, message, status, created_at)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+         ON CONFLICT (consultation_code) DO UPDATE SET
+           name = EXCLUDED.name,
+           phone = EXCLUDED.phone,
+           pet_type = EXCLUDED.pet_type,
+           category = EXCLUDED.category,
+           sub_test = EXCLUDED.sub_test,
+           schedule_date = EXCLUDED.schedule_date,
+           message = EXCLUDED.message,
+           created_at = EXCLUDED.created_at
+         RETURNING *`,
+        [
+          cleanId,
+          cleanCode,
+          cleanName,
+          cleanPhone,
+          cleanPetType,
+          cleanCategory,
+          cleanSubTest,
+          parsedPrice,
+          cleanCity,
+          cleanPincode,
+          cleanDate,
+          cleanMessage,
+          cleanStatus,
+          cleanCreatedAt,
+        ]
+      );
+      if (rows && rows[0]) createdLead = rows[0];
+    }
 
     // Await email notification so serverless functions complete HTTP dispatch before returning response
     try {

@@ -852,9 +852,16 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         setLeads(MOCK_LEADS);
       }
 
-      // 🗄️ Fetch latest leads from PostgreSQL DB on mount and merge with sample leads
+      // 🗄️ Fetch latest leads from DB on mount and merge with sample leads
       fetch('/api/leads')
-        .then(res => res.json())
+        .then(async (res) => {
+          if (!res.ok) return null;
+          const contentType = res.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            return res.json();
+          }
+          return null;
+        })
         .then(data => {
           if (data?.leads && Array.isArray(data.leads)) {
             const dbLeads = data.leads.map((row: any, i: number) => mapDbLeadToLead(row, i));
@@ -865,7 +872,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             localStorage.setItem('deepet_leads', JSON.stringify(combined));
           }
         })
-        .catch(err => console.error('Error loading DB leads:', err));
+        .catch(err => console.warn('Error loading DB leads:', err));
 
       const storedSheetUrl = localStorage.getItem('deepet_sheet_url');
       if (storedSheetUrl) setGoogleSheetUrl(storedSheetUrl);
@@ -885,9 +892,16 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       const storedContactCats = localStorage.getItem('deepet_contact_categories');
       if (storedContactCats) setContactCategories(JSON.parse(storedContactCats));
 
-      // 🗄️ Fetch latest configurations from PostgreSQL DB on mount
+      // 🗄️ Fetch latest configurations from DB on mount
       fetch('/api/settings')
-        .then(res => res.json())
+        .then(async (res) => {
+          if (!res.ok) return null;
+          const contentType = res.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            return res.json();
+          }
+          return null;
+        })
         .then(data => {
           if (data?.settings) {
             const s = data.settings;
@@ -1015,6 +1029,9 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const refreshLeads = async () => {
     try {
       const res = await fetch('/api/leads');
+      if (!res.ok) return;
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) return;
       const data = await res.json();
       if (data?.leads && Array.isArray(data.leads)) {
         const dbLeads = data.leads.map((row: any, i: number) => mapDbLeadToLead(row, i));
@@ -1025,7 +1042,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         localStorage.setItem('deepet_leads', JSON.stringify(combined));
       }
     } catch (err) {
-      console.error('Failed to refresh leads:', err);
+      console.warn('Failed to refresh leads:', err);
     }
   };
 
