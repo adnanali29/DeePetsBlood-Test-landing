@@ -141,7 +141,7 @@ export default function Home() {
       {/* Sticky Call Now & WhatsApp Bottom Bar for Mobile (Image 1 style) */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2.5 flex gap-3 md:hidden shadow-[0_-4px_12px_rgba(0,0,0,0.08)] animate-fade-in">
         <a
-          href={`tel:${contactConfig.primaryPhone}`}
+          href={`tel:${(contactConfig.primaryPhone || '+918178468130').replace(/[^0-9+]/g, '')}`}
           className="flex-1 bg-[#1e88e5] hover:bg-[#1565c0] text-white py-2 px-4 rounded-xl font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-md transition-all active:scale-[0.98]"
         >
           <Phone className="w-4 h-4 flex-shrink-0" />

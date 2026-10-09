@@ -143,7 +143,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
             {/* CTA BUTTONS BELOW "One transparent package price" (Image 2 Neon Green CTAs) */}
             <div className="flex flex-wrap items-center gap-3.5 pt-3">
               <a
-                href={`tel:${contactConfig.primaryPhone || '+917238002900'}`}
+                href={`tel:${(contactConfig.primaryPhone || '+918178468130').replace(/[^0-9+]/g, '')}`}
                 className="bg-[#a3e635] hover:bg-[#92d029] text-slate-950 px-6 py-3 rounded-full text-sm sm:text-base font-extrabold flex items-center gap-2.5 shadow-lg shadow-[#a3e635]/25 transition-all transform hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
               >
                 <Phone className="w-4 h-4 fill-slate-950 stroke-slate-950" />
@@ -151,7 +151,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onFormSuccess }) => {
               </a>
 
               <a
-                href={`https://wa.me/${(contactConfig.whatsappNumber || '+917238002900').replace(/[^0-9]/g, '')}`}
+                href={`https://wa.me/${(contactConfig.whatsappNumber || '+918178468130').replace(/[^0-9]/g, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-[#a3e635] hover:bg-[#92d029] text-slate-950 px-6 py-3 rounded-full text-sm sm:text-base font-extrabold flex items-center gap-2.5 shadow-lg shadow-[#a3e635]/25 transition-all transform hover:scale-[1.03] active:scale-[0.98] cursor-pointer"

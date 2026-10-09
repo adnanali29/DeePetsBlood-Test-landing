@@ -23,6 +23,7 @@ export interface ContactConfig {
   whatsappNumber: string;
   primaryPhone: string;
   secondaryPhone: string;
+  headerPhone?: string;
   email: string;
 }
 
@@ -313,9 +314,10 @@ const DEFAULT_HERO: HeroConfig = {
 };
 
 const DEFAULT_CONTACT: ContactConfig = {
-  whatsappNumber: '+917238002900',
-  primaryPhone: '+917238002900',
-  secondaryPhone: '+917238002900',
+  whatsappNumber: '+91 81784 68130',
+  primaryPhone: '+91 81784 68130',
+  secondaryPhone: '+91 81784 68130',
+  headerPhone: '+91 81784 68130',
   email: 'contact@deepetservices.com',
 };
 
@@ -811,7 +813,24 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       if (storedHero) setHeroConfig(JSON.parse(storedHero));
 
       const storedContact = localStorage.getItem('deepet_contact');
-      if (storedContact) setContactConfig(JSON.parse(storedContact));
+      if (storedContact) {
+        try {
+          const parsed = JSON.parse(storedContact);
+          const sanitized = {
+            ...DEFAULT_CONTACT,
+            ...parsed,
+            headerPhone: parsed.headerPhone || parsed.primaryPhone || DEFAULT_CONTACT.headerPhone,
+          };
+          // Migrate old default numbers if present
+          if (sanitized.primaryPhone.includes('72380') || sanitized.primaryPhone.includes('9591875232') || sanitized.primaryPhone === '+91 8178-468130') sanitized.primaryPhone = DEFAULT_CONTACT.primaryPhone;
+          if (sanitized.whatsappNumber.includes('72380') || sanitized.whatsappNumber.includes('7500367400') || sanitized.whatsappNumber === '+91 8178-468130') sanitized.whatsappNumber = DEFAULT_CONTACT.whatsappNumber;
+          if (sanitized.secondaryPhone.includes('72380') || sanitized.secondaryPhone.includes('8076563747') || sanitized.secondaryPhone === '+91 8178-468130') sanitized.secondaryPhone = DEFAULT_CONTACT.secondaryPhone;
+          if (sanitized.headerPhone && (sanitized.headerPhone.includes('72380') || sanitized.headerPhone.includes('9591875232') || sanitized.headerPhone === '+91 8178-468130')) sanitized.headerPhone = DEFAULT_CONTACT.headerPhone;
+          setContactConfig(sanitized);
+        } catch (e) {
+          setContactConfig(DEFAULT_CONTACT);
+        }
+      }
 
       const storedCatTests = localStorage.getItem('deepet_cat_tests');
       if (storedCatTests) {
@@ -906,7 +925,20 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
           if (data?.settings) {
             const s = data.settings;
             if (s.hero_config) { setHeroConfig(s.hero_config); localStorage.setItem('deepet_hero', JSON.stringify(s.hero_config)); }
-            if (s.contact_config) { setContactConfig(s.contact_config); localStorage.setItem('deepet_contact', JSON.stringify(s.contact_config)); }
+            if (s.contact_config) { 
+              const val = typeof s.contact_config === 'string' ? JSON.parse(s.contact_config) : s.contact_config;
+              const merged = {
+                ...DEFAULT_CONTACT,
+                ...val,
+                headerPhone: val.headerPhone || val.primaryPhone || DEFAULT_CONTACT.headerPhone,
+              };
+              if (merged.primaryPhone.includes('72380') || merged.primaryPhone.includes('9591875232') || merged.primaryPhone === '+91 8178-468130') merged.primaryPhone = DEFAULT_CONTACT.primaryPhone;
+              if (merged.whatsappNumber.includes('72380') || merged.whatsappNumber.includes('7500367400') || merged.whatsappNumber === '+91 8178-468130') merged.whatsappNumber = DEFAULT_CONTACT.whatsappNumber;
+              if (merged.secondaryPhone.includes('72380') || merged.secondaryPhone.includes('8076563747') || merged.secondaryPhone === '+91 8178-468130') merged.secondaryPhone = DEFAULT_CONTACT.secondaryPhone;
+              if (merged.headerPhone && (merged.headerPhone.includes('72380') || merged.headerPhone.includes('9591875232') || merged.headerPhone === '+91 8178-468130')) merged.headerPhone = DEFAULT_CONTACT.headerPhone;
+              setContactConfig(merged); 
+              localStorage.setItem('deepet_contact', JSON.stringify(merged)); 
+            }
             if (s.email_settings) { 
               const val = typeof s.email_settings === 'string' ? JSON.parse(s.email_settings) : s.email_settings;
               setEmailSettings(val); 

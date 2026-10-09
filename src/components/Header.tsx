@@ -52,11 +52,11 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center space-x-3">
               <a
-                href={`tel:${contactConfig.primaryPhone}`}
+                href={`tel:${(contactConfig.headerPhone || contactConfig.primaryPhone || '+918178468130').replace(/[^0-9+]/g, '')}`}
                 className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-slate-100 text-slate-900 hover:bg-slate-200 font-extrabold text-xs transition-colors"
               >
                 <Phone className="w-3.5 h-3.5" />
-                <span>+91 72380 02900</span>
+                <span>{contactConfig.headerPhone || contactConfig.primaryPhone || '+91 81784 68130'}</span>
               </a>
               <button
                 onClick={onBookClick}
@@ -103,10 +103,10 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
                 Book Home Visit Now
               </button>
               <a
-                href={`tel:${contactConfig.primaryPhone}`}
+                href={`tel:${(contactConfig.headerPhone || contactConfig.primaryPhone || '+918178468130').replace(/[^0-9+]/g, '')}`}
                 className="text-center py-2.5 rounded-2xl bg-deepblue-50 text-deepblue-700 font-bold text-xs flex items-center justify-center gap-2"
               >
-                <Phone className="w-4 h-4" /> Call {contactConfig.primaryPhone}
+                <Phone className="w-4 h-4" /> Call {contactConfig.headerPhone || contactConfig.primaryPhone || '+91 81784 68130'}
               </a>
             </div>
           </div>

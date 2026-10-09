@@ -21,9 +21,10 @@ const DEFAULT_HERO = {
 };
 
 const DEFAULT_CONTACT = {
-  whatsappNumber: '+917500367400',
-  primaryPhone: '+919591875232',
-  secondaryPhone: '+918076563747',
+  whatsappNumber: '+91 81784 68130',
+  primaryPhone: '+91 81784 68130',
+  secondaryPhone: '+91 81784 68130',
+  headerPhone: '+91 81784 68130',
   email: 'contact@deepetservices.com',
 };
 

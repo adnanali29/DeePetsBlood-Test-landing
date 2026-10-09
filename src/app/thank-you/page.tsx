@@ -33,7 +33,7 @@ function ThankYouContent() {
 
     // 3. Fallback Universal WhatsApp Link
     const defaultMsg = `Hi DeePet Services, I have submitted a consultation request (${code || 'DeePet'}). Please connect with me.`;
-    const fallbackUrl = `https://api.whatsapp.com/send?phone=917238002900&text=${encodeURIComponent(defaultMsg)}`;
+    const fallbackUrl = `https://api.whatsapp.com/send?phone=918178468130&text=${encodeURIComponent(defaultMsg)}`;
     setWaUrl(fallbackUrl);
   }, [code, searchParams]);
 

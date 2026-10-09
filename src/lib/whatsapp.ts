@@ -46,7 +46,7 @@ export function buildWhatsAppMessage(params: WhatsAppParams): string {
 }
 
 export function buildWhatsAppUrl(phoneNumber: string, params: WhatsAppParams): string {
-  let cleanPhone = (phoneNumber || '+917238002900').replace(/[^0-9]/g, '');
+  let cleanPhone = (phoneNumber || '+918178468130').replace(/[^0-9]/g, '');
   if (!cleanPhone.startsWith('91') && cleanPhone.length === 10) {
     cleanPhone = '91' + cleanPhone;
   }

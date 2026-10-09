@@ -1809,11 +1809,24 @@ export default function AdminPanel() {
                 )}
 
                 <div>
-                  <label className="text-xs font-bold text-slate-700 block mb-1">Primary Phone Number</label>
+                  <label className="text-xs font-bold text-slate-700 block mb-1">Header Phone Number</label>
+                  <input
+                    type="text"
+                    value={contactForm.headerPhone || ''}
+                    onChange={(e) => setContactForm({ ...contactForm, headerPhone: e.target.value })}
+                    placeholder="+91 81784 68130"
+                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-lime-500 focus:bg-white"
+                  />
+                  <p className="text-[11px] text-slate-400 mt-1">Phone number displayed in the top website header navbar.</p>
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold text-slate-700 block mb-1">Primary Phone / Call Number</label>
                   <input
                     type="text"
                     value={contactForm.primaryPhone}
                     onChange={(e) => setContactForm({ ...contactForm, primaryPhone: e.target.value })}
+                    placeholder="+91 81784 68130"
                     className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-lime-500 focus:bg-white"
                   />
                 </div>
@@ -1824,6 +1837,7 @@ export default function AdminPanel() {
                     type="text"
                     value={contactForm.whatsappNumber}
                     onChange={(e) => setContactForm({ ...contactForm, whatsappNumber: e.target.value })}
+                    placeholder="+91 81784 68130"
                     className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-lime-500 focus:bg-white"
                   />
                 </div>
@@ -1834,6 +1848,7 @@ export default function AdminPanel() {
                     type="text"
                     value={contactForm.secondaryPhone}
                     onChange={(e) => setContactForm({ ...contactForm, secondaryPhone: e.target.value })}
+                    placeholder="+91 81784 68130"
                     className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-lime-500 focus:bg-white"
                   />
                 </div>
